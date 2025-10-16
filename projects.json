@@ -4,7 +4,7 @@
       "title": "Mega Market Mayhem",
       "description": "A fast-paced multiplayer 1v1 fighting game where players compete to see who's on top with quirky and fun food based characters, all while managing chaos in a bustling supermarket.",
       "tags": ["Unity", "C#", "Multiplayer", "Action", "Fighting"],
-      "image": "images/mega-market-mayhem.jpg",
+      "image": "images/megamarketmayhem.png",
       "gradient": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
       "playLink": "https://studio-212.itch.io/mega-market-mayhem",
       "detailPage": true
