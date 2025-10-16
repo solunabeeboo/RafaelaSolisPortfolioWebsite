@@ -11,8 +11,8 @@
     },
     {
       "title": "Scriptorium",
-      "description": "An immersive narrative experience where players craft stories through interactive writing mechanics and collaborative storytelling.",
-      "tags": ["Unity 6", "Blueprint", "Narrative"],
+      "description": "An immersive narrative dungeon crawler where one must draw to attack, utilizing advanced neural model recognition players can learn a new language of actions.",
+      "tags": ["Unity 6", "C#", "Narrative", "Action", "Roguelite", "Bloody"],
       "image": "images/scriptorium.png",
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
       "playLink": "https://studio-212.itch.io/project-dungeon",
