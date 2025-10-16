@@ -17,6 +17,7 @@
             --text-muted: #808080;
             --max-content-width: 1200px;
             --section-padding: 2rem;
+            --nav-height: 80px; /* Define nav height for consistent spacing */
         }
 
         * {
@@ -42,6 +43,7 @@
             border-bottom: 1px solid rgba(0, 200, 255, 0.2);
             z-index: 1000;
             box-shadow: 0 0 30px rgba(0, 200, 255, 0.1);
+            height: var(--nav-height);
         }
 
         nav ul {
@@ -51,6 +53,8 @@
             padding: 1.5rem;
             max-width: var(--max-content-width);
             margin: 0 auto;
+            height: 100%;
+            align-items: center;
         }
 
         nav a {
@@ -94,7 +98,7 @@
             z-index: 1001;
             background: rgba(10, 10, 10, 0.9);
             border-radius: 8px;
-            border: 1px solid rgba(0, 200, 255, 0.3);
+            border: 1px solid rgba(255, 68, 161, 0.3);
         }
 
         .burger-line {
@@ -103,7 +107,7 @@
             background: var(--primary-blue);
             margin: 3px 0;
             transition: all 0.3s;
-            box-shadow: 0 0 5px rgba(0, 200, 255, 0.5);
+            box-shadow: 0 0 5px rgba(255, 68, 161, 0.5);
         }
 
         /* Burger animation when active */
@@ -142,11 +146,19 @@
             flex-direction: column;
             gap: 2rem;
             text-align: center;
+            list-style: none;
         }
 
         .mobile-menu a {
             font-size: 1.5rem;
             padding: 1rem 2rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--primary-blue);
         }
 
         /* Hide regular nav on mobile */
@@ -164,7 +176,11 @@
         section {
             max-width: var(--max-content-width);
             margin: 0 auto;
-            padding: 10rem var(--section-padding) 4rem;
+            padding-top: calc(var(--nav-height) + 4rem); /* Dynamic top padding based on nav height */
+            padding-left: var(--section-padding);
+            padding-right: var(--section-padding);
+            padding-bottom: 4rem;
+            min-height: calc(100vh - var(--nav-height)); /* Ensure full height accounting for nav */
         }
 
         h1 {
@@ -193,7 +209,7 @@
 
         .project-card {
             background: var(--card-background);
-            border: 1px solid rgba(0, 200, 255, 0.2);
+            border: 1px solid rgba(255, 68, 161, 0.2);
             border-radius: 15px;
             overflow: hidden;
             transition: all 0.4s;
@@ -208,7 +224,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(0, 200, 255, 0.1), rgba(179, 102, 255, 0.1));
+            background: linear-gradient(135deg, rgba(255, 68, 161, 0.1), rgba(179, 102, 255, 0.1));
             opacity: 0;
             transition: opacity 0.4s;
             pointer-events: none;
@@ -221,7 +237,7 @@
         .project-card:hover {
             transform: translateY(-10px);
             border-color: var(--primary-blue);
-            box-shadow: 0 20px 60px rgba(0, 200, 255, 0.3);
+            box-shadow: 0 20px 60px rgba(255, 68, 161, 0.3);
         }
 
         .project-image {
@@ -280,8 +296,8 @@
         }
 
         .tag {
-            background: rgba(0, 200, 255, 0.1);
-            border: 1px solid rgba(0, 200, 255, 0.3);
+            background: rgba(255, 68, 161, 0.1);
+            border: 1px solid rgba(255, 68, 161, 0.3);
             padding: 0.3rem 0.8rem;
             border-radius: 20px;
             font-size: 0.85rem;
@@ -290,8 +306,8 @@
         }
 
         .tag:hover {
-            background: rgba(0, 200, 255, 0.2);
-            box-shadow: 0 0 10px rgba(0, 200, 255, 0.3);
+            background: rgba(255, 68, 161, 0.2);
+            box-shadow: 0 0 10px rgba(255, 68, 161, 0.3);
         }
 
         .project-link {
@@ -342,19 +358,21 @@
             text-align: center;
             padding: var(--section-padding);
             color: var(--text-muted);
-            border-top: 1px solid rgba(0, 200, 255, 0.2);
+            border-top: 1px solid rgba(255, 68, 161, 0.2);
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
+            :root {
+                --nav-height: 0px; /* No nav on mobile, only burger menu */
             }
 
-            nav ul {
-                flex-direction: column;
-                align-items: center;
-                padding: 1rem;
+            section {
+                padding-top: 6rem; /* Account for burger menu space */
+            }
+
+            h1 {
+                font-size: 2rem;
             }
 
             .projects-grid {
