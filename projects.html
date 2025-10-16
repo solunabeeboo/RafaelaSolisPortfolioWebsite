@@ -244,6 +244,8 @@
             width: 100%;
             height: 220px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-size: cover;
+            background-position: center;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -252,6 +254,31 @@
             font-weight: bold;
             position: relative;
             overflow: hidden;
+        }
+
+        /* Text overlay with blur background for images */
+        .project-image-text {
+            position: relative;
+            z-index: 3;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.6);
+            text-align: center;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Darken image overlay for better text readability */
+        .project-image.has-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 2;
         }
 
         .project-image::after {
@@ -472,9 +499,22 @@
             const card = document.createElement('div');
             card.className = 'project-card';
             
+            // Determine background style and text presentation
+            let backgroundStyle = '';
+            let imageClass = '';
+            let titleMarkup = project.title;
+            
+            if (project.image) {
+                backgroundStyle = `background-image: url('${project.image}');`;
+                imageClass = 'has-image';
+                titleMarkup = `<span class="project-image-text">${project.title}</span>`;
+            } else {
+                backgroundStyle = `background: ${project.gradient || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'};`;
+            }
+            
             card.innerHTML = `
-                <div class="project-image" style="background: ${project.gradient || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'};">
-                    ${project.title}
+                <div class="project-image ${imageClass}" style="${backgroundStyle}">
+                    ${titleMarkup}
                 </div>
                 <div class="project-content">
                     <h3>${project.title}</h3>

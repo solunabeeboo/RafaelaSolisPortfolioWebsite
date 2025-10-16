@@ -2,18 +2,20 @@
   "projects": [
     {
       "title": "Mega Market Mayhem",
-      "description": "A fast-paced multiplayer shopping simulation where players compete to complete their grocery lists while managing chaos in a bustling supermarket.",
-      "tags": ["Unity", "C#", "Multiplayer", "Action"],
+      "description": "A fast-paced multiplayer 1v1 fighting game where players compete to see who's on top with quirky and fun food based characters, all while managing chaos in a bustling supermarket.",
+      "tags": ["Unity", "C#", "Multiplayer", "Action", "Fighting"],
+      "image": "images/mega-market-mayhem.jpg",
       "gradient": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-      "playLink": "https://example.com/play",
+      "playLink": "https://studio-212.itch.io/mega-market-mayhem",
       "detailPage": true
     },
     {
       "title": "Scriptorium",
       "description": "An immersive narrative experience where players craft stories through interactive writing mechanics and collaborative storytelling.",
       "tags": ["Unity 6", "Blueprint", "Narrative"],
+      "image": "",
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
-      "playLink": "#",
+      "playLink": "https://studio-212.itch.io/project-dungeon",
       "detailPage": true
     }
   ]
