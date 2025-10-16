@@ -1,0 +1,20 @@
+{
+  "projects": [
+    {
+      "title": "Mega Market Mayhem",
+      "description": "A fast-paced multiplayer shopping simulation where players compete to complete their grocery lists while managing chaos in a bustling supermarket.",
+      "tags": ["Unity", "C#", "Multiplayer", "Action"],
+      "gradient": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+      "playLink": "https://example.com/play",
+      "detailPage": true
+    },
+    {
+      "title": "Scriptorium",
+      "description": "An immersive narrative experience where players craft stories through interactive writing mechanics and collaborative storytelling.",
+      "tags": ["Unity 6", "Blueprint", "Narrative"],
+      "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+      "playLink": "#",
+      "detailPage": true
+    }
+  ]
+}

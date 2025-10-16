@@ -1,0 +1,463 @@
+<!-- ====================================== -->
+<!-- FILE: contact.html -->
+<!-- ====================================== -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Rafaela Solis</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <style>
+        /* ===== CUSTOMIZABLE VARIABLES ===== */
+        :root {
+            --primary-blue: #ff44a1;
+            --primary-purple: #b366ff;
+            --background-dark: #0a0a0a;
+            --card-background: rgba(20, 20, 20, 0.6);
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+            --max-content-width: 1200px;
+            --section-padding: 2rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--background-dark);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 200, 255, 0.2);
+            z-index: 1000;
+            box-shadow: 0 0 30px rgba(0, 200, 255, 0.1);
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 1.5rem;
+            max-width: var(--max-content-width);
+            margin: 0 auto;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-primary);
+            padding: 0.5rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--primary-purple));
+            transform: translateX(-50%);
+            transition: width 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--primary-blue);
+        }
+
+        nav a:hover::after {
+            width: 80%;
+        }
+
+                /* Burger Menu Styles */
+        .burger-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 1rem;
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1001;
+            background: rgba(10, 10, 10, 0.9);
+            border-radius: 8px;
+            border: 1px solid rgba(0, 200, 255, 0.3);
+        }
+
+        .burger-line {
+            width: 25px;
+            height: 3px;
+            background: var(--primary-blue);
+            margin: 3px 0;
+            transition: all 0.3s;
+            box-shadow: 0 0 5px rgba(0, 200, 255, 0.5);
+        }
+
+        /* Burger animation when active */
+        .burger-menu.active .burger-line:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .burger-menu.active .burger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .burger-menu.active .burger-line:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* Mobile menu overlay */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu ul {
+            flex-direction: column;
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .mobile-menu a {
+            font-size: 1.5rem;
+            padding: 1rem 2rem;
+        }
+
+        /* Hide regular nav on mobile */
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+            }
+            
+            .burger-menu {
+                display: flex;
+            }
+        }
+
+        /* Section Styles */
+        section {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 10rem var(--section-padding) 4rem;
+            min-height: calc(100vh - 100px);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .intro-text {
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 4rem;
+        }
+
+        /* Contact Grid */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--section-padding);
+            margin-bottom: 4rem;
+        }
+
+        .contact-card {
+            background: var(--card-background);
+            border: 1px solid rgba(0, 200, 255, 0.2);
+            border-radius: 15px;
+            padding: var(--section-padding);
+            text-align: center;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 200, 255, 0.05), rgba(179, 102, 255, 0.05));
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .contact-card:hover::before {
+            opacity: 1;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-blue);
+            box-shadow: 0 20px 60px rgba(0, 200, 255, 0.3);
+        }
+
+        .contact-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 10px rgba(0, 200, 255, 0.5));
+        }
+
+        .contact-card h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+            color: var(--primary-blue);
+        }
+
+        .contact-card p {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .contact-card a {
+            color: var(--primary-purple);
+            text-decoration: none;
+            font-weight: 500;
+            word-break: break-all;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .contact-card a:hover {
+            color: var(--primary-blue);
+        }
+
+        /* Social Section */
+        .social-section {
+            margin-top: 4rem;
+            text-align: center;
+        }
+
+        .social-section h2 {
+            font-size: 2rem;
+            margin-bottom: var(--section-padding);
+            color: var(--primary-blue);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--section-padding);
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s;
+            padding: 1rem;
+            border-radius: 10px;
+            background: rgba(20, 20, 20, 0.4);
+            border: 1px solid rgba(0, 200, 255, 0.1);
+        }
+
+        .social-link:hover {
+            color: var(--primary-blue);
+            transform: translateY(-5px);
+            border-color: var(--primary-blue);
+            box-shadow: 0 10px 30px rgba(0, 200, 255, 0.3);
+        }
+
+        .social-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            filter: drop-shadow(0 0 5px rgba(0, 200, 255, 0.3));
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(10, 10, 10, 0.9);
+            text-align: center;
+            padding: var(--section-padding);
+            color: var(--text-muted);
+            border-top: 1px solid rgba(0, 200, 255, 0.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                padding: 1rem;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Burger Menu Button -->
+    <div class="burger-menu" id="burgerMenu">
+        <div class="burger-line"></div>
+        <div class="burger-line"></div>
+        <div class="burger-line"></div>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="projects.html">Projects</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="projects.html">Projects</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Contact Section -->
+    <section>
+        <h1>Get In Touch</h1>
+        <p class="intro-text">I'm always interested in hearing about new projects, collaboration opportunities, and connecting with fellow game developers. Feel free to reach out!</p>
+
+        <div class="contact-grid">
+            <div class="contact-card">
+                <div class="contact-icon">📧</div>
+                <h3>Email</h3>
+                <p>Best for project inquiries</p>
+                <a href="mailto:rafa@miguelsolis.com">rafa@miguelsolis.com</a>
+            </div>
+
+            <div class="contact-card">
+                <div class="contact-icon">💼</div>
+                <h3>LinkedIn</h3>
+                <p>Professional networking</p>
+                <a href="https://linkedin.com/in/rafaela-solis-3463b2245/" target="_blank">linkedin.com/in/rafaela-solis-3463b2245/</a>
+            </div>
+
+            <div class="contact-card">
+                <div class="contact-icon">💻</div>
+                <h3>GitHub</h3>
+                <p>Check out my code</p>
+                <a href="https://github.com/solunabeeboo" target="_blank">github.com/solunabeeboo</a>
+            </div>
+<!--
+            <div class="contact-card">
+                <div class="contact-icon">🎮</div>
+                <h3>Game Jolt</h3>
+                <p>Play my games</p>
+                <a href="https://gamejolt.com/@solunabeeboo" target="_blank">gamejolt.com/@solunabeeboo</a>
+            </div>
+-->
+            <div class="contact-card">
+                <div class="contact-icon">🎮</div>
+                <h3>Itch</h3>
+                <p>Play my games</p>
+                <a href="https://itch.io/profile/solunabeeboo" target="_blank">itch.io/profile/solunabeeboo</a>
+            </div>
+        </div>
+
+        <div class="social-section">
+            <h2>Connect With Me</h2>
+            <div class="social-links">
+                <!--<a href="https://twitter.com/rafaelasolis" class="social-link" target="_blank">
+                    <div class="social-icon">🐦</div>
+                    <span>Twitter</span>
+                </a>-->
+                <a href="https://www.instagram.com/solunabeeboo/" class="social-link" target="_blank">
+                    <div class="social-icon">📷</div>
+                    <span>Instagram</span>
+                </a>
+                <a href="https://discord.com/users/633013974279127043" class="social-link" target="_blank">
+                    <div class="social-icon">💬</div>
+                    <span>Discord</span>
+                </a>
+                <a href="https://bsky.app/profile/solunabeeboo.bsky.social" class="social-link" target="_blank">
+                    <div class="social-icon">🕹️</div>
+                    <span>Bluesky</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Rafaela Solis. All rights reserved.</p>
+    </footer>
+
+    <script>
+    // Burger menu functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const burgerMenu = document.getElementById('burgerMenu');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        burgerMenu.addEventListener('click', function() {
+            burgerMenu.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+        });
+        
+        // Close menu when clicking on a link
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                burgerMenu.classList.remove('active');
+                mobileMenu.classList.remove('active');
+            });
+        });
+        
+        // Close menu when clicking outside
+        mobileMenu.addEventListener('click', function(e) {
+            if (e.target === mobileMenu) {
+                burgerMenu.classList.remove('active');
+                mobileMenu.classList.remove('active');
+            }
+        });
+    });
+    </script>
+
+</body>
+</html>

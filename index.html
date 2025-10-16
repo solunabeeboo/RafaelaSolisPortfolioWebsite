@@ -1,0 +1,559 @@
+<!-- ====================================== -->
+<!-- FILE: index.html -->
+<!-- ====================================== -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rafaela Solis - Game Developer Portfolio</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <style>
+        /* ===== CUSTOMIZABLE VARIABLES ===== */
+        :root {
+            /* Colors */
+            --primary-blue: #ff44a1;
+            --primary-purple: #b366ff;
+            --background-dark: #0a0a0a;
+            --card-background: rgba(20, 20, 20, 0.6);
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+            
+            /* Headshot Settings */
+            --headshot-size: 550px;
+            --headshot-border-width: 4px;
+            --headshot-glow-intensity: 0.6;
+            --headshot-hover-scale: 1.05;
+            
+            /* Layout */
+            --nav-height: 60px;
+            --max-content-width: 1200px;
+            --section-padding: 2rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--background-dark);
+            overflow-x: hidden;
+        }
+
+        /* Animated Background Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(0, 200, 255, 0.3);
+            border-radius: 50%;
+            animation: float 20s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 200, 255, 0.2);
+            z-index: 1000;
+            box-shadow: 0 0 30px rgba(0, 200, 255, 0.1);
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 1.5rem;
+            max-width: var(--max-content-width);
+            margin: 0 auto;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-primary);
+            padding: 0.5rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--primary-purple));
+            transform: translateX(-50%);
+            transition: width 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--primary-blue);
+        }
+
+        nav a:hover::after {
+            width: 80%;
+        }
+
+                /* Burger Menu Styles */
+        .burger-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 1rem;
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1001;
+            background: rgba(10, 10, 10, 0.9);
+            border-radius: 8px;
+            border: 1px solid rgba(0, 200, 255, 0.3);
+        }
+
+        .burger-line {
+            width: 25px;
+            height: 3px;
+            background: var(--primary-blue);
+            margin: 3px 0;
+            transition: all 0.3s;
+            box-shadow: 0 0 5px rgba(0, 200, 255, 0.5);
+        }
+
+        /* Burger animation when active */
+        .burger-menu.active .burger-line:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .burger-menu.active .burger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .burger-menu.active .burger-line:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* Mobile menu overlay */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu ul {
+            flex-direction: column;
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .mobile-menu a {
+            font-size: 1.5rem;
+            padding: 1rem 2rem;
+        }
+
+        /* Hide regular nav on mobile */
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+            }
+            
+            .burger-menu {
+                display: flex;
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: var(--section-padding);
+            margin-top: var(--nav-height);
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Headshot Styles */
+        .headshot-container {
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .headshot {
+            width: var(--headshot-size);
+            height: var(--headshot-size);
+            border-radius: 50%;
+            border: var(--headshot-border-width) solid transparent;
+            background: linear-gradient(var(--background-dark), var(--background-dark)) padding-box,
+                        linear-gradient(135deg, var(--primary-blue), var(--primary-purple)) border-box;
+            box-shadow: 0 0 40px rgba(0, 200, 255, var(--headshot-glow-intensity));
+            transition: all 0.4s ease;
+            object-fit: cover;
+            position: relative;
+            z-index: 2;
+        }
+
+        .headshot:hover {
+            transform: scale(var(--headshot-hover-scale));
+            box-shadow: 0 0 60px rgba(0, 200, 255, 0.8);
+        }
+
+        /* Animated ring around headshot */
+        .headshot-container::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-blue), var(--primary-purple), var(--primary-blue));
+            background-size: 200% 200%;
+            animation: rotateGradient 3s linear infinite;
+            opacity: 0.7;
+            z-index: 1;
+        }
+
+        @keyframes rotateGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Placeholder for when no image is provided */
+        .headshot-placeholder {
+            width: var(--headshot-size);
+            height: var(--headshot-size);
+            border-radius: 50%;
+            border: var(--headshot-border-width) solid transparent;
+            background: linear-gradient(var(--card-background), var(--card-background)) padding-box,
+                        linear-gradient(135deg, var(--primary-blue), var(--primary-purple)) border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: var(--primary-blue);
+            box-shadow: 0 0 40px rgba(0, 200, 255, var(--headshot-glow-intensity));
+            transition: all 0.4s ease;
+        }
+
+        .headshot-placeholder:hover {
+            transform: scale(var(--headshot-hover-scale));
+            box-shadow: 0 0 60px rgba(0, 200, 255, 0.8);
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple), var(--primary-blue));
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s linear infinite;
+        }
+
+        @keyframes shimmer {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        .hero .subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 300;
+        }
+
+        .hero .tagline {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            line-height: 1.8;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--primary-blue), #0080ff);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 200, 255, 0.3);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .cta-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 40px rgba(0, 200, 255, 0.6);
+        }
+
+        .cta-button.secondary {
+            background: transparent;
+            border: 2px solid var(--primary-blue);
+            box-shadow: 0 0 20px rgba(0, 200, 255, 0.2);
+        }
+
+        .cta-button.secondary:hover {
+            background: rgba(0, 200, 255, 0.1);
+        }
+
+        /* Glowing accent line */
+        .glow-line {
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary-blue), transparent);
+            margin: 2rem auto;
+            box-shadow: 0 0 10px var(--primary-blue);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(10, 10, 10, 0.9);
+            text-align: center;
+            padding: var(--section-padding);
+            color: var(--text-muted);
+            border-top: 1px solid rgba(0, 200, 255, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            :root {
+                --headshot-size: 150px;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.2rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                padding: 1rem;
+            }
+
+            .cta-group {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .cta-button {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Burger Menu Button -->
+    <div class="burger-menu" id="burgerMenu">
+        <div class="burger-line"></div>
+        <div class="burger-line"></div>
+        <div class="burger-line"></div>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="projects.html">Projects</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="projects.html">Projects</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <!-- Headshot Section -->
+            <div class="headshot-container">
+                <!-- Replace 'your-headshot.jpg' with your actual image file -->
+                <!-- If no image, the placeholder will show a profile icon -->
+                <img src="headshot.jpg" alt="Rafaela Solis" class="headshot" 
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="headshot-placeholder" style="display: none;">👤</div>
+            </div>
+            
+            <h1>Rafaela Solis</h1>
+            <div class="glow-line"></div>
+            <p class="subtitle">Game Developer & Designer</p>
+            <p class="tagline">Crafting immersive gaming experiences through innovative design, passionate development, and cutting-edge technology</p>
+            <div class="cta-group">
+                <a href="projects.html" class="cta-button">View My Work</a>
+                <a href="contact.html" class="cta-button secondary">Get In Touch</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Rafaela Solis. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Create animated particles
+        const particlesContainer = document.getElementById('particles');
+        const particleCount = 50;
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 20 + 's';
+            particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+            
+            // Random colors for variety
+            const colors = ['rgba(0, 200, 255, 0.3)', 'rgba(179, 102, 255, 0.3)', 'rgba(0, 255, 200, 0.3)'];
+            particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+            
+            particlesContainer.appendChild(particle);
+        }
+    </script>
+
+    <script>
+    // Burger menu functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const burgerMenu = document.getElementById('burgerMenu');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        burgerMenu.addEventListener('click', function() {
+            burgerMenu.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+        });
+        
+        // Close menu when clicking on a link
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                burgerMenu.classList.remove('active');
+                mobileMenu.classList.remove('active');
+            });
+        });
+        
+        // Close menu when clicking outside
+        mobileMenu.addEventListener('click', function(e) {
+            if (e.target === mobileMenu) {
+                burgerMenu.classList.remove('active');
+                mobileMenu.classList.remove('active');
+            }
+        });
+    });
+    </script>
+
+</body>
+</html>
