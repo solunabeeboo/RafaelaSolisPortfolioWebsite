@@ -1,7 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://rafaelasolis.work/</loc></url>
-  <url><loc>https://rafaelasolis.work/about.html</loc></url>
-  <url><loc>https://rafaelasolis.work/projects.html</loc></url>
-  <url><loc>https://rafaelasolis.work/contact.html</loc></url>
+  <url>
+    <loc>https://rafaelasolis.work/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://rafaelasolis.work/about.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://rafaelasolis.work/projects.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://rafaelasolis.work/contact.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
 </urlset>
+```
+
+**After uploading:**
+- Your sitemap will be accessible at `https://rafaelasolis.work/sitemap.xml`
+- Submit this URL in Google Search Console
+- You can test it by visiting the URL directly in your browser
+
+**Optional enhancement:** You could also add a `robots.txt` file to help search engines:
+```
+User-agent: *
+Allow: /
+Sitemap: https://rafaelasolis.work/sitemap.xml
