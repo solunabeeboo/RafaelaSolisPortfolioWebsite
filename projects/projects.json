@@ -2,75 +2,247 @@
   "projects": [
     {
       "title": "Mega Market Mayhem",
-      "description": "A fast-paced multiplayer 1v1 fighting game where players compete to see who's on top with quirky and fun food based characters, all while managing chaos in a bustling supermarket.",
+      "shortDescription": "A fast-paced multiplayer 1v1 fighting game where players compete to see who's on top with quirky and fun food based characters.",
+      "fullDescription": "Mega Market Mayhem is an intense multiplayer fighting game that combines fast-paced combat with quirky food-themed characters in a chaotic supermarket setting. Players engage in 1v1 battles using unique food-based fighters, each with their own special abilities and combat styles.\n\nKey Features:\n• Multiplayer 1v1 fighting mechanics\n• Unique food-based character roster\n• Dynamic supermarket environments\n• Special abilities and combo systems\n• Chaotic and fun gameplay designed for competitive play\n\nThe game focuses on accessible yet deep fighting mechanics, making it easy for newcomers to jump in while providing enough complexity for competitive players to master.",
       "tags": ["Unity", "C#", "Multiplayer", "Action", "Fighting"],
       "image": "images/megamarketmayhem.png",
+      "screenshots": [
+        "images/megamarketmayhem-1.jpg",
+        "images/megamarketmayhem-2.jpg",
+        "images/megamarketmayhem-3.jpg"
+      ],
       "gradient": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-      "playLink": "https://studio-212.itch.io/mega-market-mayhem",
-      "detailPage": true
+      "playLink": "https://solunabeeboo.itch.io/mazetastic-colors",
+      "embedUrl": "https://itch.io/embed-upload/15301189?color=ca50c5",
+      "embedType": "game",
+      "linkText": "Play on itch.io",
+      "hasEmbed": true,
+      "developmentTime": "4 months",
+      "teamSize": "Team of 3",
+      "tools": ["Unity 2022.3", "C#", "Photoshop", "Git"],
+      "challenges": "The biggest challenge was implementing smooth multiplayer networking and ensuring fair gameplay across different connection speeds.",
+      "learnings": "This project taught me a lot about multiplayer game architecture and the importance of responsive combat systems."
     },
     {
       "title": "Scriptorium",
-      "description": "An immersive narrative dungeon crawler where one must draw to attack, utilizing advanced neural model recognition players can learn a new language of actions.",
+      "shortDescription": "An immersive narrative dungeon crawler where one must draw to attack, utilizing advanced neural model recognition.",
+      "fullDescription": "Scriptorium is an innovative dungeon crawler that revolutionizes combat through drawing mechanics. Players must physically draw symbols and patterns to cast spells and perform attacks, using advanced neural network recognition to interpret their drawings in real-time.\n\nInnovative Features:\n• Neural network-powered drawing recognition\n• Learn a unique 'language' of combat through drawing\n• Immersive narrative-driven progression\n• Roguelite elements with procedural dungeons\n• Strategic spell combinations through drawing\n• Rich storyline with multiple branching paths\n\nThe game combines traditional dungeon crawling with cutting-edge AI technology, creating a truly unique gameplay experience that feels both familiar and revolutionary.",
       "tags": ["Unity 6", "C#", "Narrative", "Action", "Roguelite", "Bloody"],
       "image": "images/scriptorium.png",
+      "screenshots": [
+        "images/scriptorium-1.jpg",
+        "images/scriptorium-2.jpg"
+      ],
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
       "playLink": "https://studio-212.itch.io/project-dungeon",
-      "detailPage": true
+      "linkText": "Play on itch.io",
+      "hasEmbed": false,
+      "developmentTime": "8 months",
+      "teamSize": "Team of 4",
+      "tools": ["Unity 6", "C#", "TensorFlow", "ML.NET", "Aseprite"],
+      "challenges": "Integrating neural network recognition for drawing input while maintaining responsive gameplay was extremely challenging.",
+      "learnings": "This project expanded my knowledge of machine learning integration in games and real-time input processing."
     },
     {
       "title": "Navi",
-      "description": "A fast-paced singeplayer narrative platformer, play as a lost rabbit fighting to get home through the forest where things are always more than they seem.",
+      "shortDescription": "A fast-paced singleplayer narrative platformer, play as a lost rabbit fighting to get home through the forest.",
+      "fullDescription": "Navi tells the emotional story of a lost rabbit navigating through a mysterious forest where nothing is quite what it seems. This narrative-driven platformer combines precise movement mechanics with time-based puzzles and a compelling storyline.\n\nStory & Gameplay:\n• Play as Navi, a determined rabbit on a journey home\n• Navigate through beautifully crafted forest environments\n• Uncover the mysteries hidden within the forest\n• Master time-based mechanics that affect the world around you\n• Experience multiple story revelations and plot twists\n• Fast-paced platforming with precision controls\n\nThe game explores themes of perseverance, home, and the unexpected challenges we face on our journeys through life.",
       "tags": ["Unity", "C#", "Narrative", "Platformer", "Action", "Cute", "Time-based mechanics"],
       "image": "images/casinogame.png",
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
       "playLink": "https://rafaelasolis.work/projects",
-      "detailPage": true
+      "linkText": "View Project",
+      "hasEmbed": false,
+      "developmentTime": "5 months",
+      "teamSize": "Solo project",
+      "tools": ["Unity 2021.3", "C#", "Aseprite", "Audacity"],
+      "challenges": "Creating smooth time-based mechanics that felt intuitive while maintaining the narrative pacing was quite complex.",
+      "learnings": "This project taught me about environmental storytelling and how gameplay mechanics can enhance narrative themes."
     },
     {
       "title": "Casino Game!",
-      "description": "A silly and simple casino game coded in pure C++ with text based inputs!",
+      "shortDescription": "A silly and simple casino game coded in pure C++ with text based inputs!",
+      "fullDescription": "A fun academic project that recreates the excitement of casino games through pure C++ programming with text-based interfaces. This project demonstrates fundamental programming concepts while creating an entertaining gambling simulation.\n\nFeatures:\n• Multiple casino games (slots, blackjack, poker)\n• Text-based user interface\n• Random number generation systems\n• Player statistics and money management\n• Save/load game functionality\n• Betting systems and odds calculation\n\nBuilt entirely in C++ without external libraries, this project showcases core programming skills and game logic implementation.",
       "tags": ["C++", "Academic", "Arcade", "Gambling", "Text-based", "RNG"],
       "image": "images/casinogame.png",
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
       "playLink": "https://rafaelasolis.work/projects",
-      "detailPage": true
+      "linkText": "View Code",
+      "hasEmbed": false,
+      "developmentTime": "2 months",
+      "teamSize": "Solo project",
+      "tools": ["C++", "Visual Studio", "Git"],
+      "challenges": "Implementing fair random number generation and managing complex game state without external libraries.",
+      "learnings": "This project strengthened my understanding of C++ fundamentals and probability systems in games."
     },
     {
-      "title": "OpenGL Enviornments",
-      "description": "Scenes and textures coded in C++ and OpenGL.",
+      "title": "OpenGL Environments",
+      "shortDescription": "Scenes and textures coded in C++ and OpenGL.",
+      "fullDescription": "A collection of 3D scenes and environments built from scratch using C++ and OpenGL, demonstrating low-level graphics programming and mathematical concepts in computer graphics.\n\nTechnical Achievements:\n• Custom 3D rendering pipeline\n• Texture mapping and lighting systems\n• Shader programming (vertex and fragment)\n• Mathematical transformations and camera systems\n• Real-time rendering optimizations\n• Multiple scene compositions with different themes\n\nThese projects showcase the fundamentals of computer graphics programming and the mathematical principles that power modern game engines.",
       "tags": ["OpenGL", "C++", "Academic", "3D", "2D", "Textures", "Math"],
       "image": "images/opengl.png",
+      "screenshots": [
+        "images/opengl-1.jpg",
+        "images/opengl-2.jpg",
+        "images/opengl-3.jpg"
+      ],
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
       "playLink": "https://rafaelasolis.work/projects",
-      "detailPage": true
+      "linkText": "View Code",
+      "hasEmbed": false,
+      "developmentTime": "1 semester",
+      "teamSize": "Solo project",
+      "tools": ["OpenGL", "C++", "GLFW", "GLEW", "GLM"],
+      "challenges": "Understanding the mathematical foundations of 3D graphics and implementing efficient rendering pipelines.",
+      "learnings": "This project gave me deep insight into how modern graphics engines work under the hood."
     },
     {
       "title": "Mazetastic Colors",
-      "description": "A strategic yet multi-leveled fun maze game focused around matching colors and finding the exit!",
+      "shortDescription": "A strategic yet multi-leveled fun maze game focused around matching colors and finding the exit!",
+      "fullDescription": "Mazetastic Colors combines traditional maze navigation with color-based puzzle mechanics, creating a unique and challenging gameplay experience across multiple levels of increasing complexity.\n\nGameplay Features:\n• Strategic maze navigation with color-matching mechanics\n• Multiple levels with progressively complex layouts\n• Color-based puzzle solving elements\n• Strategic thinking required to find optimal paths\n• Clean, accessible visual design\n• Satisfying progression system\n\nThe game challenges players to think both spatially and strategically, combining pathfinding skills with color logic puzzles.",
       "tags": ["Unity", "C#", "Academic", "2D", "Puzzle", "Maze", "Color Based Puzzles"],
       "image": "images/colormaze.png",
+      "screenshots": [
+        "images/colormaze-1.jpg",
+        "images/colormaze-2.jpg"
+      ],
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
       "playLink": "https://rafaelasolis.work/projects",
-      "detailPage": true
+      "linkText": "View Project",
+      "hasEmbed": false,
+      "developmentTime": "3 months",
+      "teamSize": "Solo project",
+      "tools": ["Unity 2020.3", "C#", "Adobe Illustrator"],
+      "challenges": "Designing levels that balanced maze complexity with color puzzle difficulty without overwhelming players.",
+      "learnings": "This project taught me about puzzle design principles and creating intuitive yet challenging gameplay."
     },
     {
       "title": "Valentine Bash",
-      "description": "A strategic and fast based vertical shooter, kill the bugs trying to kill love and save valentine's day!",
+      "shortDescription": "A strategic and fast based vertical shooter, kill the bugs trying to kill love and save valentine's day!",
+      "fullDescription": "Valentine Bash is a fast-paced vertical shooter with a romantic twist! Players must defend love itself by eliminating waves of bugs that threaten to destroy Valentine's Day. The game combines classic arcade shooter mechanics with strategic elements and multi-camera rendering.\n\nGame Features:\n• Fast-paced vertical shooting action\n• Strategic enemy patterns and wave design\n• Multiple levels with increasing difficulty\n• Multi-camera rendering system for dynamic perspectives\n• Valentine's Day themed art and story\n• Power-ups and weapon upgrades\n• Score-based progression system\n\nThe game captures the intensity of classic arcade shooters while adding modern polish and strategic depth.",
       "tags": ["Unity", "C#", "Academic", "2D", "Action", "Vertical Shooter", "Multi-Leveled", "Multi-Camera Rendering"],
       "image": "images/valentinebash.png",
+      "screenshots": [
+        "images/valentinebash-1.jpg",
+        "images/valentinebash-2.jpg"
+      ],
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
       "playLink": "https://rafaelasolis.work/projects",
-      "detailPage": true
+      "linkText": "View Project",
+      "hasEmbed": false,
+      "developmentTime": "2 months",
+      "teamSize": "Solo project",
+      "tools": ["Unity 2020.3", "C#", "Aseprite"],
+      "challenges": "Implementing smooth multi-camera rendering while maintaining consistent performance across different devices.",
+      "learnings": "This project improved my understanding of camera systems and performance optimization in Unity."
     },
     {
       "title": "Matching Memories",
-      "description": "A slow and simple matching game with diagetic UI and multiple levels!",
+      "shortDescription": "A slow and simple matching game with diegetic UI and multiple levels!",
+      "fullDescription": "Matching Memories is a thoughtfully designed matching game that emphasizes calm, meditative gameplay while incorporating innovative diegetic UI elements. The game focuses on creating a relaxing experience across multiple progressively challenging levels.\n\nDesign Philosophy:\n• Slow-paced, relaxing gameplay that encourages mindfulness\n• Diegetic UI that integrates seamlessly with the game world\n• Multiple levels with carefully designed difficulty progression\n• Clean, minimalist visual design\n• Soothing audio design and feedback\n• Accessibility-focused design principles\n\nThe game demonstrates how traditional matching mechanics can be elevated through thoughtful design and attention to user experience.",
       "tags": ["Unity", "C#", "Academic", "2D", "Puzzle", "Matching", "Multi-Leveled"],
       "image": "images/matching.png",
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
       "playLink": "https://rafaelasolis.work/projects",
-      "detailPage": true
+      "linkText": "View Project",
+      "hasEmbed": false,
+      "developmentTime": "1.5 months",
+      "teamSize": "Solo project",
+      "tools": ["Unity 2020.3", "C#", "Adobe Photoshop"],
+      "challenges": "Creating diegetic UI elements that felt natural and intuitive while maintaining game functionality.",
+      "learnings": "This project taught me about UI/UX design principles and the importance of accessibility in game design."
+    },
+    {
+      "title": "Scrum Facilitation",
+      "shortDescription": "The various tools I've created, researched, and implemented into team use to more easily facilitate the agile / scrum workflow.",
+      "fullDescription": "A comprehensive collection of tools, processes, and implementations designed to streamline agile and scrum workflows in game development teams. This project represents ongoing research and practical application of project management methodologies.\n\nTools & Implementations:\n• Custom sprint planning and tracking tools\n• Automated burndown chart generation\n• Team velocity analysis systems\n• Retrospective facilitation frameworks\n• Integration tools for development workflows\n• Documentation and training materials\n• Performance metrics and reporting systems\n\nThese tools have been tested and refined through real-world team implementations, focusing on practical solutions that actually improve team productivity.",
+      "tags": ["Scrum", "Agile", "Python"],
+      "image": "images/agile.png",
+      "screenshots": [
+        "images/agile-1.jpg",
+        "images/agile-2.jpg"
+      ],
+      "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+      "playLink": "https://rafaelasolis.work/projects",
+      "linkText": "View Documentation",
+      "hasEmbed": false,
+      "developmentTime": "Ongoing",
+      "teamSize": "Solo research",
+      "tools": ["Python", "Jira API", "Git", "Excel/Sheets"],
+      "challenges": "Balancing tool complexity with ease of use, and getting team buy-in for new processes.",
+      "learnings": "This project deepened my understanding of team dynamics and the practical challenges of implementing agile methodologies."
+    },
+    {
+      "title": "Project Documentation",
+      "shortDescription": "Various examples of documentation I've created as a game designer and programmer, as well as more historically focused deconstructions.",
+      "fullDescription": "A comprehensive portfolio of technical and design documentation spanning game development, programming practices, and historical game analysis. This collection showcases my ability to communicate complex technical concepts clearly and thoroughly.\n\nDocumentation Types:\n• Technical design documents for game systems\n• Code documentation and API references\n• Game design documents with detailed mechanics\n• Historical game deconstructions and analysis\n• Development process documentation\n• Team workflow and standards documentation\n• Post-mortem analyses of completed projects\n\nThese documents demonstrate both technical writing skills and deep understanding of game development processes across different eras and platforms.",
+      "tags": ["Documentation", "Academic", "Game Design", "Game Programming", "Game History"],
+      "image": "images/documentation.png",
+      "screenshots": [
+        "images/documentation-1.jpg",
+        "images/documentation-2.jpg"
+      ],
+      "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+      "playLink": "https://rafaelasolis.work/projects",
+      "linkText": "View Documentation",
+      "hasEmbed": false,
+      "developmentTime": "Ongoing",
+      "teamSize": "Solo work",
+      "tools": ["Markdown", "LaTeX", "Confluence", "Git"],
+      "challenges": "Making technical documentation accessible to both technical and non-technical team members.",
+      "learnings": "This work has improved my communication skills and understanding of historical game development practices."
+    },
+    {
+      "title": "Space Escape",
+      "shortDescription": "A dramatic narrative collection game, fix the space station's power core to save everyone's lives... but how much will it take?",
+      "fullDescription": "Space Escape is a tense narrative-driven puzzle game set aboard a failing space station. Players must navigate through the station collecting crucial components to repair the power core, all while racing against time and uncovering the dark secrets of what really happened.\n\nNarrative & Gameplay:\n• Dramatic sci-fi storyline with multiple revelations\n• Collection-based puzzle mechanics\n• Immersive 3D space station environments\n• Moral choices that affect the story outcome\n• Atmospheric tension building throughout the experience\n• Resource management under pressure\n• Multiple endings based on player choices\n\nBuilt in Unreal Engine 5.6, the game showcases advanced visual storytelling and environmental narrative techniques.",
+      "tags": ["Unreal Engine 5.6", "Blueprints", "Academic", "3D", "Puzzle", "Collecting", "Narrative"],
+      "image": "images/spaceescape.png",
+      "screenshots": [
+        "images/spaceescape-1.jpg",
+        "images/spaceescape-2.jpg"
+      ],
+      "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+      "playLink": "https://rafaelasolis.work/projects",
+      "linkText": "View Project",
+      "hasEmbed": false,
+      "developmentTime": "4 months",
+      "teamSize": "Solo project",
+      "tools": ["Unreal Engine 5.6", "Blueprints", "Blender", "Audacity"],
+      "challenges": "Creating convincing space station environments while maintaining performance in UE5.",
+      "learnings": "This project taught me advanced Unreal Engine techniques and environmental storytelling methods."
+    },
+    {
+      "title": "Bender Man",
+      "shortDescription": "A silly collecting game parodying the Slender Man series, collect the pages before he gets you!",
+      "fullDescription": "Bender Man is a humorous parody of the classic Slender Man horror games, turning the terrifying concept into a lighthearted collecting adventure. Players must gather scattered pages while avoiding the comically reimagined antagonist.\n\nParody Elements:\n• Playful take on classic horror game mechanics\n• Collecting gameplay with a twist of humor\n• 3D environments that both honor and subvert the original\n• Survival mechanics with comedic timing\n• Easter eggs and references to the original series\n• Accessible horror that's more fun than frightening\n\nThe game demonstrates how familiar mechanics can be transformed through tone and presentation to create entirely different experiences.",
+      "tags": ["Unreal Engine", "Blueprints", "Academic", "3D", "Collecting", "Survival"],
+      "image": "images/benderman.png",
+      "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+      "playLink": "https://rafaelasolis.work/projects",
+      "linkText": "View Project",
+      "hasEmbed": false,
+      "developmentTime": "2 months",
+      "teamSize": "Solo project",
+      "tools": ["Unreal Engine 4", "Blueprints", "Blender"],
+      "challenges": "Balancing parody elements with actual engaging gameplay mechanics.",
+      "learnings": "This project taught me about tone and how presentation can completely change a player's experience."
+    },
+    {
+      "title": "Fishing For Fun",
+      "shortDescription": "A fun arcade style shooter-looter, use your harpoon to swing around the level collecting fish and upgrading your stats!",
+      "fullDescription": "Fishing For Fun combines arcade shooting mechanics with looter progression systems, creating a unique experience where players use a harpoon both as a weapon and a traversal tool. The game focuses on fluid movement and satisfying collection mechanics.\n\nCore Mechanics:\n• Harpoon-based movement and combat system\n• Arcade-style shooting with physics-based projectiles\n• Loot collection and character progression\n• Swinging mechanics for dynamic traversal\n• Stat upgrades and equipment systems\n• Multiple level environments with different challenges\n• High-score based arcade progression\n\nThe game successfully merges several genres to create something that feels both familiar and fresh.",
+      "tags": ["Unreal Engine", "Blueprints", "Academic", "3D", "Shooter-Looter", "Arcade"],
+      "image": "images/matching.png",
+      "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+      "playLink": "https://rafaelasolis.work/projects",
+      "linkText": "View Project",
+      "hasEmbed": false,
+      "developmentTime": "3 months",
+      "teamSize": "Solo project",
+      "tools": ["Unreal Engine 4", "Blueprints", "Maya"],
+      "challenges": "Creating responsive harpoon physics that felt good for both movement and combat.",
+      "learnings": "This project improved my understanding of physics-based gameplay and arcade game design principles."
     }
   ]
 }

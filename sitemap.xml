@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://rafaelasolis.work/</loc></url>
-  <url><loc>https://rafaelasolis.work/about.html</loc></url>
-  <url><loc>https://rafaelasolis.work/projects.html</loc></url>
-  <url><loc>https://rafaelasolis.work/contact.html</loc></url>
+  <url><loc>https://rafaelasolis.work/about</loc></url>
+  <url><loc>https://rafaelasolis.work/projects</loc></url>
+  <url><loc>https://rafaelasolis.work/contact</loc></url>
 </urlset>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"="width=device-width, initial-scale=1.0">
     <title>Projects - Rafaela Solis</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <style>
@@ -17,7 +17,7 @@
             --text-muted: #808080;
             --max-content-width: 1200px;
             --section-padding: 2rem;
-            --nav-height: 80px; /* Define nav height for consistent spacing */
+            --nav-height: 80px;
         }
 
         * {
@@ -110,7 +110,6 @@
             box-shadow: 0 0 5px rgba(255, 68, 161, 0.5);
         }
 
-        /* Burger animation when active */
         .burger-menu.active .burger-line:nth-child(1) {
             transform: rotate(45deg) translate(5px, 5px);
         }
@@ -123,7 +122,6 @@
             transform: rotate(-45deg) translate(7px, -6px);
         }
 
-        /* Mobile menu overlay */
         .mobile-menu {
             position: fixed;
             top: 0;
@@ -161,7 +159,6 @@
             color: var(--primary-blue);
         }
 
-        /* Hide regular nav on mobile */
         @media (max-width: 768px) {
             nav {
                 display: none;
@@ -176,11 +173,11 @@
         section {
             max-width: var(--max-content-width);
             margin: 0 auto;
-            padding-top: calc(var(--nav-height) + 4rem); /* Dynamic top padding based on nav height */
+            padding-top: calc(var(--nav-height) + 4rem);
             padding-left: var(--section-padding);
             padding-right: var(--section-padding);
             padding-bottom: 4rem;
-            min-height: calc(100vh - var(--nav-height)); /* Ensure full height accounting for nav */
+            min-height: calc(100vh - var(--nav-height));
         }
 
         h1 {
@@ -256,7 +253,6 @@
             overflow: hidden;
         }
 
-        /* Text overlay with blur background for images */
         .project-image-text {
             position: relative;
             z-index: 3;
@@ -269,7 +265,6 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
-        /* Darken image overlay for better text readability */
         .project-image.has-image::before {
             content: '';
             position: absolute;
@@ -319,7 +314,6 @@
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
-            margin-bottom: 1rem;
         }
 
         .tag {
@@ -337,33 +331,219 @@
             box-shadow: 0 0 10px rgba(255, 68, 161, 0.3);
         }
 
-        .project-link {
+        /* Project Detail Modal */
+        .project-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .project-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card-background);
+            border: 1px solid rgba(255, 68, 161, 0.3);
+            border-radius: 15px;
+            max-width: 1000px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 2rem 1rem 2rem;
+            border-bottom: 1px solid rgba(255, 68, 161, 0.2);
+        }
+
+        .modal-title {
+            color: var(--primary-blue);
+            font-size: 2rem;
+            margin: 0;
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .close-button:hover {
+            background: rgba(255, 68, 161, 0.1);
+            color: var(--primary-blue);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-embed-section {
+            margin-bottom: 2rem;
+        }
+
+        .embed-frame {
+            width: 100%;
+            border: none;
+            border-radius: 10px;
+            background: white;
+        }
+
+        .widget-embed {
+            height: 167px;
+        }
+
+        .game-embed {
+            height: 700px;
+            min-width: 940px; /* Unity's typical minimum width */
+        }
+
+        .modal-info-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .modal-main-content h4 {
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .modal-description {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            white-space: pre-line;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-screenshots {
+            margin-bottom: 2rem;
+        }
+
+        .screenshots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .screenshot {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 68, 161, 0.2);
+            transition: all 0.3s;
+        }
+
+        .screenshot:hover {
+            border-color: var(--primary-blue);
+            transform: scale(1.05);
+        }
+
+        .modal-sidebar {
+            background: rgba(10, 10, 10, 0.5);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 68, 161, 0.1);
+        }
+
+        .modal-detail-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-detail-item h5 {
+            color: var(--primary-purple);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .modal-detail-item p,
+        .modal-detail-item ul {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .modal-detail-item ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .modal-detail-item li {
+            margin-bottom: 0.3rem;
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .modal-detail-item li::before {
+            content: '•';
+            color: var(--primary-blue);
+            position: absolute;
+            left: 0;
+        }
+
+        .modal-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .modal-actions {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .modal-link {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            color: var(--primary-purple);
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+            color: white;
             text-decoration: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
             font-weight: 500;
             transition: all 0.3s;
-            position: relative;
-            z-index: 10;
         }
 
-        .project-link:hover {
-            color: var(--primary-blue);
-            gap: 1rem;
+        .modal-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 68, 161, 0.3);
         }
 
-        .project-link::after {
+        .modal-link::after {
             content: '→';
             transition: transform 0.3s;
         }
 
-        .project-link:hover::after {
+        .modal-link:hover::after {
             transform: translateX(5px);
         }
 
-        /* Loading state */
+        /* Loading and Error States */
         .loading {
             text-align: center;
             color: var(--text-muted);
@@ -371,7 +551,6 @@
             font-size: 1.1rem;
         }
 
-        /* Error state */
         .error {
             text-align: center;
             color: #ff6b6b;
@@ -391,11 +570,11 @@
         /* Responsive */
         @media (max-width: 768px) {
             :root {
-                --nav-height: 0px; /* No nav on mobile, only burger menu */
+                --nav-height: 0px;
             }
 
             section {
-                padding-top: 6rem; /* Account for burger menu space */
+                padding-top: 6rem;
             }
 
             h1 {
@@ -403,6 +582,36 @@
             }
 
             .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                margin: 1rem;
+                max-height: 95vh;
+            }
+
+            .modal-header {
+                padding: 1.5rem 1.5rem 1rem 1.5rem;
+            }
+
+            .modal-title {
+                font-size: 1.5rem;
+            }
+
+            .modal-body {
+                padding: 1.5rem;
+            }
+
+            .modal-info-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .game-embed {
+                height: 400px;
+            }
+
+            .screenshots-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -436,6 +645,19 @@
         </ul>
     </nav>
 
+    <!-- Project Detail Modal -->
+    <div class="project-modal" id="projectModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Project Title</h2>
+                <button class="close-button" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
     <!-- Projects Section -->
     <section>
         <h1>My Projects</h1>
@@ -452,13 +674,7 @@
     </footer>
 
     <script>
-        // Function to convert project title to filename
-        function titleToFilename(title) {
-            return title.toLowerCase()
-                .replace(/[^a-z0-9\s]/g, '') // Remove special characters
-                .replace(/\s+/g, '') // Remove spaces
-                + '.html';
-        }
+        let projectsData = [];
 
         // Load and display projects from JSON
         async function loadProjects() {
@@ -468,7 +684,8 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
-                displayProjects(data.projects);
+                projectsData = data.projects;
+                displayProjects(projectsData);
             } catch (error) {
                 console.error('Error loading projects:', error);
                 displayError('Failed to load projects. Please check that projects.json exists and is properly formatted.');
@@ -484,8 +701,8 @@
                 return;
             }
 
-            for (const project of projects) {
-                const card = await createProjectCard(project);
+            for (let i = 0; i < projects.length; i++) {
+                const card = await createProjectCard(projects[i], i);
                 grid.appendChild(card);
             }
         }
@@ -501,10 +718,10 @@
                 img.onload = () => resolve(true);
                 img.onerror = () => resolve(false);
                 img.src = imagePath;
-                });
+            });
         }
 
-        async function createProjectCard(project) {
+        async function createProjectCard(project, index) {
             const card = document.createElement('div');
             card.className = 'project-card';
             
@@ -514,14 +731,13 @@
             let titleMarkup = project.title;
             
             if (project.image) {
-                 const imageExists = await checkImageExists(project.image);
+                const imageExists = await checkImageExists(project.image);
         
                 if (imageExists) {
                     backgroundStyle = `background-image: url('${project.image}');`;
                     imageClass = 'has-image';
                     titleMarkup = `<span class="project-image-text">${project.title}</span>`;
                 } else {
-                    // Fallback to gradient if image doesn't exist
                     console.warn(`Image not found: ${project.image}`);
                     backgroundStyle = `background: ${project.gradient || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'};`;
                 }
@@ -535,28 +751,158 @@
                 </div>
                 <div class="project-content">
                     <h3>${project.title}</h3>
-                    <p>${project.description}</p>
+                    <p>${project.shortDescription || project.description}</p>
                     <div class="project-tags">
                         ${project.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
                     </div>
-                    <a href="${project.playLink || '#'}" class="project-link">${project.linkText || 'Play Game'}</a>
                 </div>
             `;
 
-            // Add click handler for detail pages if enabled
-            if (project.detailPage !== false) {
-                card.addEventListener('click', function(e) {
-                    if (e.target.classList.contains('project-link') || 
-                        e.target.closest('.project-link')) {
-                        return;
-                    }
-                    
-                    const filename = titleToFilename(project.title);
-                    window.location.href = filename;
-                });
-            }
+            // Add click handler to open modal
+            card.addEventListener('click', () => openProjectModal(index));
 
             return card;
+        }
+
+        function openProjectModal(projectIndex) {
+            const project = projectsData[projectIndex];
+            const modal = document.getElementById('projectModal');
+            const title = document.getElementById('modalTitle');
+            const body = document.getElementById('modalBody');
+            
+            title.textContent = project.title;
+            
+            // Build modal content
+            let modalContent = '';
+            
+            // Embed section (if available)
+            if (project.hasEmbed && project.embedUrl) {
+                const embedClass = project.embedType === 'game' ? 'game-embed' : 'widget-embed';
+                modalContent += `
+                    <div class="modal-embed-section">
+                        <iframe class="embed-frame ${embedClass}" 
+                                src="${project.embedUrl}" 
+                                allowfullscreen="true"
+                                webkitallowfullscreen="true"
+                                mozallowfullscreen="true"
+                                allow="fullscreen">
+                        </iframe>
+                    </div>
+                `;
+            }
+            
+            // Main content grid
+            modalContent += `
+                <div class="modal-info-grid">
+                    <div class="modal-main-content">
+                        <h4>About This Project</h4>
+                        <div class="modal-description">${project.fullDescription || project.description}</div>
+            `;
+            
+            // Screenshots section
+            if (project.screenshots && project.screenshots.length > 0) {
+                modalContent += `
+                    <div class="modal-screenshots">
+                        <h4>Screenshots</h4>
+                        <div class="screenshots-grid">
+                            ${project.screenshots.map(screenshot => 
+                                `<img src="${screenshot}" alt="Screenshot" class="screenshot" onerror="this.style.display='none'">`
+                            ).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            modalContent += `</div>`;
+            
+            // Sidebar with project details
+            modalContent += `
+                <div class="modal-sidebar">
+                    <div class="modal-detail-item">
+                        <h5>Technologies</h5>
+                        <div class="modal-tags">
+                            ${project.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                    </div>
+            `;
+            
+            if (project.developmentTime) {
+                modalContent += `
+                    <div class="modal-detail-item">
+                        <h5>Development Time</h5>
+                        <p>${project.developmentTime}</p>
+                    </div>
+                `;
+            }
+            
+            if (project.teamSize) {
+                modalContent += `
+                    <div class="modal-detail-item">
+                        <h5>Team Size</h5>
+                        <p>${project.teamSize}</p>
+                    </div>
+                `;
+            }
+            
+            if (project.tools && project.tools.length > 0) {
+                modalContent += `
+                    <div class="modal-detail-item">
+                        <h5>Tools Used</h5>
+                        <ul>
+                            ${project.tools.map(tool => `<li>${tool}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            if (project.challenges) {
+                modalContent += `
+                    <div class="modal-detail-item">
+                        <h5>Key Challenges</h5>
+                        <p>${project.challenges}</p>
+                    </div>
+                `;
+            }
+            
+            if (project.learnings) {
+                modalContent += `
+                    <div class="modal-detail-item">
+                        <h5>What I Learned</h5>
+                        <p>${project.learnings}</p>
+                    </div>
+                `;
+            }
+            
+            modalContent += `
+                </div>
+            </div>
+            `;
+            
+            // Action buttons
+            modalContent += `
+                <div class="modal-actions">
+                    <a href="${project.playLink || '#'}" class="modal-link" target="_blank" rel="noopener noreferrer">
+                        ${project.linkText || 'View Project'}
+                    </a>
+                </div>
+            `;
+            
+            body.innerHTML = modalContent;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeProjectModal() {
+            const modal = document.getElementById('projectModal');
+            const body = document.getElementById('modalBody');
+            
+            modal.classList.remove('active');
+            
+            // Clear iframe sources to stop any running content
+            const iframes = body.querySelectorAll('iframe');
+            iframes.forEach(iframe => iframe.src = '');
+            
+            document.body.style.overflow = '';
         }
 
         // Burger menu functionality
@@ -569,7 +915,6 @@
                 mobileMenu.classList.toggle('active');
             });
             
-            // Close menu when clicking on a link
             const mobileLinks = mobileMenu.querySelectorAll('a');
             mobileLinks.forEach(link => {
                 link.addEventListener('click', function() {
@@ -578,7 +923,6 @@
                 });
             });
             
-            // Close menu when clicking outside
             mobileMenu.addEventListener('click', function(e) {
                 if (e.target === mobileMenu) {
                     burgerMenu.classList.remove('active');
@@ -587,10 +931,31 @@
             });
         }
 
+        // Initialize modal functionality
+        function initProjectModal() {
+            const closeButton = document.getElementById('closeModal');
+            const modal = document.getElementById('projectModal');
+            
+            closeButton.addEventListener('click', closeProjectModal);
+            
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeProjectModal();
+                }
+            });
+            
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closeProjectModal();
+                }
+            });
+        }
+
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', function() {
             loadProjects();
             initBurgerMenu();
+            initProjectModal();
         });
     </script>
 </body>
