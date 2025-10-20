@@ -302,6 +302,37 @@
             margin-bottom: 0.5rem;
             font-size: 1.5rem;
             color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .game-indicator {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            transition: all 0.3s;
+            filter: drop-shadow(0 0 5px rgba(255, 68, 161, 0.3));
+            background: linear-gradient(135deg, rgba(255, 68, 161, 0.15), rgba(179, 102, 255, 0.15));
+            border: 2px solid rgba(255, 68, 161, 0.4);
+            border-radius: 50%;
+            width: 2.2rem;
+            height: 2.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 15px rgba(255, 68, 161, 0.2);
+            flex-shrink: 0;
+            line-height: 1;
+        }
+
+        .project-card:hover .game-indicator {
+            opacity: 1;
+            transform: scale(1.15);
+            filter: drop-shadow(0 0 10px rgba(255, 68, 161, 0.6));
+            border-color: rgba(255, 68, 161, 0.7);
+            box-shadow: 0 0 25px rgba(255, 68, 161, 0.4);
+            background: linear-gradient(135deg, rgba(255, 68, 161, 0.25), rgba(179, 102, 255, 0.25));
         }
 
         .project-content p {
@@ -375,6 +406,9 @@
             color: var(--primary-blue);
             font-size: 2rem;
             margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .close-button {
@@ -745,12 +779,16 @@
                 backgroundStyle = `background: ${project.gradient || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'};`;
             }
             
+            // Check if project has an embedded game
+            const hasEmbeddedGame = project.hasEmbed && project.embedType === 'game';
+            const gameIndicator = hasEmbeddedGame ? '<span class="game-indicator">🎮</span>' : '';
+            
             card.innerHTML = `
                 <div class="project-image ${imageClass}" style="${backgroundStyle}">
                     ${titleMarkup}
                 </div>
                 <div class="project-content">
-                    <h3>${project.title}</h3>
+                    <h3>${project.title}${gameIndicator}</h3>
                     <p>${project.shortDescription || project.description}</p>
                     <div class="project-tags">
                         ${project.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
@@ -770,7 +808,10 @@
             const title = document.getElementById('modalTitle');
             const body = document.getElementById('modalBody');
             
-            title.textContent = project.title;
+            // Add game indicator to modal title if it's an embedded game
+            const hasEmbeddedGame = project.hasEmbed && project.embedType === 'game';
+            const gameIndicator = hasEmbeddedGame ? '<span class="game-indicator">🎮</span>' : '';
+            title.innerHTML = `${project.title} ${gameIndicator}`;
             
             // Build modal content
             let modalContent = '';
