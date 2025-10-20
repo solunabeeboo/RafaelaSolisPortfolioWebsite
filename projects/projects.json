@@ -7,9 +7,9 @@
       "tags": ["Unity", "C#", "Multiplayer", "Action", "Fighting"],
       "image": "images/megamarketmayhem.png",
       "screenshots": [
-        "images/megamarketmayhem-1.jpg",
-        "images/megamarketmayhem-2.jpg",
-        "images/megamarketmayhem-3.jpg"
+        "screenshots/mmm (1).png",
+        "screenshots/mmm (2).png",
+        "screenshots/mmm (3).png"
       ],
       "gradient": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
       "playLink": "https://studio-212.itch.io/mega-market-mayhem",
@@ -30,13 +30,17 @@
       "tags": ["Unity 6", "C#", "Narrative", "Action", "Roguelite", "Bloody"],
       "image": "images/scriptorium.png",
       "screenshots": [
-        "images/scriptorium-1.jpg",
-        "images/scriptorium-2.jpg"
+        "screenshots/scriptorium (1).png",
+        "screenshots/scriptorium (2).png",
+        "screenshots/scriptorium (3).png",
+        "screenshots/scriptorium (4).png"
       ],
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
       "playLink": "https://studio-212.itch.io/project-dungeon",
       "linkText": "Play on itch.io",
-      "hasEmbed": false,
+      "hasEmbed": true,
+      "embedType":"widget",
+      "embedUrl": "https://itch.io/embed/3904438",
       "developmentTime": "8 months",
       "teamSize": "Team of 4",
       "tools": ["Unity 6", "C#", "TensorFlow", "ML.NET", "Aseprite"],
@@ -50,8 +54,9 @@
       "tags": ["Unity", "C#", "Academic", "2D", "Puzzle", "Maze", "Color Based Puzzles"],
       "image": "images/mazegame.png",
       "screenshots": [
-        "images/colormaze-1.jpg",
-        "images/colormaze-2.jpg"
+        "screenshots/maze (1).png",
+        "screenshots/maze (2).png",
+        "screenshots/maze (3).png"
       ],
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
       "playLink": "https://solunabeeboo.itch.io/mazetastic-colors",
@@ -72,8 +77,9 @@
       "tags": ["Unity", "C#", "Academic", "2D", "Action", "Vertical Shooter", "Multi-Leveled", "Multi-Camera Rendering"],
       "image": "images/valentinebash.png",
       "screenshots": [
-        "images/valentinebash-1.jpg",
-        "images/valentinebash-2.jpg"
+        "screenshots/vertshooter (1).png",
+        "screenshots/vertshooter (2).png",
+        "screenshots/vertshooter (3).png"
       ],
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
       "playLink": "https://solunabeeboo.itch.io/valentine-bash",
@@ -93,6 +99,11 @@
       "fullDescription": "Matching Memories is a thoughtfully designed matching game that emphasizes calm, meditative gameplay while incorporating innovative diegetic UI elements. The game focuses on creating a relaxing experience across multiple progressively challenging levels.\n\nDesign Philosophy:\n• Slow-paced, relaxing gameplay that encourages mindfulness\n• Diegetic UI that integrates seamlessly with the game world\n• Multiple levels with carefully designed difficulty progression\n• Clean, minimalist visual design\n• Soothing audio design and feedback\n• Accessibility-focused design principles\n\nThe game demonstrates how traditional matching mechanics can be elevated through thoughtful design and attention to user experience.",
       "tags": ["Unity", "C#", "Academic", "2D", "Puzzle", "Matching", "Multi-Leveled"],
       "image": "images/matchingmemories.png",
+      "screenshots": [
+        "screenshots/matching (1).png",
+        "screenshots/matching (2).png",
+        "screenshots/matching (3).png"
+      ],
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
       "playLink": "https://solunabeeboo.itch.io/matching-memories",
       "embedType": "game",
@@ -110,11 +121,18 @@
       "shortDescription": "A fun arcade style shooter-looter, use your harpoon to swing around the level collecting fish and upgrading your stats!",
       "fullDescription": "Fishing For Fun combines arcade shooting mechanics with looter progression systems, creating a unique experience where players use a harpoon both as a weapon and a traversal tool. The game focuses on fluid movement and satisfying collection mechanics.\n\nCore Mechanics:\n• Harpoon-based movement and combat system\n• Arcade-style shooting with physics-based projectiles\n• Loot collection and character progression\n• Swinging mechanics for dynamic traversal\n• Stat upgrades and equipment systems\n• Multiple level environments with different challenges\n• High-score based arcade progression\n\nThe game successfully merges several genres to create something that feels both familiar and fresh.",
       "tags": ["Unreal Engine", "Blueprints", "Academic", "3D", "Shooter-Looter", "Arcade"],
-      "image": "images/matching.png",
+      "image": "images/fishingforfun.png",
+      "screenshots": [
+        "screenshots/fish (1).png",
+        "screenshots/fish (2).png",
+        "screenshots/fish (3).png"
+      ],
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
       "playLink": "https://solunabeeboo.itch.io/fishing-for-fun",
       "linkText": "View on Itch.io",
-      "hasEmbed": false,
+      "hasEmbed": true,
+      "embedType":"widget",
+      "embedUrl": "https://itch.io/embed/3974978",
       "developmentTime": "3 months",
       "teamSize": "Solo project",
       "tools": ["Unreal Engine 4", "Blueprints", "Maya"],
@@ -127,10 +145,17 @@
       "fullDescription": "Bender Man is a humorous parody of the classic Slender Man horror games, turning the terrifying concept into a lighthearted collecting adventure. Players must gather scattered pages while avoiding the comically reimagined antagonist.\n\nParody Elements:\n• Playful take on classic horror game mechanics\n• Collecting gameplay with a twist of humor\n• 3D environments that both honor and subvert the original\n• Survival mechanics with comedic timing\n• Easter eggs and references to the original series\n• Accessible horror that's more fun than frightening\n\nThe game demonstrates how familiar mechanics can be transformed through tone and presentation to create entirely different experiences.",
       "tags": ["Unreal Engine", "Blueprints", "Academic", "3D", "Collecting", "Survival"],
       "image": "images/benderman.png",
+      "screenshots": [
+        "screenshots/bender (1).jpg",
+        "screenshots/bender (2).jpg",
+        "screenshots/bender (3).jpg"
+      ],
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
       "playLink": "https://solunabeeboo.itch.io/bender-man-the-something-something",
       "linkText": "View on Itch.io",
-      "hasEmbed": false,
+      "embedType": "widget",
+      "embedUrl": "https://itch.io/embed/3974963",
+      "hasEmbed": true,
       "developmentTime": "2 months",
       "teamSize": "Solo project",
       "tools": ["Unreal Engine 4", "Blueprints", "Blender"],

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport"="width=device-width, initial-scale=1.0">
     <title>Projects - Rafaela Solis</title>
-    <link rel="icon" type="image/png" href="../favicon.png">
+    <link rel="icon" type="image/png" href="favicon.png">
     <style>
         /* ===== CUSTOMIZABLE VARIABLES ===== */
         :root {
@@ -449,6 +449,14 @@
         .game-embed {
             height: 700px;
             min-width: 960px; /* Unity's typical minimum width */
+            overflow: hidden; /* Prevent scrollbars */
+        }
+
+        /* Additional Unity WebGL fixes */
+        .game-embed canvas {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain;
         }
 
         .modal-info-grid {
@@ -456,6 +464,11 @@
             grid-template-columns: 2fr 1fr;
             gap: 2rem;
             margin-top: 2rem;
+        }
+
+        .modal-main-content {
+            overflow: hidden;
+            max-width: 100%;
         }
 
         .modal-main-content h4 {
@@ -475,25 +488,101 @@
             margin-bottom: 2rem;
         }
 
-        .screenshots-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        .screenshots-carousel {
+            position: relative;
+            margin-top: 1rem;
+            max-width: 100%;
+            width: 100%;
+        }
+
+        .carousel-container {
+            overflow: hidden;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 68, 161, 0.2);
+            width: 100%;
+            height: auto;
+            min-height: 200px;
+            max-height: 400px;
+            background: rgba(10, 10, 10, 0.5);
+            position: relative;
+            aspect-ratio: 16/9;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.3s ease;
+            height: 100%;
+        }
+
+        .screenshot {
+            min-width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            background: rgba(10, 10, 10, 0.8);
+        }
+
+        .carousel-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
             gap: 1rem;
             margin-top: 1rem;
         }
 
-        .screenshot {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 68, 161, 0.2);
+        .carousel-btn {
+            background: rgba(255, 68, 161, 0.1);
+            border: 1px solid rgba(255, 68, 161, 0.3);
+            color: var(--primary-blue);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .carousel-btn:hover {
+            background: rgba(255, 68, 161, 0.2);
+            border-color: var(--primary-blue);
+            transform: scale(1.1);
+        }
+
+        .carousel-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .carousel-dots {
+            display: flex;
+            gap: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .carousel-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 68, 161, 0.3);
+            cursor: pointer;
             transition: all 0.3s;
         }
 
-        .screenshot:hover {
-            border-color: var(--primary-blue);
-            transform: scale(1.05);
+        .carousel-dot.active {
+            background: var(--primary-blue);
+            transform: scale(1.2);
+        }
+
+        .carousel-counter {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: 0.5rem;
         }
 
         .modal-sidebar {
@@ -645,8 +734,10 @@
                 height: 400px;
             }
 
-            .screenshots-grid {
-                grid-template-columns: 1fr;
+            @media (max-width: 768px) {
+                .screenshots-grid {
+                    grid-template-columns: 1fr;
+                }
             }
         }
     </style>
@@ -845,10 +936,28 @@
                 modalContent += `
                     <div class="modal-screenshots">
                         <h4>Screenshots</h4>
-                        <div class="screenshots-grid">
-                            ${project.screenshots.map(screenshot => 
-                                `<img src="${screenshot}" alt="Screenshot" class="screenshot" onerror="this.style.display='none'">`
-                            ).join('')}
+                        <div class="screenshots-carousel">
+                            <div class="carousel-container">
+                                <div class="carousel-track" id="carouselTrack">
+                                    ${project.screenshots.map(screenshot => 
+                                        `<img src="${screenshot}" alt="Screenshot" class="screenshot" onerror="this.style.display='none'">`
+                                    ).join('')}
+                                </div>
+                            </div>
+                            ${project.screenshots.length > 1 ? `
+                                <div class="carousel-nav">
+                                    <button class="carousel-btn" id="prevBtn">‹</button>
+                                    <div class="carousel-dots" id="carouselDots">
+                                        ${project.screenshots.map((_, index) => 
+                                            `<div class="carousel-dot ${index === 0 ? 'active' : ''}" data-index="${index}"></div>`
+                                        ).join('')}
+                                    </div>
+                                    <button class="carousel-btn" id="nextBtn">›</button>
+                                </div>
+                                <div class="carousel-counter">
+                                    <span id="currentSlide">1</span> / <span id="totalSlides">${project.screenshots.length}</span>
+                                </div>
+                            ` : ''}
                         </div>
                     </div>
                 `;
@@ -931,6 +1040,81 @@
             body.innerHTML = modalContent;
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
+
+            // Initialize carousel if screenshots exist
+            if (project.screenshots && project.screenshots.length > 1) {
+                initCarousel();
+            }
+        }
+
+        function initCarousel() {
+            let currentIndex = 0;
+            const track = document.getElementById('carouselTrack');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const dots = document.querySelectorAll('.carousel-dot');
+            const currentSlideSpan = document.getElementById('currentSlide');
+            const totalSlides = dots.length;
+
+            function updateCarousel() {
+                track.style.transform = `translateX(-${currentIndex * 100}%)`;
+                currentSlideSpan.textContent = currentIndex + 1;
+
+                // Update dots
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentIndex);
+                });
+
+                // Update buttons
+                prevBtn.disabled = currentIndex === 0;
+                nextBtn.disabled = currentIndex === totalSlides - 1;
+            }
+
+            function goToSlide(index) {
+                currentIndex = Math.max(0, Math.min(totalSlides - 1, index));
+                updateCarousel();
+            }
+
+            // Event listeners
+            prevBtn.addEventListener('click', () => goToSlide(currentIndex - 1));
+            nextBtn.addEventListener('click', () => goToSlide(currentIndex + 1));
+
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => goToSlide(index));
+            });
+
+            // Keyboard navigation
+            document.addEventListener('keydown', function handleCarouselKeys(e) {
+                if (document.getElementById('projectModal').classList.contains('active')) {
+                    if (e.key === 'ArrowLeft') goToSlide(currentIndex - 1);
+                    if (e.key === 'ArrowRight') goToSlide(currentIndex + 1);
+                }
+            });
+
+            // Touch/swipe support
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            track.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+            });
+
+            track.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].screenX;
+                const swipeThreshold = 50;
+                const swipeDistance = touchStartX - touchEndX;
+
+                if (Math.abs(swipeDistance) > swipeThreshold) {
+                    if (swipeDistance > 0) {
+                        goToSlide(currentIndex + 1); // Swipe left, go next
+                    } else {
+                        goToSlide(currentIndex - 1); // Swipe right, go prev
+                    }
+                }
+            });
+
+            // Initialize
+            updateCarousel();
         }
 
         function closeProjectModal() {
