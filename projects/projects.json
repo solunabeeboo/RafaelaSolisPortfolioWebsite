@@ -17,6 +17,60 @@
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
       "playLink": "https://studio-212.itch.io/project-dungeon",
       "detailPage": true
+    },
+    {
+      "title": "Navi",
+      "description": "A fast-paced singeplayer narrative platformer, play as a lost rabbit fighting to get home through the forest where things are always more than they seem.",
+      "tags": ["Unity", "C#", "Narrative", "Platformer", "Action", "Cute", "Time-based mechanics"],
+      "image": "images/casinogame.png",
+      "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+      "playLink": "https://rafaelasolis.work/projects",
+      "detailPage": true
+    },
+    {
+      "title": "Casino Game!",
+      "description": "A silly and simple casino game coded in pure C++ with text based inputs!",
+      "tags": ["C++", "Academic", "Arcade", "Gambling", "Text-based", "RNG"],
+      "image": "images/casinogame.png",
+      "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+      "playLink": "https://rafaelasolis.work/projects",
+      "detailPage": true
+    },
+    {
+      "title": "OpenGL Enviornments",
+      "description": "Scenes and textures coded in C++ and OpenGL.",
+      "tags": ["OpenGL", "C++", "Academic", "3D", "2D", "Textures", "Math"],
+      "image": "images/opengl.png",
+      "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+      "playLink": "https://rafaelasolis.work/projects",
+      "detailPage": true
+    },
+    {
+      "title": "Mazetastic Colors",
+      "description": "A strategic yet multi-leveled fun maze game focused around matching colors and finding the exit!",
+      "tags": ["Unity", "C#", "Academic", "2D", "Puzzle", "Maze", "Color Based Puzzles"],
+      "image": "images/colormaze.png",
+      "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+      "playLink": "https://rafaelasolis.work/projects",
+      "detailPage": true
+    },
+    {
+      "title": "Valentine Bash",
+      "description": "A strategic and fast based vertical shooter, kill the bugs trying to kill love and save valentine's day!",
+      "tags": ["Unity", "C#", "Academic", "2D", "Action", "Vertical Shooter", "Multi-Leveled", "Multi-Camera Rendering"],
+      "image": "images/valentinebash.png",
+      "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+      "playLink": "https://rafaelasolis.work/projects",
+      "detailPage": true
+    },
+    {
+      "title": "Matching Memories",
+      "description": "A slow and simple matching game with diagetic UI and multiple levels!",
+      "tags": ["Unity", "C#", "Academic", "2D", "Puzzle", "Matching", "Multi-Leveled"],
+      "image": "images/matching.png",
+      "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+      "playLink": "https://rafaelasolis.work/projects",
+      "detailPage": true
     }
   ]
 }

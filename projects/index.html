@@ -475,7 +475,7 @@
             }
         }
 
-        function displayProjects(projects) {
+        async function displayProjects(projects) {
             const grid = document.getElementById('projectsGrid');
             grid.innerHTML = '';
 
@@ -484,10 +484,10 @@
                 return;
             }
 
-            projects.forEach(project => {
-                const card = createProjectCard(project);
+            for (const project of projects) {
+                const card = await createProjectCard(project);
                 grid.appendChild(card);
-            });
+            }
         }
 
         function displayError(message) {
@@ -495,7 +495,16 @@
             grid.innerHTML = `<div class="error">${message}</div>`;
         }
 
-        function createProjectCard(project) {
+        function checkImageExists(imagePath) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(true);
+                img.onerror = () => resolve(false);
+                img.src = imagePath;
+                });
+        }
+
+        async function createProjectCard(project) {
             const card = document.createElement('div');
             card.className = 'project-card';
             
@@ -505,9 +514,17 @@
             let titleMarkup = project.title;
             
             if (project.image) {
-                backgroundStyle = `background-image: url('${project.image}');`;
-                imageClass = 'has-image';
-                titleMarkup = `<span class="project-image-text">${project.title}</span>`;
+                 const imageExists = await checkImageExists(project.image);
+        
+                if (imageExists) {
+                    backgroundStyle = `background-image: url('${project.image}');`;
+                    imageClass = 'has-image';
+                    titleMarkup = `<span class="project-image-text">${project.title}</span>`;
+                } else {
+                    // Fallback to gradient if image doesn't exist
+                    console.warn(`Image not found: ${project.image}`);
+                    backgroundStyle = `background: ${project.gradient || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'};`;
+                }
             } else {
                 backgroundStyle = `background: ${project.gradient || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'};`;
             }
