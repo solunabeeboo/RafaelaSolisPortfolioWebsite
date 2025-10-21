@@ -718,6 +718,7 @@
             opacity: 0.9;
             transition: all 0.3s;
             pointer-events: none;
+            z-index: 10;
         }
 
         .video-play-indicator::after {
@@ -732,14 +733,10 @@
             transform: translate(-50%, -50%) scale(1.1);
         }
 
-        .screenshot-video:not([data-playing="true"]) + .video-play-indicator {
-            display: flex;
-        }
-
+        /* Hide play button when video is playing */
         .screenshot-video[data-playing="true"] + .video-play-indicator {
-            display: none;
+            display: none !important;
         }
-
         /* Responsive */
         @media (max-width: 768px) {
             :root {
@@ -866,16 +863,29 @@
                 document.querySelectorAll('.screenshot-video').forEach(v => {
                     if (v !== video) {
                         v.pause();
-                        v.setAttribute('data-playing', 'false');
+                        v.removeAttribute('data-playing');
                     }
                 });
                 video.play();
                 video.setAttribute('data-playing', 'true');
             } else {
                 video.pause();
-                video.setAttribute('data-playing', 'false');
+                video.removeAttribute('data-playing');
             }
         }
+        
+        // Also handle play/pause events from native controls
+        document.addEventListener('play', function(e) {
+            if (e.target.classList.contains('screenshot-video')) {
+                e.target.setAttribute('data-playing', 'true');
+            }
+        }, true);
+        
+        document.addEventListener('pause', function(e) {
+            if (e.target.classList.contains('screenshot-video')) {
+                e.target.removeAttribute('data-playing');
+            }
+        }, true);
 
         // Load and display projects from JSON
         async function loadProjects() {
