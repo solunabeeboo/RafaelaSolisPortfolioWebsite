@@ -17,16 +17,16 @@
       "embedUrl": "https://itch.io/embed-upload/15303000?color=333333",
       "linkText": "Play on itch.io",
       "hasEmbed": true,
-      "developmentTime": "4 months",
-      "teamSize": "Team of 3",
-      "tools": ["Unity 2022.3", "C#", "Photoshop", "Git"],
-      "challenges": "The biggest challenge was implementing smooth multiplayer networking and ensuring fair gameplay across different connection speeds.",
-      "learnings": "This project taught me a lot about multiplayer game architecture and the importance of responsive combat systems."
+      "developmentTime": "9 months",
+      "teamSize": "Team of 7-10",
+      "tools": ["Unity 2022.3", "C#", "Photoshop", "Git", "Jira", "Notion", "Google Suite"],
+      "challenges": "The biggest challenge was creating a gold-plated attack system that could sync up it's hits and expressive motions to the level's soundtrack.",
+      "learnings": "This project taught me an incredible amount about multiplayer game architecture and the importance of responsive combat systems, as well as the affects of product management software and how to help team memebers manage workload."
     },
     {
       "title": "Scriptorium",
       "shortDescription": "An immersive narrative dungeon crawler where one must draw to attack, utilizing advanced neural model recognition.",
-      "fullDescription": "Scriptorium is an innovative dungeon crawler that revolutionizes combat through drawing mechanics. Players must physically draw symbols and patterns to cast spells and perform attacks, using advanced neural network recognition to interpret their drawings in real-time.\n\nInnovative Features:\n• Neural network-powered drawing recognition\n• Learn a unique 'language' of combat through drawing\n• Immersive narrative-driven progression\n• Roguelite elements with procedural dungeons\n• Strategic spell combinations through drawing\n• Rich storyline with multiple branching paths\n\nThe game combines traditional dungeon crawling with cutting-edge AI technology, creating a truly unique gameplay experience that feels both familiar and revolutionary.",
+      "fullDescription": "Scriptorium is an innovative dungeon crawler that revolutionizes combat through drawing mechanics. Players must physically draw symbols and patterns to cast spells and perform attacks, using advanced neural network recognition to interpret their drawings in real-time.\n\nInnovative Features:\n• Neural network-powered drawing recognition\n• Learn a unique 'language' of combat through drawing\n• Immersive narrative-driven progression\n• Roguelite elements with procedural dungeons\n• Strategic spell combinations through drawing\n\nThe game combines traditional dungeon crawling with cutting-edge AI technology, creating a truly unique gameplay experience that feels both familiar and revolutionary.",
       "tags": ["Unity 6", "C#", "Narrative", "Action", "Roguelite", "Bloody"],
       "image": "images/scriptorium.png",
       "screenshots": [
@@ -41,13 +41,13 @@
       "hasEmbed": true,
       "embedType":"widget",
       "embedUrl": "https://itch.io/embed/3904438",
-      "developmentTime": "8 months",
-      "teamSize": "Team of 4",
-      "tools": ["Unity 6", "C#", "TensorFlow", "ML.NET", "Aseprite"],
+      "developmentTime": "2.25 months [ONGOING]",
+      "teamSize": "Team of 5",
+      "tools": ["Unity 6", "C#", "TensorFlow", "Keras", "Aseprite", "Python", "Photoshop", "Taiga.io", "Discord", "Github Actions", "Git"],
       "challenges": "Integrating neural network recognition for drawing input while maintaining responsive gameplay was extremely challenging.",
       "learnings": "This project expanded my knowledge of machine learning integration in games and real-time input processing."
     },
-        {
+    {
       "title": "Mazetastic Colors",
       "shortDescription": "A strategic yet multi-leveled fun maze game focused around matching colors and finding the exit!",
       "fullDescription": "Mazetastic Colors combines traditional maze navigation with color-based puzzle mechanics, creating a unique and challenging gameplay experience across multiple levels of increasing complexity.\n\nGameplay Features:\n• Strategic maze navigation with color-matching mechanics\n• Multiple levels with progressively complex layouts\n• Color-based puzzle solving elements\n• Strategic thinking required to find optimal paths\n• Clean, accessible visual design\n• Satisfying progression system\n\nThe game challenges players to think both spatially and strategically, combining pathfinding skills with color logic puzzles.",
@@ -64,16 +64,16 @@
       "linkText": "View on Itch.io",
       "hasEmbed": true,
       "embedType": "game",
-      "developmentTime": "3 months",
+      "developmentTime": "2 weeks",
       "teamSize": "Solo project",
-      "tools": ["Unity 2020.3", "C#", "Adobe Illustrator"],
-      "challenges": "Designing levels that balanced maze complexity with color puzzle difficulty without overwhelming players.",
+      "tools": ["Unity 2022.3", "C#", "Adobe Illustrator", "Aseprite"],
+      "challenges": "Designing levels that balanced maze complexity with color puzzle difficulty without overwhelming players, as well as using colors that players could differentiate",
       "learnings": "This project taught me about puzzle design principles and creating intuitive yet challenging gameplay."
     },
     {
       "title": "Valentine Bash",
       "shortDescription": "A strategic and fast based vertical shooter, kill the bugs trying to kill love and save valentine's day!",
-      "fullDescription": "Valentine Bash is a fast-paced vertical shooter with a romantic twist! Players must defend love itself by eliminating waves of bugs that threaten to destroy Valentine's Day. The game combines classic arcade shooter mechanics with strategic elements and multi-camera rendering.\n\nGame Features:\n• Fast-paced vertical shooting action\n• Strategic enemy patterns and wave design\n• Multiple levels with increasing difficulty\n• Multi-camera rendering system for dynamic perspectives\n• Valentine's Day themed art and story\n• Power-ups and weapon upgrades\n• Score-based progression system\n\nThe game captures the intensity of classic arcade shooters while adding modern polish and strategic depth.",
+      "fullDescription": "Valentine Bash is a fast-paced vertical shooter with a romantic twist! Players must defend love itself by eliminating waves of bugs that threaten to destroy Valentine's Day. The game combines classic arcade shooter mechanics with strategic elements and multi-camera rendering.\n\nGame Features:\n• Fast-paced vertical shooting action\n• Strategic enemy patterns and wave design\n• Multiple levels with increasing difficulty\n• Multi-camera rendering system for dynamic perspectives\n• Valentine's Day themed art and story\n• Color saturation based progression system\n\nThe game captures the intensity of classic arcade shooters while adding modern polish and strategic depth.",
       "tags": ["Unity", "C#", "Academic", "2D", "Action", "Vertical Shooter", "Multi-Leveled", "Multi-Camera Rendering"],
       "image": "images/valentinebash.png",
       "screenshots": [
@@ -87,9 +87,9 @@
       "hasEmbed": true,
       "embedType":"game",
       "embedUrl": "https://itch.io/embed-upload/15301923?color=fec7f2",
-      "developmentTime": "2 months",
+      "developmentTime": "2 weeks",
       "teamSize": "Solo project",
-      "tools": ["Unity 2020.3", "C#", "Aseprite"],
+      "tools": ["Unity 2022.3", "C#", "Aseprite"],
       "challenges": "Implementing smooth multi-camera rendering while maintaining consistent performance across different devices.",
       "learnings": "This project improved my understanding of camera systems and performance optimization in Unity."
     },
@@ -110,10 +110,10 @@
       "embedUrl": "https://itch.io/embed-upload/15301755?color=3d2f49",
       "linkText": "View on Itch.io",
       "hasEmbed": true,
-      "developmentTime": "1.5 months",
+      "developmentTime": "2 weeks",
       "teamSize": "Solo project",
-      "tools": ["Unity 2020.3", "C#", "Adobe Photoshop"],
-      "challenges": "Creating diegetic UI elements that felt natural and intuitive while maintaining game functionality.",
+      "tools": ["Unity 2022.3", "C#", "Aseprite", "Audacity"],
+      "challenges": "Creating diegetic UI elements that felt natural and intuitive while maintaining game functionality, and building for a mobile + PC enviornment",
       "learnings": "This project taught me about UI/UX design principles and the importance of accessibility in game design."
     },
     {
@@ -133,11 +133,11 @@
       "hasEmbed": true,
       "embedType":"widget",
       "embedUrl": "https://itch.io/embed/3974978",
-      "developmentTime": "3 months",
+      "developmentTime": "3 weeks",
       "teamSize": "Solo project",
-      "tools": ["Unreal Engine 4", "Blueprints", "Maya"],
-      "challenges": "Creating responsive harpoon physics that felt good for both movement and combat.",
-      "learnings": "This project improved my understanding of physics-based gameplay and arcade game design principles."
+      "tools": ["Unreal Engine", "Blueprints", "Blender", "Aseprite"],
+      "challenges": "Creating responsive harpoon physics that felt good for both movement and combat, as well as modifying unreal template blueprints to inject the new systems.",
+      "learnings": "This project improved my understanding of physics-based gameplay and arcade game design principles, and taught me a lot about the quirks of Unreal Engine."
     },
     {
       "title": "Bender Man",
@@ -156,9 +156,9 @@
       "embedType": "widget",
       "embedUrl": "https://itch.io/embed/3974963",
       "hasEmbed": true,
-      "developmentTime": "2 months",
+      "developmentTime": "3 weeks",
       "teamSize": "Solo project",
-      "tools": ["Unreal Engine 4", "Blueprints", "Blender"],
+      "tools": ["Unreal Engine", "Blueprints", "Blender"],
       "challenges": "Balancing parody elements with actual engaging gameplay mechanics.",
       "learnings": "This project taught me about tone and how presentation can completely change a player's experience."
     },
