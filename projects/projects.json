@@ -168,7 +168,7 @@
       "shortDescription": "A fast-paced singleplayer narrative platformer, play as a lost rabbit fighting to get home through the forest.",
       "fullDescription": "Navi tells the emotional story of a lost rabbit navigating through a mysterious forest where nothing is quite what it seems. This narrative-driven platformer combines precise movement mechanics with time-based puzzles and a compelling storyline.\n\nStory & Gameplay:\n• Play as Navi, a determined rabbit on a journey home\n• Navigate through beautifully crafted forest environments\n• Uncover the mysteries hidden within the forest\n• Master time-based mechanics that affect the world around you\n• Experience multiple story revelations and plot twists\n• Fast-paced platforming with precision controls\n\nThe game explores themes of perseverance, home, and the unexpected challenges we face on our journeys through life.",
       "tags": ["Unity", "C#", "Narrative", "Platformer", "Action", "Cute", "Time-based mechanics"],
-      "image": "images/casinogame.png",
+      "image": "images/navi.png",
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
       "playLink": "https://rafaelasolis.work/projects",
       "linkText": "View Project",
@@ -185,12 +185,15 @@
       "fullDescription": "A fun academic project that recreates the excitement of casino games through pure C++ programming with text-based interfaces. This project demonstrates fundamental programming concepts while creating an entertaining gambling simulation.\n\nFeatures:\n• Multiple casino games (slots, blackjack, poker)\n• Text-based user interface\n• Random number generation systems\n• Player statistics and money management\n• Save/load game functionality\n• Betting systems and odds calculation\n\nBuilt entirely in C++ without external libraries, this project showcases core programming skills and game logic implementation.",
       "tags": ["C++", "Academic", "Arcade", "Gambling", "Text-based", "RNG"],
       "image": "images/casinogame.png",
+            "screenshots": [
+        "screenshots/casino (1).mp4"
+      ],
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
-      "playLink": "https://rafaelasolis.work/projects",
-      "linkText": "View Code",
+      "playLink": "https://github.com/solunabeeboo/CSI240Casino/releases/tag/Casino",
+      "linkText": "View Code & Download EXE",
       "hasEmbed": false,
-      "developmentTime": "2 months",
-      "teamSize": "Solo project",
+      "developmentTime": "2 weeks",
+      "teamSize": "Team of 2",
       "tools": ["C++", "Visual Studio", "Git"],
       "challenges": "Implementing fair random number generation and managing complex game state without external libraries.",
       "learnings": "This project strengthened my understanding of C++ fundamentals and probability systems in games."
