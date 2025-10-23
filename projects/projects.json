@@ -197,8 +197,8 @@
         "screenshots/casino (1).mp4"
       ],
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
-      "playLink": "https://github.com/solunabeeboo/CSI240Casino/releases/tag/Casino",
-      "linkText": "View Code & Download EXE",
+      "playLink": "https://github.com/solunabeeboo/CSI240Casino",
+      "linkText": "View Code on GitHub",
       "hasEmbed": true,
       "embedUrl": "https://rafaelasolis.work/embeds/github-widget.html?user=solunabeeboo&repo=CSI240Casino",
       "embedType": "widget",
@@ -223,8 +223,8 @@
 
       ],
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
-      "playLink": "https://rafaelasolis.work/projects",
-      "linkText": "View Code",
+      "playLink": "https://github.com/solunabeeboo/OpenGL-Work",
+      "linkText": "View Code on GitHub",
       "hasEmbed": true,
       "embedType": "widget",
       "embedUrl": "https://rafaelasolis.work/embeds/github-widget.html?user=solunabeeboo&repo=OpenGL-Work",
