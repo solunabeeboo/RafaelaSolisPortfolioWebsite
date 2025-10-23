@@ -199,7 +199,7 @@
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
       "playLink": "https://github.com/solunabeeboo/CSI240Casino/releases/tag/Casino",
       "linkText": "View Code & Download EXE",
-      "hasEmbed": false,
+      "hasEmbed": true,
       "embedUrl": "https://rafaelasolis.work/embeds/github-widget.html?user=solunabeeboo&repo=CSI240Casino",
       "embedType": "widget",
       "developmentTime": "2 weeks",
@@ -215,9 +215,12 @@
       "tags": ["OpenGL", "C++", "Academic", "3D", "2D", "Textures", "Math"],
       "image": "images/opengl.png",
       "screenshots": [
-        "images/opengl-1.jpg",
-        "images/opengl-2.jpg",
-        "images/opengl-3.jpg"
+        "screenshots/opengl (2).mp4",
+        "screenshots/opengl (1).mp4",
+        "screenshots/opengl (5).mp4",
+        "screenshots/opengl (3).mp4",
+        "screenshots/opengl (4).mp4"
+
       ],
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
       "playLink": "https://rafaelasolis.work/projects",
