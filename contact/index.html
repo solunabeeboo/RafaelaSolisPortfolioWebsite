@@ -8,16 +8,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact - Rafaela Solis</title>
     <link rel="icon" type="image/png" href="../favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ===== CUSTOMIZABLE VARIABLES ===== */
+        /* ===== DESIGN VARIABLES ===== */
         :root {
-            --primary-blue: #ff44a1;
-            --primary-purple: #b366ff;
-            --background-dark: #0a0a0a;
-            --card-background: rgba(20, 20, 20, 0.6);
-            --text-primary: #e0e0e0;
-            --text-secondary: #b0b0b0;
-            --text-muted: #808080;
+            --bg: #f5f2eb;
+            --accent: #2d5016;
+            --accent-sage: #6b8f47;
+            --border: #1a1a1a;
+            --text-primary: #1a1a1a;
+            --text-secondary: #3a3a3a;
+            --text-muted: #6a6a6a;
+            --card-bg: rgba(255, 255, 255, 0.7);
+            --nav-bg: rgba(255, 255, 255, 0.75);
             --max-content-width: 1200px;
             --section-padding: 2rem;
         }
@@ -29,10 +34,10 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
             line-height: 1.6;
             color: var(--text-primary);
-            background: var(--background-dark);
+            background: var(--bg);
         }
 
         /* Navigation */
@@ -40,11 +45,11 @@
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(10, 10, 10, 0.8);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(0, 200, 255, 0.2);
+            background: var(--nav-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 2px solid var(--border);
             z-index: 1000;
-            box-shadow: 0 0 30px rgba(0, 200, 255, 0.1);
         }
 
         nav ul {
@@ -60,8 +65,11 @@
             text-decoration: none;
             color: var(--text-primary);
             padding: 0.5rem 1.5rem;
-            font-weight: 500;
-            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            transition: color 0.2s;
             position: relative;
         }
 
@@ -72,20 +80,20 @@
             left: 50%;
             width: 0;
             height: 2px;
-            background: linear-gradient(90deg, var(--primary-blue), var(--primary-purple));
+            background: var(--accent);
             transform: translateX(-50%);
-            transition: width 0.3s;
+            transition: width 0.25s;
         }
 
         nav a:hover {
-            color: var(--primary-blue);
+            color: var(--accent);
         }
 
         nav a:hover::after {
             width: 80%;
         }
 
-                /* Burger Menu Styles */
+        /* Burger Menu */
         .burger-menu {
             display: none;
             flex-direction: column;
@@ -95,21 +103,20 @@
             top: 1rem;
             right: 1rem;
             z-index: 1001;
-            background: rgba(10, 10, 10, 0.9);
-            border-radius: 8px;
-            border: 1px solid rgba(0, 200, 255, 0.3);
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            box-shadow: 3px 3px 0 var(--border);
+            backdrop-filter: blur(16px);
         }
 
         .burger-line {
             width: 25px;
             height: 3px;
-            background: var(--primary-blue);
+            background: var(--border);
             margin: 3px 0;
             transition: all 0.3s;
-            box-shadow: 0 0 5px rgba(0, 200, 255, 0.5);
         }
 
-        /* Burger animation when active */
         .burger-menu.active .burger-line:nth-child(1) {
             transform: rotate(45deg) translate(5px, 5px);
         }
@@ -129,8 +136,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(10, 10, 10, 0.95);
+            background: rgba(245, 242, 235, 0.97);
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             z-index: 1000;
             display: none;
             align-items: center;
@@ -143,13 +151,37 @@
 
         .mobile-menu ul {
             flex-direction: column;
-            gap: 2rem;
+            gap: 0;
             text-align: center;
+            list-style: none;
+            width: 100%;
+            max-width: 360px;
+            border: 2px solid var(--border);
+        }
+
+        .mobile-menu li {
+            border-bottom: 2px solid var(--border);
+        }
+
+        .mobile-menu li:last-child {
+            border-bottom: none;
         }
 
         .mobile-menu a {
-            font-size: 1.5rem;
-            padding: 1rem 2rem;
+            display: block;
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 1.5rem 2rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .mobile-menu a:hover {
+            background: var(--accent);
+            color: var(--bg);
         }
 
         /* Hide regular nav on mobile */
@@ -157,7 +189,7 @@
             nav {
                 display: none;
             }
-            
+
             .burger-menu {
                 display: flex;
             }
@@ -167,150 +199,147 @@
         section {
             max-width: 1000px;
             margin: 0 auto;
-            padding: 10rem var(--section-padding) 4rem;
+            padding: 10rem var(--section-padding) 6rem;
             min-height: calc(100vh - 100px);
         }
 
         h1 {
             font-size: 3rem;
-            margin-bottom: 1rem;
-            text-align: center;
-            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            display: inline-block;
+            border-bottom: 4px solid var(--accent);
+            padding-bottom: 0.25rem;
         }
 
         .intro-text {
-            text-align: center;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             color: var(--text-muted);
+            margin-top: 1.25rem;
             margin-bottom: 4rem;
+            max-width: 600px;
+            line-height: 1.7;
         }
 
         /* Contact Grid */
         .contact-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: var(--section-padding);
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
             margin-bottom: 4rem;
         }
 
         .contact-card {
-            background: var(--card-background);
-            border: 1px solid rgba(0, 200, 255, 0.2);
-            border-radius: 15px;
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            box-shadow: 4px 4px 0 var(--border);
             padding: var(--section-padding);
             text-align: center;
-            transition: all 0.4s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .contact-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(0, 200, 255, 0.05), rgba(179, 102, 255, 0.05));
-            opacity: 0;
-            transition: opacity 0.4s;
-        }
-
-        .contact-card:hover::before {
-            opacity: 1;
+            transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
         }
 
         .contact-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary-blue);
-            box-shadow: 0 20px 60px rgba(0, 200, 255, 0.3);
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 var(--accent);
+            border-color: var(--accent);
         }
 
         .contact-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            filter: drop-shadow(0 0 10px rgba(0, 200, 255, 0.5));
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+            display: block;
         }
 
         .contact-card h3 {
-            margin-bottom: 0.5rem;
-            font-size: 1.3rem;
-            color: var(--primary-blue);
+            margin-bottom: 0.4rem;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
         }
 
         .contact-card p {
             color: var(--text-muted);
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.85rem;
         }
 
         .contact-card a {
-            color: var(--primary-purple);
-            text-decoration: none;
-            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            font-weight: 600;
+            font-size: 0.85rem;
             word-break: break-all;
-            transition: all 0.3s;
-            position: relative;
+            transition: color 0.2s;
         }
 
         .contact-card a:hover {
-            color: var(--primary-blue);
+            color: var(--accent);
         }
 
         /* Social Section */
         .social-section {
             margin-top: 4rem;
-            text-align: center;
         }
 
         .social-section h2 {
-            font-size: 2rem;
+            font-size: 1.6rem;
+            font-weight: 700;
             margin-bottom: var(--section-padding);
-            color: var(--primary-blue);
+            color: var(--text-primary);
+            padding-left: 1rem;
+            border-left: 4px solid var(--accent);
         }
 
         .social-links {
             display: flex;
-            justify-content: center;
-            gap: var(--section-padding);
+            gap: 1rem;
             flex-wrap: wrap;
         }
 
         .social-link {
             display: flex;
-            flex-direction: column;
             align-items: center;
+            gap: 0.75rem;
             text-decoration: none;
             color: var(--text-primary);
-            transition: all 0.3s;
-            padding: 1rem;
-            border-radius: 10px;
-            background: rgba(20, 20, 20, 0.4);
-            border: 1px solid rgba(0, 200, 255, 0.1);
+            padding: 0.85rem 1.5rem;
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            box-shadow: 3px 3px 0 var(--border);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s, color 0.15s;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
         }
 
         .social-link:hover {
-            color: var(--primary-blue);
-            transform: translateY(-5px);
-            border-color: var(--primary-blue);
-            box-shadow: 0 10px 30px rgba(0, 200, 255, 0.3);
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0 var(--accent);
+            border-color: var(--accent);
+            color: var(--accent);
         }
 
         .social-icon {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            filter: drop-shadow(0 0 5px rgba(0, 200, 255, 0.3));
+            font-size: 1.4rem;
+            line-height: 1;
         }
 
         /* Footer */
         footer {
-            background: rgba(10, 10, 10, 0.9);
+            background: var(--accent);
             text-align: center;
             padding: var(--section-padding);
-            color: var(--text-muted);
-            border-top: 1px solid rgba(0, 200, 255, 0.2);
+            color: rgba(245, 242, 235, 0.8);
+            border-top: 3px solid var(--border);
+            font-size: 0.9rem;
         }
 
         /* Responsive */
@@ -319,14 +348,20 @@
                 font-size: 2rem;
             }
 
-            nav ul {
-                flex-direction: column;
-                align-items: center;
-                padding: 1rem;
-            }
-
             .contact-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .social-links {
+                flex-direction: column;
+            }
+
+            .social-link {
+                box-shadow: 2px 2px 0 var(--border);
+            }
+
+            .contact-card {
+                box-shadow: 2px 2px 0 var(--border);
             }
         }
     </style>
@@ -366,35 +401,28 @@
 
         <div class="contact-grid">
             <div class="contact-card">
-                <div class="contact-icon">📧</div>
+                <span class="contact-icon">📧</span>
                 <h3>Email</h3>
                 <p>Best for project inquiries</p>
                 <a href="mailto:rafa@miguelsolis.com">rafa@miguelsolis.com</a>
             </div>
 
             <div class="contact-card">
-                <div class="contact-icon">💼</div>
+                <span class="contact-icon">💼</span>
                 <h3>LinkedIn</h3>
                 <p>Professional networking</p>
                 <a href="https://linkedin.com/in/rafaela-solis-3463b2245/" target="_blank">linkedin.com/in/rafaela-solis-3463b2245/</a>
             </div>
 
             <div class="contact-card">
-                <div class="contact-icon">💻</div>
+                <span class="contact-icon">💻</span>
                 <h3>GitHub</h3>
                 <p>Check out my code</p>
                 <a href="https://github.com/solunabeeboo" target="_blank">github.com/solunabeeboo</a>
             </div>
-<!--
+
             <div class="contact-card">
-                <div class="contact-icon">🎮</div>
-                <h3>Game Jolt</h3>
-                <p>Play my games</p>
-                <a href="https://gamejolt.com/@solunabeeboo" target="_blank">gamejolt.com/@solunabeeboo</a>
-            </div>
--->
-            <div class="contact-card">
-                <div class="contact-icon">🎮</div>
+                <span class="contact-icon">🎮</span>
                 <h3>Itch</h3>
                 <p>Play my games</p>
                 <a href="https://itch.io/profile/solunabeeboo" target="_blank">itch.io/profile/solunabeeboo</a>
@@ -404,20 +432,16 @@
         <div class="social-section">
             <h2>Connect With Me</h2>
             <div class="social-links">
-                <!--<a href="https://twitter.com/rafaelasolis" class="social-link" target="_blank">
-                    <div class="social-icon">🐦</div>
-                    <span>Twitter</span>
-                </a>-->
                 <a href="https://www.instagram.com/solunabeeboo/" class="social-link" target="_blank">
-                    <div class="social-icon">📷</div>
+                    <span class="social-icon">📷</span>
                     <span>Instagram</span>
                 </a>
                 <a href="https://discord.com/users/633013974279127043" class="social-link" target="_blank">
-                    <div class="social-icon">💬</div>
+                    <span class="social-icon">💬</span>
                     <span>Discord</span>
                 </a>
                 <a href="https://bsky.app/profile/solunabeeboo.bsky.social" class="social-link" target="_blank">
-                    <div class="social-icon">🕹️</div>
+                    <span class="social-icon">🕹️</span>
                     <span>Bluesky</span>
                 </a>
             </div>
@@ -430,17 +454,15 @@
     </footer>
 
     <script>
-    // Burger menu functionality
     document.addEventListener('DOMContentLoaded', function() {
         const burgerMenu = document.getElementById('burgerMenu');
         const mobileMenu = document.getElementById('mobileMenu');
-        
+
         burgerMenu.addEventListener('click', function() {
             burgerMenu.classList.toggle('active');
             mobileMenu.classList.toggle('active');
         });
-        
-        // Close menu when clicking on a link
+
         const mobileLinks = mobileMenu.querySelectorAll('a');
         mobileLinks.forEach(link => {
             link.addEventListener('click', function() {
@@ -448,8 +470,7 @@
                 mobileMenu.classList.remove('active');
             });
         });
-        
-        // Close menu when clicking outside
+
         mobileMenu.addEventListener('click', function(e) {
             if (e.target === mobileMenu) {
                 burgerMenu.classList.remove('active');
