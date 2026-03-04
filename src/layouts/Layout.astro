@@ -1,0 +1,89 @@
+---
+import '../styles/global.css';
+
+interface Props {
+    title: string;
+    description?: string;
+    ogUrl?: string;
+}
+
+const {
+    title,
+    description = 'Passionate game developer creating engaging and immersive experiences.',
+    ogUrl = 'https://rafaelasolis.work/',
+} = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title}</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <meta name="description" content={description}>
+    <meta property="og:type" content="website">
+    <meta property="og:url" content={ogUrl}>
+    <meta property="og:title" content={title}>
+    <meta property="og:description" content={description}>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <slot name="head" />
+</head>
+<body>
+    <!-- Burger button -->
+    <div class="burger-menu" id="burgerMenu">
+        <div class="burger-line"></div>
+        <div class="burger-line"></div>
+        <div class="burger-line"></div>
+    </div>
+
+    <!-- Mobile overlay -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/projects/">Projects</a></li>
+            <li><a href="/about/">About</a></li>
+            <li><a href="/contact/">Contact</a></li>
+        </ul>
+    </div>
+
+    <!-- Desktop nav -->
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/projects/">Projects</a></li>
+            <li><a href="/about/">About</a></li>
+            <li><a href="/contact/">Contact</a></li>
+        </ul>
+    </nav>
+
+    <slot />
+
+    <footer>
+        <p>&copy; 2025 Rafaela Solis. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const burger = document.getElementById('burgerMenu')!;
+        const menu   = document.getElementById('mobileMenu')!;
+        burger.addEventListener('click', () => {
+            burger.classList.toggle('active');
+            menu.classList.toggle('active');
+        });
+        menu.querySelectorAll('a').forEach(l => l.addEventListener('click', () => {
+            burger.classList.remove('active');
+            menu.classList.remove('active');
+        }));
+        menu.addEventListener('click', e => {
+            if (e.target === menu) {
+                burger.classList.remove('active');
+                menu.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -404,46 +404,82 @@
 
         .strip-link:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--border); }
 
-        /* Right: scrollable media gallery */
+        /* ===== RIGHT PANEL: click-through carousel ===== */
         .strip-gallery {
+            position: relative;
             height: 100%;
-            overflow-y: auto;
-            overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
+            overflow: hidden;
             background: #0d0d0d;
             border-left: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .gallery-item {
-            width: 100%;
+        /* Each slide fills the panel; only active one is shown */
+        .gallery-slide {
+            position: absolute;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gallery-slide.active { display: flex; }
+
+        .gallery-slide img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
             height: auto;
-            display: block;
-            flex-shrink: 0;
-            border-bottom: 1px solid #222;
-        }
-
-        .gallery-item:last-child { border-bottom: none; }
-
-        .gallery-video {
-            width: 100%;
-            height: auto;
-            display: block;
-            flex-shrink: 0;
-            background: #000;
-            border-bottom: 1px solid #222;
-        }
-
-        .gallery-video:last-child { border-bottom: none; }
-
-        /* Single item: stretch to fill the panel height */
-        .strip-gallery.single .gallery-item {
-            height: 100%;
             object-fit: contain;
+            display: block;
         }
 
-        .strip-gallery.single .gallery-video {
-            height: 100%;
+        .gallery-slide video {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            display: block;
+        }
+
+        /* Prev / Next buttons */
+        .gallery-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #fff;
+            font-size: 0.9rem;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: background 0.15s;
+            user-select: none;
+        }
+
+        .gallery-btn:hover { background: rgba(255, 255, 255, 0.28); }
+        .gallery-btn-prev { left: 0.4rem; }
+        .gallery-btn-next { right: 0.4rem; }
+
+        /* Slide counter e.g. "2 / 5" */
+        .gallery-counter {
+            position: absolute;
+            bottom: 0.45rem;
+            right: 0.6rem;
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
+            pointer-events: none;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.04em;
         }
 
         /* ===== LOADING / ERROR ===== */
@@ -489,9 +525,7 @@
             .strip-content { opacity: 1 !important; min-height: calc(100svh - 36px); }
             .strip-content-grid { grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
             .strip-info { border-right: none; border-bottom: 2px solid var(--border); overflow-y: visible; }
-            .strip-gallery { min-height: 220px; height: auto; border-left: none; border-top: 2px solid var(--border); }
-            .strip-gallery.single .gallery-item,
-            .strip-gallery.single .gallery-video { height: auto; }
+            .strip-gallery { min-height: 240px; height: 240px; border-left: none; border-top: 2px solid var(--border); }
         }
     </style>
 </head>
@@ -546,13 +580,12 @@
             return /\.(mp4|webm|ogg)$/i.test(src);
         }
 
-        function buildGalleryHTML(screenshots) {
-            if (!screenshots || !screenshots.length) return '';
-            return screenshots.map(src => {
-                if (isVideo(src)) {
-                    return `<video class="gallery-video" src="${src}" controls muted playsinline loop></video>`;
-                }
-                return `<img class="gallery-item" src="${src}" alt="" loading="lazy" onerror="this.style.display='none'">`;
+        function buildSlidesHTML(media) {
+            return media.map((src, idx) => {
+                const inner = isVideo(src)
+                    ? `<video src="${src}" controls muted playsinline loop></video>`
+                    : `<img src="${src}" alt="" loading="lazy" onerror="this.style.display='none'">`;
+                return `<div class="gallery-slide${idx === 0 ? ' active' : ''}">${inner}</div>`;
             }).join('');
         }
 
@@ -595,12 +628,12 @@
                 const linkHref = project.playLink || '#';
                 const linkText = project.linkText || 'View Project';
 
-                // Gallery: use screenshots array; fall back to main image
+                // Carousel: use screenshots array; fall back to main image
                 const media = (project.screenshots && project.screenshots.length)
                     ? project.screenshots
                     : (bgSrc ? [bgSrc] : []);
-                const isSingle = media.length <= 1;
-                const galleryHTML = buildGalleryHTML(media);
+                const hasMultiple = media.length > 1;
+                const slidesHTML = buildSlidesHTML(media);
 
                 strip.innerHTML = `
                     <div class="strip-bg" style="${bgStyle}"></div>
@@ -628,12 +661,37 @@
                                     ${linkText} &rarr;
                                 </a>
                             </div>
-                            <div class="strip-gallery${isSingle ? ' single' : ''}">
-                                ${galleryHTML}
+                            <div class="strip-gallery">
+                                ${slidesHTML}
+                                ${hasMultiple ? `
+                                <button class="gallery-btn gallery-btn-prev" aria-label="Previous">&#8592;</button>
+                                <button class="gallery-btn gallery-btn-next" aria-label="Next">&#8594;</button>
+                                <span class="gallery-counter"><span class="gallery-cur">1</span> / ${media.length}</span>
+                                ` : ''}
                             </div>
                         </div>
                     </div>
                 `;
+
+                // Carousel init (only if multiple slides)
+                if (hasMultiple) {
+                    const gallery  = strip.querySelector('.strip-gallery');
+                    const slides   = Array.from(gallery.querySelectorAll('.gallery-slide'));
+                    const curEl    = gallery.querySelector('.gallery-cur');
+                    const btnPrev  = gallery.querySelector('.gallery-btn-prev');
+                    const btnNext  = gallery.querySelector('.gallery-btn-next');
+                    let cur = 0;
+
+                    function goTo(idx) {
+                        slides[cur].classList.remove('active');
+                        cur = (idx + slides.length) % slides.length;
+                        slides[cur].classList.add('active');
+                        if (curEl) curEl.textContent = cur + 1;
+                    }
+
+                    btnPrev.addEventListener('click', e => { e.stopPropagation(); goTo(cur - 1); });
+                    btnNext.addEventListener('click', e => { e.stopPropagation(); goTo(cur + 1); });
+                }
 
                 // Click inactive header → jump to that section
                 strip.querySelector('.strip-header').addEventListener('click', () => {
