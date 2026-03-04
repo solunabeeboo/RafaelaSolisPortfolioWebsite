@@ -37,7 +37,7 @@ const projects = projectsData.projects;
             filter: brightness(0.14) saturate(0.35);
         }
 
-        /* ===== STRIP HEADER (24px) ===== */
+        /* ===== STRIP HEADER (36px) ===== */
         .strip-header {
             height: var(--compact-h);
             min-height: var(--compact-h);
@@ -67,7 +67,7 @@ const projects = projectsData.projects;
             width: auto;
             aspect-ratio: 1;
             align-self: stretch;
-            margin: 0.3rem 0;   /* keeps it from touching top/bottom edges */
+            margin: 0.3rem 0;
             border-radius: 50%;
             flex-shrink: 0;
             background-size: cover;
@@ -83,9 +83,9 @@ const projects = projectsData.projects;
             border-bottom: 1px solid rgba(26, 26, 26, 0.15);
         }
 
-        /* ===== OVERVIEW ROW (visible in overview, clipped at 24px) ===== */
+        /* ===== OVERVIEW ROW ===== */
         .strip-overview-row {
-            flex: 1;           /* fills remaining strip height when not active */
+            flex: 1;
             display: flex;
             align-items: center;
             gap: 0.75rem;
@@ -113,7 +113,6 @@ const projects = projectsData.projects;
 
         .strip-sep { width: 1px; height: 12px; background: rgba(26,26,26,0.2); flex-shrink: 0; }
 
-        /* Description: absolutely centered between the two 18% side areas */
         .strip-short-desc {
             position: absolute;
             left: 18%; right: 18%; top: 0; bottom: 0;
@@ -160,7 +159,7 @@ const projects = projectsData.projects;
 
         /* ===== EXPANDED CONTENT ===== */
         .strip-content {
-            flex: 0 0 0;       /* takes zero space when inactive so overview-row fills the strip */
+            flex: 0 0 0;
             position: relative; z-index: 2;
             opacity: 0; transition: opacity 0.35s;
             overflow: hidden; display: flex;
@@ -169,16 +168,104 @@ const projects = projectsData.projects;
         .section-strip.strip-active .strip-content { opacity: 1; flex: 1; }
 
         .strip-content-grid {
-            display: grid; grid-template-columns: 1fr 1fr;
+            display: grid; grid-template-columns: 7fr 5fr;
             width: 100%; height: 100%;
         }
 
+        /* ===== THUMBNAIL (left) ===== */
+        .strip-thumbnail {
+            position: relative;
+            overflow: hidden;
+            background: #111;
+        }
+
+        .strip-thumbnail-img {
+            width: 100%; height: 100%;
+            object-fit: cover; object-position: center;
+            display: block;
+        }
+
+        .strip-thumb-slide {
+            position: absolute;
+            inset: 0;
+            display: none;
+        }
+
+        .strip-thumb-slide.active { display: block; }
+
+        .strip-thumb-slide img {
+            width: 100%; height: 100%;
+            object-fit: cover; object-position: center; display: block;
+        }
+
+        .strip-thumb-slide video {
+            width: 100%; height: 100%;
+            object-fit: contain; background: #000; display: block;
+        }
+
+        .strip-thumbnail-overlay {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            padding: 3rem 2rem 1.75rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.35) 55%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 2;
+        }
+
+        .strip-thumbnail-eyebrow {
+            display: inline-flex;
+            align-self: flex-start;
+            background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            color: var(--accent-sage);
+            padding: 0.22rem 0.65rem;
+            font-size: 0.62rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.18em;
+            line-height: 1;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* ===== CAROUSEL CONTROLS ===== */
+        .gallery-btn {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            width: 32px; height: 32px;
+            background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25);
+            color: #fff; font-size: 0.9rem; line-height: 1;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; z-index: 10; transition: background 0.15s; user-select: none;
+        }
+
+        .gallery-btn:hover { background: rgba(255,255,255,0.28); }
+        .gallery-btn-prev { left: 0.4rem; }
+        .gallery-btn-next { right: 0.4rem; }
+
+        .gallery-counter {
+            position: absolute; bottom: 0.55rem; right: 0.7rem;
+            font-size: 0.62rem; font-weight: 600; color: rgba(255,255,255,0.45);
+            pointer-events: none; font-variant-numeric: tabular-nums; letter-spacing: 0.04em;
+            z-index: 10;
+        }
+
+        .strip-thumbnail-title {
+            font-size: clamp(1.8rem, 2.8vw, 3rem);
+            font-weight: 700;
+            color: rgba(255,255,255,0.96);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            line-height: 1;
+            text-shadow: 0 2px 16px rgba(0,0,0,0.5);
+        }
+
+        /* ===== INFO PANEL (right) ===== */
         .strip-info {
             padding: 1.5rem 1.75rem;
-            background: rgba(245, 242, 235, 0.93);
+            background: rgba(245, 242, 235, 0.97);
             backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             display: flex; flex-direction: column; gap: 0.8rem;
-            overflow-y: auto; border-right: 2px solid var(--border);
+            overflow-y: auto; border-left: 2px solid var(--border);
         }
 
         .strip-label {
@@ -217,38 +304,6 @@ const projects = projectsData.projects;
 
         .strip-link:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--border); }
 
-        /* ===== CAROUSEL ===== */
-        .strip-gallery {
-            position: relative; height: 100%; overflow: hidden;
-            background: #0d0d0d; border-left: 2px solid var(--border);
-            display: flex; align-items: center; justify-content: center;
-        }
-
-        .gallery-slide { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; }
-        .gallery-slide.active { display: flex; }
-
-        .gallery-slide img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: block; }
-        .gallery-slide video { max-width: 100%; max-height: 100%; width: auto; height: auto; display: block; }
-
-        .gallery-btn {
-            position: absolute; top: 50%; transform: translateY(-50%);
-            width: 32px; height: 32px;
-            background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25);
-            color: #fff; font-size: 0.9rem; line-height: 1;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; z-index: 10; transition: background 0.15s; user-select: none;
-        }
-
-        .gallery-btn:hover { background: rgba(255,255,255,0.28); }
-        .gallery-btn-prev { left: 0.4rem; }
-        .gallery-btn-next { right: 0.4rem; }
-
-        .gallery-counter {
-            position: absolute; bottom: 0.45rem; right: 0.6rem;
-            font-size: 0.62rem; font-weight: 600; color: rgba(255,255,255,0.5);
-            pointer-events: none; font-variant-numeric: tabular-nums; letter-spacing: 0.04em;
-        }
-
         /* ===== LOADING ===== */
         .loading-state {
             display: flex; align-items: center; justify-content: center;
@@ -260,13 +315,12 @@ const projects = projectsData.projects;
             #scrollDriver { height: auto !important; }
             .sections-stage { position: static; height: auto !important; overflow: visible; }
             .section-strip { height: auto !important; min-height: 100svh; cursor: default; border-bottom: 3px solid var(--border); }
-            .strip-bg { opacity: 1 !important; filter: brightness(0.12) saturate(0.3); }
             .strip-header { background: rgba(255,255,255,0.92) !important; backdrop-filter: blur(12px); flex-wrap: wrap; height: auto !important; min-height: 36px; padding: 0.5rem 1rem; gap: 0.5rem; }
             .strip-overview-row { padding: 0.5rem 1rem; }
             .strip-content { opacity: 1 !important; min-height: calc(100svh - 36px); }
-            .strip-content-grid { grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
-            .strip-info { border-right: none; border-bottom: 2px solid var(--border); overflow-y: visible; }
-            .strip-gallery { min-height: 240px; height: 240px; border-left: none; border-top: 2px solid var(--border); }
+            .strip-content-grid { grid-template-columns: 1fr; grid-template-rows: 260px auto; }
+            .strip-thumbnail { min-height: 260px; border-bottom: 2px solid var(--border); }
+            .strip-info { border-left: none; overflow-y: visible; }
         }
     </style>
 
@@ -292,12 +346,12 @@ const projects = projectsData.projects;
             return /\.(mp4|webm|ogg)$/i.test(src);
         }
 
-        function buildSlidesHTML(media) {
+        function buildThumbSlides(media) {
             return media.map((src, idx) => {
                 const inner = isVideo(src)
                     ? `<video src="${src}" controls muted playsinline loop></video>`
                     : `<img src="${src}" alt="" loading="lazy" onerror="this.style.display='none'">`;
-                return `<div class="gallery-slide${idx === 0 ? ' active' : ''}">${inner}</div>`;
+                return `<div class="strip-thumb-slide${idx === 0 ? ' active' : ''}">${inner}</div>`;
             }).join('');
         }
 
@@ -337,13 +391,25 @@ const projects = projectsData.projects;
                 const linkHref = project.playLink || '#';
                 const linkText = project.linkText || 'View Project';
 
-                const media       = (project.screenshots && project.screenshots.length) ? project.screenshots : (bgSrc ? [bgSrc] : []);
-                const hasMultiple = media.length > 1;
-                const slidesHTML  = buildSlidesHTML(media);
-
                 const iconStyle = project.image
                     ? `background-image: url('${project.image}')`
                     : '';
+
+                // Build media array: main image → videos → other screenshots
+                const mediaArr = [];
+                if (project.image) mediaArr.push(project.image);
+                if (project.screenshots) {
+                    const rest   = project.screenshots.filter(s => s !== project.image);
+                    const videos = rest.filter(s => isVideo(s));
+                    const imgs   = rest.filter(s => !isVideo(s));
+                    videos.forEach(s => mediaArr.push(s));
+                    imgs.forEach(s => mediaArr.push(s));
+                }
+                if (mediaArr.length === 0) mediaArr.push('');
+
+                const hasMultiple = mediaArr.length > 1;
+                const thumbSlides = buildThumbSlides(mediaArr.filter(Boolean));
+                const eyebrow = project.tags.slice(0, 3).join(' · ');
 
                 strip.innerHTML = `
                     <div class="strip-bg" style="${bgStyle}"></div>
@@ -361,6 +427,18 @@ const projects = projectsData.projects;
                     </div>
                     <div class="strip-content">
                         <div class="strip-content-grid">
+                            <div class="strip-thumbnail">
+                                ${thumbSlides}
+                                <div class="strip-thumbnail-overlay">
+                                    <span class="strip-thumbnail-eyebrow">${eyebrow}</span>
+                                    <span class="strip-thumbnail-title">${project.title}</span>
+                                </div>
+                                ${hasMultiple ? `
+                                    <button class="gallery-btn gallery-btn-prev" aria-label="Previous">&#8592;</button>
+                                    <button class="gallery-btn gallery-btn-next" aria-label="Next">&#8594;</button>
+                                    <span class="gallery-counter"><span class="gallery-cur">1</span> / ${mediaArr.filter(Boolean).length}</span>
+                                ` : ''}
+                            </div>
                             <div class="strip-info">
                                 <span class="strip-label">About</span>
                                 <div class="strip-description">${desc}</div>
@@ -368,22 +446,14 @@ const projects = projectsData.projects;
                                 <div class="strip-tags-full">${fullTags}</div>
                                 <a href="${linkHref}" class="strip-link" target="_blank" rel="noopener noreferrer">${linkText} &rarr;</a>
                             </div>
-                            <div class="strip-gallery">
-                                ${slidesHTML}
-                                ${hasMultiple ? `
-                                    <button class="gallery-btn gallery-btn-prev" aria-label="Previous">&#8592;</button>
-                                    <button class="gallery-btn gallery-btn-next" aria-label="Next">&#8594;</button>
-                                    <span class="gallery-counter"><span class="gallery-cur">1</span> / ${media.length}</span>
-                                ` : ''}
-                            </div>
                         </div>
                     </div>
                 `;
 
                 if (hasMultiple) {
-                    const gallery = strip.querySelector('.strip-gallery');
-                    const slides  = Array.from(gallery.querySelectorAll('.gallery-slide'));
-                    const curEl   = gallery.querySelector('.gallery-cur');
+                    const thumb  = strip.querySelector('.strip-thumbnail');
+                    const slides = Array.from(thumb.querySelectorAll('.strip-thumb-slide'));
+                    const curEl  = thumb.querySelector('.gallery-cur');
                     let cur = 0;
 
                     function goTo(idx) {
@@ -393,8 +463,8 @@ const projects = projectsData.projects;
                         if (curEl) curEl.textContent = cur + 1;
                     }
 
-                    gallery.querySelector('.gallery-btn-prev').addEventListener('click', e => { e.stopPropagation(); goTo(cur - 1); });
-                    gallery.querySelector('.gallery-btn-next').addEventListener('click', e => { e.stopPropagation(); goTo(cur + 1); });
+                    thumb.querySelector('.gallery-btn-prev').addEventListener('click', e => { e.stopPropagation(); goTo(cur - 1); });
+                    thumb.querySelector('.gallery-btn-next').addEventListener('click', e => { e.stopPropagation(); goTo(cur + 1); });
                 }
 
                 strip.querySelector('.strip-header').addEventListener('click', () => {
@@ -451,8 +521,6 @@ const projects = projectsData.projects;
 
                 progresses.forEach((p, i) => {
                     strips[i].style.height = (COMPACT + (maxH - COMPACT) * p) + 'px';
-                    const bg = strips[i].querySelector('.strip-bg');
-                    if (bg) bg.style.opacity = Math.max(0, (p - 0.2) / 0.8);
                     if (p > maxP) { maxP = p; activeIdx = i; }
                 });
 
