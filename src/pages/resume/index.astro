@@ -1,0 +1,140 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout title="Resume - Rafaela Solis">
+    <style>
+        .resume-page {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - var(--nav-h));
+            padding-top: var(--nav-h);
+        }
+
+        .resume-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.85rem 2rem;
+            border-bottom: 2px solid var(--border);
+            background: var(--bg);
+            flex-shrink: 0;
+        }
+
+        .resume-header-left {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .resume-eyebrow {
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: var(--accent-sage);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
+
+        .resume-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        .resume-actions {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.55rem 1.25rem;
+            font-weight: 700;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            text-decoration: none;
+            border: 2px solid var(--border);
+            box-shadow: 3px 3px 0 var(--border);
+            transition: transform 0.15s, box-shadow 0.15s;
+            cursor: pointer;
+        }
+
+        .action-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0 var(--border);
+        }
+
+        .action-btn.primary {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        .action-btn.outline {
+            background: transparent;
+            color: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 3px 3px 0 var(--accent);
+        }
+
+        .action-btn.outline:hover { box-shadow: 5px 5px 0 var(--accent); }
+
+        .resume-embed-wrapper {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .resume-iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .resume-header { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+            .resume-actions { flex-wrap: wrap; }
+        }
+    </style>
+
+    <div class="resume-page">
+        <div class="resume-header">
+            <div class="resume-header-left">
+                <span class="resume-eyebrow">Rafaela Solis</span>
+                <span class="resume-title">Resume</span>
+            </div>
+            <div class="resume-actions">
+                <a
+                    href="https://docs.google.com/document/d/1v0lK7-rZYCnJ68tqIrMUsZItaMFcUgHx-enojmvdkaY/edit?usp=sharing"
+                    class="action-btn outline"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Open in Google Docs ↗
+                </a>
+                <a
+                    href="https://docs.google.com/document/d/1v0lK7-rZYCnJ68tqIrMUsZItaMFcUgHx-enojmvdkaY/export?format=pdf"
+                    class="action-btn primary"
+                    download="Rafaela_Solis_Resume.pdf"
+                    target="_blank"
+                >
+                    Download PDF
+                </a>
+            </div>
+        </div>
+
+        <div class="resume-embed-wrapper">
+            <iframe
+                class="resume-iframe"
+                src="https://docs.google.com/document/d/1v0lK7-rZYCnJ68tqIrMUsZItaMFcUgHx-enojmvdkaY/preview"
+                title="Rafaela Solis — Resume"
+                allowfullscreen
+            ></iframe>
+        </div>
+    </div>
+</Layout>
