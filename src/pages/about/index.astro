@@ -1,0 +1,280 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout title="About - Rafaela Solis">
+    <style>
+        section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 8rem var(--section-padding) 6rem;
+        }
+
+        /* ===== STAR HEADSHOT ===== */
+        .headshot-wrap {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .headshot-star {
+            width: 220px;
+            height: 220px;
+            flex-shrink: 0;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            border: 0;
+            box-shadow: 8px 8px 0 var(--accent);
+            object-fit: cover;
+            display: block;
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+
+        .headshot-star:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 11px 11px 0 var(--accent);
+        }
+
+        .headshot-text h1 { margin-bottom: 0.4rem; }
+
+        .headshot-text .subtitle {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-sage);
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 640px) {
+            .headshot-wrap { justify-content: center; text-align: center; }
+            .headshot-star { width: 160px; height: 160px; box-shadow: 5px 5px 0 var(--accent); }
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            display: inline-block;
+            border-bottom: 4px solid var(--accent);
+            padding-bottom: 0.25rem;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin: 3rem 0 1.5rem;
+            color: var(--text-primary);
+            padding-left: 1rem;
+            border-left: 4px solid var(--accent);
+        }
+
+        .about-content {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-top: 2rem;
+        }
+
+        .about-content p {
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .skills-section {
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .skills-category {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            box-shadow: 4px 4px 0 var(--border);
+            padding: var(--section-padding);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+        }
+
+        .skills-category:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 var(--border);
+            border-color: var(--accent);
+        }
+
+        .skills-category h3 {
+            margin-bottom: 1.25rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        .skill-badge {
+            background: transparent;
+            color: var(--text-primary);
+            padding: 0.45rem 0.9rem;
+            font-weight: 600;
+            font-size: 0.82rem;
+            border: 2px solid var(--border);
+            letter-spacing: 0.02em;
+            transition: background 0.15s, color 0.15s, transform 0.15s, box-shadow 0.15s;
+            cursor: default;
+        }
+
+        .skill-badge:hover {
+            background: var(--accent);
+            color: var(--bg);
+            transform: translate(-1px, -1px);
+            box-shadow: 2px 2px 0 var(--border);
+        }
+
+        .resume-buttons {
+            margin-top: var(--section-padding);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .resume-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.85rem 2rem;
+            background: var(--accent);
+            color: var(--bg);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            border: 2px solid var(--border);
+            box-shadow: 4px 4px 0 var(--border);
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        .resume-button:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 var(--border);
+        }
+
+        .resume-button.secondary {
+            background: transparent;
+            color: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 4px 4px 0 var(--accent);
+        }
+
+        .resume-button.secondary:hover { box-shadow: 6px 6px 0 var(--accent); }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .skills-category { box-shadow: 2px 2px 0 var(--border); }
+            .resume-button { box-shadow: 2px 2px 0 var(--border); }
+        }
+    </style>
+
+    <section>
+        <div class="headshot-wrap">
+            <img
+                src="/headshot.jpg"
+                alt="Rafaela Solis"
+                class="headshot-star"
+                onerror="this.style.display='none'"
+            >
+            <div class="headshot-text">
+                <h1>About Me</h1>
+                <p class="subtitle">Game Developer &amp; Designer</p>
+            </div>
+        </div>
+
+        <div class="about-content">
+            <p>Hi! I'm Rafaela Solis, a passionate game developer dedicated to creating engaging, immersive, and emotional player-focused gaming experiences. My journey in game development started as a tiny baby. My father started a company during the tech boom, and performed IT services for the city of Austin, Texas. He always had every kind of computer, and quite often we would sit down together in front of a 4 inch thick laptop to play obscure cobbled together kids games that my tiny brain could understand. I've been hooked ever since.</p>
+
+            <p>I major in Game Design and Game Programming at Champlain College (2028). I have specific focus in gameplay programming, implementation, system design, level design, technical design, narrative design, rapid concepting, rapid prototyping, etc. I have experience working with Unity, Unreal Engine, C#, C++, Python, Java, and Blueprints. I don't just love the games, I love the puzzle of making people happy, so I've worked on a plethora of genres: Maze-Puzzle, Action-Adventure, Educational, Drawing-Combat, Multiplayer-Coop/Competitive, and more! I'm driven by the beautiful things we as people are able to create, and the process it takes to get there, the emergent or focused narratives, the experiences, the player flow.</p>
+
+            <p>Throughout my career, I've worked on two non-academic large-team projects: Mega Market Mayhem and Scriptorium. Both are in their demo stages, with Scriptorium in active development. I've done dozens of indie / solo games for myself and jams, and a plethora of prototypes for the academic setting. Each project has taught me valuable lessons about teamwork, project management, game design, scope, limitations, and the importance of the player.</p>
+
+            <h2>Skills &amp; Expertise</h2>
+
+            <div class="skills-section">
+                <div class="skills-category">
+                    <h3>Game Engines</h3>
+                    <div class="skills">
+                        <span class="skill-badge">Unity</span>
+                        <span class="skill-badge">Unreal Engine</span>
+                        <span class="skill-badge">UEFN</span>
+                    </div>
+                </div>
+
+                <div class="skills-category">
+                    <h3>Programming Languages</h3>
+                    <div class="skills">
+                        <span class="skill-badge">C#</span>
+                        <span class="skill-badge">C++</span>
+                        <span class="skill-badge">Python</span>
+                        <span class="skill-badge">Java</span>
+                    </div>
+                </div>
+
+                <div class="skills-category">
+                    <h3>Game Development</h3>
+                    <div class="skills">
+                        <span class="skill-badge">Game Design</span>
+                        <span class="skill-badge">Game Programming</span>
+                        <span class="skill-badge">Level Design</span>
+                        <span class="skill-badge">Systems Design</span>
+                        <span class="skill-badge">Technical Design</span>
+                        <span class="skill-badge">Implementation</span>
+                        <span class="skill-badge">Documentation</span>
+                        <span class="skill-badge">Project Management (Scrum, Agile, Waterfall)</span>
+                        <span class="skill-badge">UI/UX Design</span>
+                        <span class="skill-badge">Gameplay Programming</span>
+                        <span class="skill-badge">AI / Neural Model Development</span>
+                        <span class="skill-badge">Game Infrastructure Design</span>
+                    </div>
+                </div>
+
+                <div class="skills-category">
+                    <h3>Tools &amp; Software</h3>
+                    <div class="skills">
+                        <span class="skill-badge">Git</span>
+                        <span class="skill-badge">Subversion</span>
+                        <span class="skill-badge">Blender</span>
+                        <span class="skill-badge">Aseprite</span>
+                        <span class="skill-badge">Photoshop</span>
+                        <span class="skill-badge">Illustrator</span>
+                        <span class="skill-badge">DaVinci Resolve</span>
+                        <span class="skill-badge">Audacity</span>
+                        <span class="skill-badge">Taiga</span>
+                        <span class="skill-badge">Jira + Confluence</span>
+                        <span class="skill-badge">Google Sheets + Google Docs</span>
+                        <span class="skill-badge">CMake</span>
+                    </div>
+                </div>
+            </div>
+
+            <h2>What I'm Looking For</h2>
+            <p>I'm currently interested in passionately led projects as well as game industry focused internships in the US-CA-EU regions. I'm particularly excited about projects involving player psychology, narrative-driven experience, large scale multiplayer, community driven development, and more!</p>
+
+            <div class="resume-buttons">
+                <a href="/resume.pdf" class="resume-button" download>Download Resume</a>
+                <a href="https://docs.google.com/document/d/1v0lK7-rZYCnJ68tqIrMUsZItaMFcUgHx-enojmvdkaY/edit?usp=sharing" class="resume-button secondary" target="_blank">View Resume Online</a>
+            </div>
+        </div>
+    </section>
+</Layout>

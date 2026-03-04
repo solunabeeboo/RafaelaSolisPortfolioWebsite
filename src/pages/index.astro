@@ -1,0 +1,204 @@
+---
+import Layout from '../layouts/Layout.astro';
+import projectsData from '../data/projects.json';
+
+const projects = (projectsData as any).projects as Array<{ screenshots?: string[] }>;
+
+// All available non-video screenshots — passed to client JS for random assignment
+const allImages: string[] = projects
+    .flatMap(p =>
+        (p.screenshots ?? [])
+            .filter((s: string) => !s.endsWith('.mp4') && !s.endsWith('.webm'))
+    )
+    .map(s => `/projects/${s}`);
+
+const PANEL_COUNT = 11;
+---
+<Layout
+    title="Rafaela Solis - Game Developer Portfolio"
+    description="Passionate game developer creating engaging and immersive experiences. Specializing in gameplay programming, level design, and systems design."
+    ogUrl="https://rafaelasolis.work/"
+>
+    <style>
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: calc(var(--nav-h) + 3rem) var(--section-padding) 3rem;
+            position: relative;
+            overflow: hidden;
+            background: var(--border); /* fills corner gaps between strips */
+        }
+
+        /* ── PANEL STRIPS ── */
+        .panel-bg {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: -8%;
+            right: -8%;
+        }
+
+        .panel-strip {
+            position: absolute;
+            top: -25%;
+            bottom: -25%;
+            overflow: hidden;
+            transform: skewX(-8deg);
+            transform-origin: center center;
+            border-right: 3px solid var(--border);
+        }
+
+        .panel-strip:last-child { border-right: none; }
+
+        .panel-img {
+            position: absolute;
+            top: -20%;
+            bottom: -20%;
+            left: -20vw;
+            right: -20vw;
+            background-size: cover;
+            background-position: center;
+            transform: skewX(8deg);       /* counter-skew so image stays upright */
+            transform-origin: center center;
+            filter: brightness(0.65) saturate(0.85);
+        }
+
+        /* ── HERO BOX ── */
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            animation: fadeInUp 0.7s ease-out both;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-box {
+            background: var(--bg);
+            border: 3px solid var(--border);
+            box-shadow: 10px 10px 0 var(--border);
+            padding: 3rem 4.5rem;
+            display: inline-block;
+        }
+
+        .hero-name {
+            font-size: clamp(3rem, 6vw, 6.5rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            color: var(--text-primary);
+            white-space: nowrap;
+        }
+
+        .accent-rule {
+            width: 80px;
+            height: 4px;
+            background: var(--accent);
+            margin: 1.75rem auto;
+        }
+
+        .hero-role {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-sage);
+            text-transform: uppercase;
+            letter-spacing: 0.22em;
+            margin-bottom: 1.25rem;
+        }
+
+        .hero-tagline {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            max-width: 500px;
+            margin: 0 auto 3rem;
+            line-height: 1.8;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.85rem 2.25rem;
+            background: var(--accent);
+            color: var(--bg);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            border: 2px solid var(--border);
+            box-shadow: 4px 4px 0 var(--border);
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        .cta-button:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 var(--border);
+        }
+
+        .cta-button.secondary {
+            background: transparent;
+            color: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 4px 4px 0 var(--accent);
+        }
+
+        .cta-button.secondary:hover { box-shadow: 6px 6px 0 var(--accent); }
+
+        @media (max-width: 768px) {
+            .hero-name { font-size: clamp(2rem, 10vw, 3.5rem); white-space: normal; }
+            .hero-box { padding: 2rem 1.75rem; }
+            /* Disable skew on mobile — straight panels */
+            .panel-strip { transform: none; }
+            .panel-img { transform: none; top: 0; bottom: 0; left: 0; right: 0; }
+            .cta-group { flex-direction: column; align-items: center; }
+            .cta-button { width: 100%; max-width: 300px; justify-content: center; box-shadow: 2px 2px 0 var(--border); }
+            .cta-button.secondary { box-shadow: 2px 2px 0 var(--accent); }
+        }
+    </style>
+
+    <section class="hero">
+        <div class="panel-bg">
+            {Array.from({ length: PANEL_COUNT }, (_, i) => (
+                <div
+                    class="panel-strip"
+                    style={`left: calc(${i} / ${PANEL_COUNT} * 100%); width: calc(100% / ${PANEL_COUNT} + 1px);`}
+                >
+                    <div class="panel-img"></div>
+                </div>
+            ))}
+        </div>
+
+        <div class="hero-content">
+            <div class="hero-box">
+                <h1 class="hero-name">Rafaela Solis</h1>
+                <div class="accent-rule"></div>
+                <p class="hero-role">Game Developer &amp; Designer</p>
+                <p class="hero-tagline">Crafting immersive gaming experiences through innovative design, passionate development, and cutting-edge technology</p>
+                <div class="cta-group">
+                    <a href="/projects/" class="cta-button">View My Work</a>
+                    <a href="/contact/" class="cta-button secondary">Get In Touch</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script define:vars={{ allImages }}>
+        // Shuffle and assign a unique random image to each panel on every page load
+        const imgs = [...allImages].sort(() => Math.random() - 0.5);
+        document.querySelectorAll('.panel-img').forEach((el, i) => {
+            el.style.backgroundImage = `url('${imgs[i % imgs.length]}')`;
+        });
+    </script>
+</Layout>

@@ -1,0 +1,202 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Projects - Rafaela Solis</title><link rel="icon" type="image/png" href="/favicon.png"><meta name="description" content="Passionate game developer creating engaging and immersive experiences."><meta property="og:type" content="website"><meta property="og:url" content="https://rafaelasolis.work/"><meta property="og:title" content="Projects - Rafaela Solis"><meta property="og:description" content="Passionate game developer creating engaging and immersive experiences."><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet"><style>:root{--bg: #f5f2eb;--accent: #2d5016;--accent-sage: #6b8f47;--border: #1a1a1a;--text-primary: #1a1a1a;--text-secondary: #3a3a3a;--text-muted: #6a6a6a;--card-bg: rgba(255, 255, 255, .7);--nav-bg: rgba(255, 255, 255, .75);--nav-h: 60px;--max-content-width: 1200px;--section-padding: 2rem}*{margin:0;padding:0;box-sizing:border-box}body{font-family:Space Grotesk,-apple-system,BlinkMacSystemFont,sans-serif;line-height:1.6;color:var(--text-primary);background:var(--bg);overflow-x:hidden}nav{position:fixed;top:0;width:100%;height:var(--nav-h);background:var(--nav-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:2px solid var(--border);z-index:1000;display:flex;align-items:center}nav ul{display:flex;justify-content:center;list-style:none;padding:0 1.5rem;max-width:var(--max-content-width);margin:0 auto;width:100%}nav a{text-decoration:none;color:var(--text-primary);padding:.5rem 1.5rem;font-weight:600;font-size:.85rem;text-transform:uppercase;letter-spacing:.06em;transition:color .2s;position:relative}nav a:after{content:"";position:absolute;bottom:0;left:50%;width:0;height:2px;background:var(--accent);transform:translate(-50%);transition:width .25s}nav a:hover{color:var(--accent)}nav a:hover:after{width:80%}.burger-menu{display:none;flex-direction:column;cursor:pointer;padding:1rem;position:fixed;top:1rem;right:1rem;z-index:1001;background:var(--card-bg);border:2px solid var(--border);box-shadow:3px 3px 0 var(--border);backdrop-filter:blur(16px)}.burger-line{width:25px;height:3px;background:var(--border);margin:3px 0;transition:all .3s}.burger-menu.active .burger-line:nth-child(1){transform:rotate(45deg) translate(5px,5px)}.burger-menu.active .burger-line:nth-child(2){opacity:0}.burger-menu.active .burger-line:nth-child(3){transform:rotate(-45deg) translate(7px,-6px)}.mobile-menu{position:fixed;top:0;left:0;width:100%;height:100%;background:#f5f2ebf7;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);z-index:1000;display:none;align-items:center;justify-content:center}.mobile-menu.active{display:flex}.mobile-menu ul{list-style:none;width:100%;max-width:360px;border:2px solid var(--border)}.mobile-menu li{border-bottom:2px solid var(--border)}.mobile-menu li:last-child{border-bottom:none}.mobile-menu a{display:block;font-size:1.4rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:1.5rem 2rem;color:var(--text-primary);text-decoration:none;transition:background .15s,color .15s}.mobile-menu a:hover{background:var(--accent);color:var(--bg)}footer{background:var(--accent);text-align:center;padding:var(--section-padding);color:#f5f2ebcc;border-top:3px solid var(--border);font-size:.9rem}@media(max-width:768px){nav{display:none}.burger-menu{display:flex}}
+</style>
+<link rel="stylesheet" href="/_astro/index.xmS0_Yhb.css"></head> <body> <!-- Burger button --> <div class="burger-menu" id="burgerMenu"> <div class="burger-line"></div> <div class="burger-line"></div> <div class="burger-line"></div> </div> <!-- Mobile overlay --> <div class="mobile-menu" id="mobileMenu"> <ul> <li><a href="/">Home</a></li> <li><a href="/projects/">Projects</a></li> <li><a href="/about/">About</a></li> <li><a href="/contact/">Contact</a></li> </ul> </div> <!-- Desktop nav --> <nav> <ul> <li><a href="/">Home</a></li> <li><a href="/projects/">Projects</a></li> <li><a href="/about/">About</a></li> <li><a href="/contact/">Contact</a></li> </ul> </nav>   <div id="scrollDriver"> <div class="sections-stage" id="sectionsStage"> <div class="loading-state">Loading projects...</div> </div> </div> <script>(function(){const projects = [{"title":"Mega Market Mayhem","shortDescription":"A fast-paced multiplayer 1v1 fighting game where players compete to see who's on top with quirky and fun food based characters.","fullDescription":"Mega Market Mayhem is an intense multiplayer fighting game that combines fast-paced combat with quirky food-themed characters in a chaotic supermarket setting. Players engage in 1v1 battles using unique food-based fighters, each with their own special abilities and combat styles.\n\nKey Features:\n• Multiplayer 1v1 fighting mechanics\n• Unique food-based character roster\n• Dynamic supermarket environments\n• Special abilities and combo systems\n• Chaotic and fun gameplay designed for competitive play\n\nThe game focuses on accessible yet deep fighting mechanics, making it easy for newcomers to jump in while providing enough complexity for competitive players to master.","tags":["Unity","C#","Multiplayer","Action","Fighting"],"image":"images/megamarketmayhem.png","screenshots":["screenshots/mmm (1).png","screenshots/mmm (2).png","screenshots/mmm (3).png"],"gradient":"linear-gradient(135deg, #667eea 0%, #764ba2 100%)","playLink":"https://studio-212.itch.io/mega-market-mayhem","embedType":"game","embedUrl":"https://itch.io/embed-upload/15303000?color=333333","linkText":"Play on itch.io","hasEmbed":true,"developmentTime":"9 months","teamSize":"Team of 7-10","tools":["Unity 2022.3","C#","Photoshop","Git","Jira","Notion","Google Suite"],"challenges":"The biggest challenge was creating a gold-plated attack system that could sync up it's hits and expressive motions to the level's soundtrack.","learnings":"This project taught me an incredible amount about multiplayer game architecture and the importance of responsive combat systems, as well as the affects of product management software and how to help team memebers manage workload."},{"title":"Scriptorium","shortDescription":"An immersive narrative dungeon crawler where one must draw to attack, utilizing advanced neural model recognition.","fullDescription":"Scriptorium is an innovative dungeon crawler that revolutionizes combat through drawing mechanics. Players must physically draw symbols and patterns to cast spells and perform attacks, using advanced neural network recognition to interpret their drawings in real-time.\n\nInnovative Features:\n• Neural network-powered drawing recognition\n• Learn a unique 'language' of combat through drawing\n• Immersive narrative-driven progression\n• Roguelite elements with procedural dungeons\n• Strategic spell combinations through drawing\n\nThe game combines traditional dungeon crawling with cutting-edge AI technology, creating a truly unique gameplay experience that feels both familiar and revolutionary.","tags":["Unity 6","C#","Narrative","Action","Roguelite","Bloody"],"image":"images/scriptorium.png","screenshots":["screenshots/scriptorium (1).png","screenshots/scriptorium (5).mp4","screenshots/scriptorium (2).png","screenshots/scriptorium (3).png","screenshots/scriptorium (4).png"],"gradient":"linear-gradient(135deg, #f093fb 0%, #f5576c 100%)","playLink":"https://studio-212.itch.io/project-dungeon","linkText":"Play on itch.io","hasEmbed":true,"embedType":"widget","embedUrl":"https://itch.io/embed/3904438","developmentTime":"2.25 months [ONGOING]","teamSize":"Team of 5","tools":["Unity 6","C#","TensorFlow","Keras","Aseprite","Python","Photoshop","Taiga.io","Discord","Github Actions","Git"],"challenges":"Integrating neural network recognition for drawing input while maintaining responsive gameplay was extremely challenging.","learnings":"This project expanded my knowledge of machine learning integration in games and real-time input processing."},{"title":"Mazetastic Colors","shortDescription":"A strategic yet multi-leveled fun maze game focused around matching colors and finding the exit!","fullDescription":"Mazetastic Colors combines traditional maze navigation with color-based puzzle mechanics, creating a unique and challenging gameplay experience across multiple levels of increasing complexity.\n\nGameplay Features:\n• Strategic maze navigation with color-matching mechanics\n• Multiple levels with progressively complex layouts\n• Color-based puzzle solving elements\n• Strategic thinking required to find optimal paths\n• Clean, accessible visual design\n• Satisfying progression system\n\nThe game challenges players to think both spatially and strategically, combining pathfinding skills with color logic puzzles.","tags":["Unity","C#","Academic","2D","Puzzle","Maze","Color Based Puzzles"],"image":"images/mazegame.png","screenshots":["screenshots/maze (1).png","screenshots/maze (2).png","screenshots/maze (3).png"],"gradient":"linear-gradient(135deg, #f093fb 0%, #f5576c 100%)","playLink":"https://solunabeeboo.itch.io/mazetastic-colors","embedUrl":"https://itch.io/embed-upload/15301466?color=ca50c5","linkText":"View on Itch.io","hasEmbed":true,"embedType":"game","developmentTime":"2 weeks","teamSize":"Solo project","tools":["Unity 2022.3","C#","Adobe Illustrator","Aseprite"],"challenges":"Designing levels that balanced maze complexity with color puzzle difficulty without overwhelming players, as well as using colors that players could differentiate","learnings":"This project taught me about puzzle design principles and creating intuitive yet challenging gameplay."},{"title":"Valentine Bash","shortDescription":"A strategic and fast based vertical shooter, kill the bugs trying to kill love and save valentine's day!","fullDescription":"Valentine Bash is a fast-paced vertical shooter with a romantic twist! Players must defend love itself by eliminating waves of bugs that threaten to destroy Valentine's Day. The game combines classic arcade shooter mechanics with strategic elements and multi-camera rendering.\n\nGame Features:\n• Fast-paced vertical shooting action\n• Strategic enemy patterns and wave design\n• Multiple levels with increasing difficulty\n• Multi-camera rendering system for dynamic perspectives\n• Valentine's Day themed art and story\n• Color saturation based progression system\n\nThe game captures the intensity of classic arcade shooters while adding modern polish and strategic depth.","tags":["Unity","C#","Academic","2D","Action","Vertical Shooter","Multi-Leveled","Multi-Camera Rendering"],"image":"images/valentinebash.png","screenshots":["screenshots/vertshooter (1).png","screenshots/vertshooter (2).png","screenshots/vertshooter (3).png"],"gradient":"linear-gradient(135deg, #f093fb 0%, #f5576c 100%)","playLink":"https://solunabeeboo.itch.io/valentine-bash","linkText":"View on Itch.io","hasEmbed":true,"embedType":"game","embedUrl":"https://itch.io/embed-upload/15301923?color=fec7f2","developmentTime":"2 weeks","teamSize":"Solo project","tools":["Unity 2022.3","C#","Aseprite"],"challenges":"Implementing smooth multi-camera rendering while maintaining consistent performance across different devices.","learnings":"This project improved my understanding of camera systems and performance optimization in Unity."},{"title":"Matching Memories","shortDescription":"A slow and simple matching game with diegetic UI and multiple levels!","fullDescription":"Matching Memories is a thoughtfully designed matching game that emphasizes calm, meditative gameplay while incorporating innovative diegetic UI elements. The game focuses on creating a relaxing experience across multiple progressively challenging levels.\n\nDesign Philosophy:\n• Slow-paced, relaxing gameplay that encourages mindfulness\n• Diegetic UI that integrates seamlessly with the game world\n• Multiple levels with carefully designed difficulty progression\n• Clean, minimalist visual design\n• Soothing audio design and feedback\n• Accessibility-focused design principles\n\nThe game demonstrates how traditional matching mechanics can be elevated through thoughtful design and attention to user experience.","tags":["Unity","C#","Academic","2D","Puzzle","Matching","Multi-Leveled"],"image":"images/matchingmemories.png","screenshots":["screenshots/matching (1).png","screenshots/matching (2).png","screenshots/matching (3).png"],"gradient":"linear-gradient(135deg, #f093fb 0%, #f5576c 100%)","playLink":"https://solunabeeboo.itch.io/matching-memories","embedType":"game","embedUrl":"https://itch.io/embed-upload/15301755?color=3d2f49","linkText":"View on Itch.io","hasEmbed":true,"developmentTime":"2 weeks","teamSize":"Solo project","tools":["Unity 2022.3","C#","Aseprite","Audacity"],"challenges":"Creating diegetic UI elements that felt natural and intuitive while maintaining game functionality, and building for a mobile + PC enviornment","learnings":"This project taught me about UI/UX design principles and the importance of accessibility in game design."},{"title":"Fishing For Fun","shortDescription":"A fun arcade style shooter-looter, use your harpoon to swing around the level collecting fish and upgrading your stats!","fullDescription":"Fishing For Fun combines arcade shooting mechanics with looter progression systems, creating a unique experience where players use a harpoon both as a weapon and a traversal tool. The game focuses on fluid movement and satisfying collection mechanics.\n\nCore Mechanics:\n• Harpoon-based movement and combat system\n• Arcade-style shooting with physics-based projectiles\n• Loot collection and character progression\n• Swinging mechanics for dynamic traversal\n• Stat upgrades and equipment systems\n• Multiple level environments with different challenges\n• High-score based arcade progression\n\nThe game successfully merges several genres to create something that feels both familiar and fresh.","tags":["Unreal Engine","Blueprints","Academic","3D","Shooter-Looter","Arcade"],"image":"images/fishingforfun.png","screenshots":["screenshots/fish (1).png","screenshots/fish (2).png","screenshots/fish (3).png"],"gradient":"linear-gradient(135deg, #f093fb 0%, #f5576c 100%)","playLink":"https://solunabeeboo.itch.io/fishing-for-fun","linkText":"View on Itch.io","hasEmbed":true,"embedType":"widget","embedUrl":"https://itch.io/embed/3974978","developmentTime":"3 weeks","teamSize":"Solo project","tools":["Unreal Engine","Blueprints","Blender","Aseprite"],"challenges":"Creating responsive harpoon physics that felt good for both movement and combat, as well as modifying unreal template blueprints to inject the new systems.","learnings":"This project improved my understanding of physics-based gameplay and arcade game design principles, and taught me a lot about the quirks of Unreal Engine."},{"title":"Bender Man","shortDescription":"A silly collecting game parodying the Slender Man series, collect the pages before he gets you!","fullDescription":"Bender Man is a humorous parody of the classic Slender Man horror games, turning the terrifying concept into a lighthearted collecting adventure. Players must gather scattered pages while avoiding the comically reimagined antagonist.\n\nParody Elements:\n• Playful take on classic horror game mechanics\n• Collecting gameplay with a twist of humor\n• 3D environments that both honor and subvert the original\n• Survival mechanics with comedic timing\n• Easter eggs and references to the original series\n• Accessible horror that's more fun than frightening\n\nThe game demonstrates how familiar mechanics can be transformed through tone and presentation to create entirely different experiences.","tags":["Unreal Engine","Blueprints","Academic","3D","Collecting","Survival"],"image":"images/benderman.png","screenshots":["screenshots/bender (1).jpg","screenshots/bender (2).jpg","screenshots/bender (3).jpg"],"gradient":"linear-gradient(135deg, #f093fb 0%, #f5576c 100%)","playLink":"https://solunabeeboo.itch.io/bender-man-the-something-something","linkText":"View on Itch.io","embedType":"widget","embedUrl":"https://itch.io/embed/3974963","hasEmbed":true,"developmentTime":"3 weeks","teamSize":"Solo project","tools":["Unreal Engine","Blueprints","Blender"],"challenges":"Balancing parody elements with actual engaging gameplay mechanics.","learnings":"This project taught me about tone and how presentation can completely change a player's experience."},{"title":"Navi","shortDescription":"A fast-paced singleplayer narrative platformer, play as a lost rabbit fighting to get home through the forest.","fullDescription":"Navi tells the emotional story of a lost rabbit navigating through a mysterious forest where nothing is quite what it seems. This narrative-driven platformer combines precise movement mechanics with time-based puzzles and a compelling storyline.\n\nStory & Gameplay:\n• Play as Navi, a determined rabbit on a journey home\n• Navigate through beautifully crafted forest environments\n• Uncover the mysteries hidden within the forest\n• Master time-based mechanics that affect the world around you\n• Experience multiple story revelations and plot twists\n• Fast-paced platforming with precision controls\n\nThe game explores themes of perseverance, home, and the unexpected challenges we face on our journeys through life.","tags":["Unity","C#","Narrative","Platformer","Action","Cute","Time-based mechanics"],"image":"images/navigame.png","screenshots":["screenshots/navi (1).png","screenshots/navi (2).png","screenshots/navi (3).png","screenshots/navi (4).mp4"],"gradient":"linear-gradient(135deg, #f093fb 0%, #f5576c 100%)","playLink":"https://solunabeeboo.itch.io/navi","linkText":"View Project on Itch.io","hasEmbed":true,"embedType":"widget","embedUrl":"https://itch.io/embed/3975751","developmentTime":"1.5 months","teamSize":"Team of 3","tools":["Unity 2022.3","C#","Aseprite","Audacity","Photoshop"],"challenges":"Creating smooth time-based mechanics that felt intuitive while maintaining the narrative pacing was quite complex.","learnings":"This project taught me about environmental storytelling and how gameplay mechanics can enhance narrative themes."},{"title":"Casino Game!","shortDescription":"A silly and simple casino game coded in pure C++ with text based inputs!","fullDescription":"A fun academic project that recreates the excitement of casino games through pure C++ programming with text-based interfaces. This project demonstrates fundamental programming concepts while creating an entertaining gambling simulation.\n\nFeatures:\n• Multiple casino games (slots, blackjack, poker)\n• Text-based user interface\n• Random number generation systems\n• Player statistics and money management\n• Save/load game functionality\n• Betting systems and odds calculation\n\nBuilt entirely in C++ without external libraries, this project showcases core programming skills and game logic implementation.","tags":["C++","Academic","Arcade","Gambling","Text-based","RNG"],"image":"images/casinogame.png","screenshots":["screenshots/casino (1).mp4"],"gradient":"linear-gradient(135deg, #f093fb 0%, #f5576c 100%)","playLink":"https://github.com/solunabeeboo/CSI240Casino","linkText":"View Code on GitHub","hasEmbed":true,"embedUrl":"https://rafaelasolis.work/embeds/github-widget.html?user=solunabeeboo&repo=CSI240Casino","embedType":"widget","developmentTime":"2 weeks","teamSize":"Team of 2","tools":["C++","Visual Studio","Git"],"challenges":"Implementing fair random number generation and managing complex game state without external libraries.","learnings":"This project strengthened my understanding of C++ fundamentals and probability systems in games."},{"title":"OpenGL Environments","shortDescription":"Scenes and textures coded in C++ and OpenGL.","fullDescription":"A collection of 3D scenes and environments built from scratch using C++ and OpenGL, demonstrating low-level graphics programming and mathematical concepts in computer graphics.\n\nTechnical Achievements:\n• Custom 3D rendering pipeline\n• Texture mapping and lighting systems\n• Shader programming (vertex and fragment)\n• Mathematical transformations and camera systems\n• Real-time rendering optimizations\n• Multiple scene compositions with different themes\n\nThese projects showcase the fundamentals of computer graphics programming and the mathematical principles that power modern game engines.","tags":["OpenGL","C++","Academic","3D","2D","Textures","Math"],"image":"images/opengl.png","screenshots":["screenshots/opengl (2).mp4","screenshots/opengl (1).mp4","screenshots/opengl (5).mp4","screenshots/opengl (3).mp4","screenshots/opengl (4).mp4"],"gradient":"linear-gradient(135deg, #f093fb 0%, #f5576c 100%)","playLink":"https://github.com/solunabeeboo/OpenGL-Work","linkText":"View Code on GitHub","hasEmbed":true,"embedType":"widget","embedUrl":"https://rafaelasolis.work/embeds/github-widget.html?user=solunabeeboo&repo=OpenGL-Work","developmentTime":"1 semester","teamSize":"Solo project","tools":["OpenGL","C++","GLFW","GLEW","GLM"],"challenges":"Understanding the mathematical foundations of 3D graphics and implementing efficient rendering pipelines.","learnings":"This project gave me deep insight into how modern graphics engines work under the hood."},{"title":"Scrum Facilitation","shortDescription":"The various tools I've created, researched, and implemented into team use to more easily facilitate the agile / scrum workflow.","fullDescription":"A comprehensive collection of tools, processes, and implementations designed to streamline agile and scrum workflows in game development teams. This project represents ongoing research and practical application of project management methodologies.\n\nTools & Implementations:\n• Custom sprint planning and tracking tools\n• Automated burndown chart generation\n• Team velocity analysis systems\n• Retrospective facilitation frameworks\n• Integration tools for development workflows\n• Documentation and training materials\n• Performance metrics and reporting systems\n\nThese tools have been tested and refined through real-world team implementations, focusing on practical solutions that actually improve team productivity.","tags":["Scrum","Agile","Python"],"image":"images/agile.png","screenshots":["images/agile-1.jpg","images/agile-2.jpg"],"gradient":"linear-gradient(135deg, #f093fb 0%, #f5576c 100%)","playLink":"https://rafaelasolis.work/projects","linkText":"View Documentation","hasEmbed":false,"developmentTime":"Ongoing","teamSize":"Solo research","tools":["Python","Jira API","Git","Excel/Sheets"],"challenges":"Balancing tool complexity with ease of use, and getting team buy-in for new processes.","learnings":"This project deepened my understanding of team dynamics and the practical challenges of implementing agile methodologies."},{"title":"Project Documentation","shortDescription":"Various examples of documentation I've created as a game designer and programmer, as well as more historically focused deconstructions.","fullDescription":"A comprehensive portfolio of technical and design documentation spanning game development, programming practices, and historical game analysis. This collection showcases my ability to communicate complex technical concepts clearly and thoroughly.\n\nDocumentation Types:\n• Technical design documents for game systems\n• Code documentation and API references\n• Game design documents with detailed mechanics\n• Historical game deconstructions and analysis\n• Development process documentation\n• Team workflow and standards documentation\n• Post-mortem analyses of completed projects\n\nThese documents demonstrate both technical writing skills and deep understanding of game development processes across different eras and platforms.","tags":["Documentation","Academic","Game Design","Game Programming","Game History"],"image":"images/documentation.png","screenshots":["images/documentation-1.jpg","images/documentation-2.jpg"],"gradient":"linear-gradient(135deg, #f093fb 0%, #f5576c 100%)","playLink":"https://rafaelasolis.work/projects","linkText":"View Documentation","hasEmbed":false,"developmentTime":"Ongoing","teamSize":"Solo work","tools":["Markdown","LaTeX","Confluence","Git"],"challenges":"Making technical documentation accessible to both technical and non-technical team members.","learnings":"This work has improved my communication skills and understanding of historical game development practices."}];
+
+        const NAV_H   = 60;
+        const COMPACT = 36;
+        const BUF_VH  = 0.25;
+        const SEC_VH  = 0.80;
+
+        let isMobile = false;
+
+        function checkMobile() {
+            isMobile = window.matchMedia('(max-width: 768px)').matches;
+        }
+
+        function isVideo(src) {
+            return /\.(mp4|webm|ogg)$/i.test(src);
+        }
+
+        function buildSlidesHTML(media) {
+            return media.map((src, idx) => {
+                const inner = isVideo(src)
+                    ? `<video src="${src}" controls muted playsinline loop></video>`
+                    : `<img src="${src}" alt="" loading="lazy" onerror="this.style.display='none'">`;
+                return `<div class="gallery-slide${idx === 0 ? ' active' : ''}">${inner}</div>`;
+            }).join('');
+        }
+
+        function buildStrips(projects) {
+            const stage  = document.getElementById('sectionsStage');
+            const driver = document.getElementById('scrollDriver');
+            const N = projects.length;
+            const stageH = window.innerHeight - NAV_H;
+
+            stage.style.height  = stageH + 'px';
+            driver.style.height = ((BUF_VH + N * SEC_VH) * window.innerHeight) + 'px';
+            stage.innerHTML = '';
+
+            projects.forEach((project, i) => {
+                const strip = document.createElement('div');
+                strip.className = 'section-strip';
+                strip.id = `strip-${i}`;
+
+                const bgSrc      = project.image || (project.screenshots && project.screenshots[0]) || '';
+                const bgFallback = project.gradient || 'linear-gradient(135deg, #2d5016, #6b8f47)';
+                const bgStyle    = bgSrc ? `background-image: url('${bgSrc}')` : `background: ${bgFallback}`;
+
+                const headerTags = project.tags.slice(0, 3).map(t => `<span class="strip-tag">${t}</span>`).join('');
+                const fullTags   = project.tags.map(t => `<span class="tag">${t}</span>`).join('');
+
+                const metaItems = [
+                    project.developmentTime && `<div class="strip-meta-item"><span class="strip-meta-label">Dev Time</span><span class="strip-meta-value">${project.developmentTime}</span></div>`,
+                    project.teamSize        && `<div class="strip-meta-item"><span class="strip-meta-label">Team</span><span class="strip-meta-value">${project.teamSize}</span></div>`,
+                    project.tools && project.tools.length && `<div class="strip-meta-item"><span class="strip-meta-label">Tools</span><span class="strip-meta-value">${project.tools.slice(0, 4).join(', ')}</span></div>`,
+                ].filter(Boolean).join('');
+
+                const desc     = project.fullDescription || project.shortDescription || '';
+                const linkHref = project.playLink || '#';
+                const linkText = project.linkText || 'View Project';
+
+                const media       = (project.screenshots && project.screenshots.length) ? project.screenshots : (bgSrc ? [bgSrc] : []);
+                const hasMultiple = media.length > 1;
+                const slidesHTML  = buildSlidesHTML(media);
+
+                strip.innerHTML = `
+                    <div class="strip-bg" style="${bgStyle}"></div>
+                    <div class="strip-header">
+                        <span class="strip-num">${String(i + 1).padStart(2, '0')}</span>
+                        <span class="strip-title">${project.title}</span>
+                        <span class="strip-hint">&#8597;</span>
+                    </div>
+                    <div class="strip-overview-row">
+                        <span class="strip-sep"></span>
+                        <span class="strip-short-desc">${project.shortDescription || ''}</span>
+                        <div class="strip-header-tags">${headerTags}</div>
+                    </div>
+                    <div class="strip-content">
+                        <div class="strip-content-grid">
+                            <div class="strip-info">
+                                <span class="strip-label">About</span>
+                                <div class="strip-description">${desc}</div>
+                                ${metaItems ? `<div class="strip-meta-row">${metaItems}</div>` : ''}
+                                <div class="strip-tags-full">${fullTags}</div>
+                                <a href="${linkHref}" class="strip-link" target="_blank" rel="noopener noreferrer">${linkText} &rarr;</a>
+                            </div>
+                            <div class="strip-gallery">
+                                ${slidesHTML}
+                                ${hasMultiple ? `
+                                    <button class="gallery-btn gallery-btn-prev" aria-label="Previous">&#8592;</button>
+                                    <button class="gallery-btn gallery-btn-next" aria-label="Next">&#8594;</button>
+                                    <span class="gallery-counter"><span class="gallery-cur">1</span> / ${media.length}</span>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                if (hasMultiple) {
+                    const gallery = strip.querySelector('.strip-gallery');
+                    const slides  = Array.from(gallery.querySelectorAll('.gallery-slide'));
+                    const curEl   = gallery.querySelector('.gallery-cur');
+                    let cur = 0;
+
+                    function goTo(idx) {
+                        slides[cur].classList.remove('active');
+                        cur = (idx + slides.length) % slides.length;
+                        slides[cur].classList.add('active');
+                        if (curEl) curEl.textContent = cur + 1;
+                    }
+
+                    gallery.querySelector('.gallery-btn-prev').addEventListener('click', e => { e.stopPropagation(); goTo(cur - 1); });
+                    gallery.querySelector('.gallery-btn-next').addEventListener('click', e => { e.stopPropagation(); goTo(cur + 1); });
+                }
+
+                strip.querySelector('.strip-header').addEventListener('click', () => {
+                    if (strip.classList.contains('strip-active') || isMobile) return;
+                    window.scrollTo({ top: BUF_VH * window.innerHeight + i * SEC_VH * window.innerHeight, behavior: 'smooth' });
+                });
+
+                stage.appendChild(strip);
+            });
+        }
+
+        function initScrollEngine() {
+            const stage = document.getElementById('sectionsStage');
+            let ticking = false;
+
+            function update() {
+                if (isMobile) { ticking = false; return; }
+
+                const strips = Array.from(stage.querySelectorAll('.section-strip'));
+                const N = strips.length;
+                if (!N) { ticking = false; return; }
+
+                const stageH = window.innerHeight - NAV_H;
+                const maxH   = stageH - (N - 1) * COMPACT;
+                const bufPx  = BUF_VH * window.innerHeight;
+                const secPx  = SEC_VH * window.innerHeight;
+                const scrollY = window.scrollY;
+
+                let progresses;
+
+                if (scrollY <= bufPx) {
+                    const t = scrollY / bufPx;
+                    const equalH_progress = (stageH / N - COMPACT) / (maxH - COMPACT);
+                    progresses = strips.map((_, i) =>
+                        i === 0
+                            ? equalH_progress + (1 - equalH_progress) * t
+                            : equalH_progress * (1 - t)
+                    );
+                } else {
+                    const frac = (scrollY - bufPx) / secPx;
+                    const lo   = Math.max(0, Math.min(N - 1, Math.floor(frac)));
+                    const hi   = Math.min(N - 1, lo + 1);
+                    const t    = frac - Math.floor(frac);
+
+                    progresses = strips.map((_, i) => {
+                        if (lo === hi) return i === lo ? 1 : 0;
+                        if (i === lo)  return 1 - t;
+                        if (i === hi)  return t;
+                        return 0;
+                    });
+                }
+
+                let activeIdx = -1, maxP = 0;
+
+                progresses.forEach((p, i) => {
+                    strips[i].style.height = (COMPACT + (maxH - COMPACT) * p) + 'px';
+                    const bg = strips[i].querySelector('.strip-bg');
+                    if (bg) bg.style.opacity = Math.max(0, (p - 0.2) / 0.8);
+                    if (p > maxP) { maxP = p; activeIdx = i; }
+                });
+
+                strips.forEach((s, i) => s.classList.toggle('strip-active', i === activeIdx && maxP > 0.5));
+                ticking = false;
+            }
+
+            window.addEventListener('scroll', () => {
+                if (!ticking) { requestAnimationFrame(update); ticking = true; }
+            }, { passive: true });
+
+            window.addEventListener('resize', () => {
+                checkMobile();
+                if (!isMobile) {
+                    const stage  = document.getElementById('sectionsStage');
+                    const driver = document.getElementById('scrollDriver');
+                    const N = stage.querySelectorAll('.section-strip').length;
+                    stage.style.height  = (window.innerHeight - NAV_H) + 'px';
+                    driver.style.height = ((BUF_VH + N * SEC_VH) * window.innerHeight) + 'px';
+                    requestAnimationFrame(update);
+                }
+            });
+
+            update();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            checkMobile();
+            buildStrips(projects);
+            initScrollEngine();
+        });
+    })();</script>  <footer> <p>&copy; 2025 Rafaela Solis. All rights reserved.</p> </footer> <script type="module">const t=document.getElementById("burgerMenu"),e=document.getElementById("mobileMenu");t.addEventListener("click",()=>{t.classList.toggle("active"),e.classList.toggle("active")});e.querySelectorAll("a").forEach(c=>c.addEventListener("click",()=>{t.classList.remove("active"),e.classList.remove("active")}));e.addEventListener("click",c=>{c.target===e&&(t.classList.remove("active"),e.classList.remove("active"))});</script> </body> </html>
