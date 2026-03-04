@@ -266,6 +266,31 @@ import Layout from '../../layouts/Layout.astro';
 
         .resume-button.secondary:hover { box-shadow: 6px 6px 0 var(--accent); }
 
+        /* ===== LEFT RESUME BUTTON ===== */
+        .left-resume-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            margin-top: 2.5rem;
+            padding: 0.7rem 1.6rem;
+            background: rgba(245, 242, 235, 0.12);
+            color: var(--bg);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border: 2px solid rgba(245, 242, 235, 0.55);
+            box-shadow: 3px 3px 0 rgba(26, 26, 26, 0.45);
+            transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+        }
+
+        .left-resume-btn:hover {
+            background: rgba(245, 242, 235, 0.22);
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0 rgba(26, 26, 26, 0.55);
+        }
+
         /* ===== MOBILE ===== */
         @media (max-width: 768px) {
             .about-page { flex-direction: column; }
@@ -312,6 +337,7 @@ import Layout from '../../layouts/Layout.astro';
                     <span class="stat-value">Internships &amp; Projects — US / CA / EU</span>
                 </div>
             </div>
+            <a href="/resume/" class="left-resume-btn">View Resume ↗</a>
         </aside>
 
         <!-- ── RIGHT: scrollable content ── -->
@@ -396,8 +422,8 @@ import Layout from '../../layouts/Layout.astro';
             </div>
 
             <div class="resume-buttons">
-                <a href="/resume.pdf" class="resume-button" download>Download Resume</a>
-                <a href="https://docs.google.com/document/d/1v0lK7-rZYCnJ68tqIrMUsZItaMFcUgHx-enojmvdkaY/edit?usp=sharing" class="resume-button secondary" target="_blank">View Resume Online</a>
+                <a href="https://docs.google.com/document/d/1v0lK7-rZYCnJ68tqIrMUsZItaMFcUgHx-enojmvdkaY/export?format=pdf" class="resume-button" download="Rafaela_Solis_Resume.pdf" target="_blank">Download Resume</a>
+                <a href="/resume/" class="resume-button secondary">View Resume</a>
             </div>
         </main>
 
