@@ -53,6 +53,29 @@ const projects = projectsData.projects;
             transition: background 0.3s, backdrop-filter 0.3s;
         }
 
+        .strip-title-group {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            overflow: hidden;
+            min-width: 0;
+        }
+
+        .strip-icon {
+            width: auto;
+            aspect-ratio: 1;
+            align-self: stretch;
+            margin: 0.3rem 0;   /* keeps it from touching top/bottom edges */
+            border-radius: 50%;
+            flex-shrink: 0;
+            background-size: cover;
+            background-position: center;
+            background-color: var(--accent-sage);
+            border: 1.5px solid rgba(26,26,26,0.2);
+        }
+
         .section-strip.strip-active .strip-header {
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(12px);
@@ -62,11 +85,11 @@ const projects = projectsData.projects;
 
         /* ===== OVERVIEW ROW (visible in overview, clipped at 24px) ===== */
         .strip-overview-row {
-            flex-shrink: 0;
+            flex: 1;           /* fills remaining strip height when not active */
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            padding: 0.35rem 0.85rem 0.4rem;
+            padding: 0 0.85rem;
             position: relative;
             z-index: 2;
             background: var(--bg);
@@ -85,23 +108,47 @@ const projects = projectsData.projects;
             font-size: 2rem; font-weight: 700; color: var(--text-primary);
             text-transform: uppercase; letter-spacing: 0.04em;
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-            flex-shrink: 0; line-height: 1;
+            line-height: 1;
         }
 
         .strip-sep { width: 1px; height: 12px; background: rgba(26,26,26,0.2); flex-shrink: 0; }
 
+        /* Description: absolutely centered between the two 18% side areas */
         .strip-short-desc {
-            font-size: 0.75rem; color: var(--text-muted);
+            position: absolute;
+            left: 18%; right: 18%; top: 0; bottom: 0;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
+            font-size: 0.92rem; color: var(--text-secondary);
+            pointer-events: none;
+        }
+        .strip-short-desc > span {
+            display: inline-block; max-width: 100%;
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-            flex: 1; min-width: 0;
         }
 
-        .strip-header-tags { display: flex; gap: 0.3rem; flex-shrink: 0; margin-left: auto; }
+        .strip-header-tags {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 0.2rem;
+            flex-shrink: 0;
+            width: 18%;
+            overflow: hidden;
+            margin-left: auto;
+        }
+
+        .strip-tag-row {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.3rem;
+            overflow: hidden;
+        }
 
         .strip-tag {
-            font-size: 0.64rem; font-weight: 600;
+            font-size: 0.72rem; font-weight: 600;
             border: 1.5px solid rgba(26,26,26,0.35);
-            padding: 0.1rem 0.38rem; color: var(--text-secondary); white-space: nowrap;
+            padding: 0.15rem 0.5rem; color: var(--text-secondary); white-space: nowrap;
         }
 
         .strip-hint {
@@ -113,12 +160,13 @@ const projects = projectsData.projects;
 
         /* ===== EXPANDED CONTENT ===== */
         .strip-content {
-            flex: 1; position: relative; z-index: 2;
+            flex: 0 0 0;       /* takes zero space when inactive so overview-row fills the strip */
+            position: relative; z-index: 2;
             opacity: 0; transition: opacity 0.35s;
             overflow: hidden; display: flex;
         }
 
-        .section-strip.strip-active .strip-content { opacity: 1; }
+        .section-strip.strip-active .strip-content { opacity: 1; flex: 1; }
 
         .strip-content-grid {
             display: grid; grid-template-columns: 1fr 1fr;
@@ -272,7 +320,11 @@ const projects = projectsData.projects;
                 const bgFallback = project.gradient || 'linear-gradient(135deg, #2d5016, #6b8f47)';
                 const bgStyle    = bgSrc ? `background-image: url('${bgSrc}')` : `background: ${bgFallback}`;
 
-                const headerTags = project.tags.slice(0, 3).map(t => `<span class="strip-tag">${t}</span>`).join('');
+                const allTags  = project.tags.slice(0, 6);
+                const split    = Math.floor(allTags.length / 2);
+                const tagsRow1 = allTags.slice(0, split).map(t => `<span class="strip-tag">${t}</span>`).join('');
+                const tagsRow2 = allTags.slice(split).map(t => `<span class="strip-tag">${t}</span>`).join('');
+                const headerTags = `<div class="strip-tag-row">${tagsRow1}</div><div class="strip-tag-row">${tagsRow2}</div>`;
                 const fullTags   = project.tags.map(t => `<span class="tag">${t}</span>`).join('');
 
                 const metaItems = [
@@ -289,16 +341,22 @@ const projects = projectsData.projects;
                 const hasMultiple = media.length > 1;
                 const slidesHTML  = buildSlidesHTML(media);
 
+                const iconStyle = project.image
+                    ? `background-image: url('${project.image}')`
+                    : '';
+
                 strip.innerHTML = `
                     <div class="strip-bg" style="${bgStyle}"></div>
                     <div class="strip-header">
                         <span class="strip-num">${String(i + 1).padStart(2, '0')}</span>
-                        <span class="strip-title">${project.title}</span>
+                        <div class="strip-title-group">
+                            <span class="strip-title">${project.title}</span>
+                        </div>
                         <span class="strip-hint">&#8597;</span>
                     </div>
                     <div class="strip-overview-row">
-                        <span class="strip-sep"></span>
-                        <span class="strip-short-desc">${project.shortDescription || ''}</span>
+                        <div class="strip-icon" style="${iconStyle}"></div>
+                        <span class="strip-short-desc"><span>${project.shortDescription || ''}</span></span>
                         <div class="strip-header-tags">${headerTags}</div>
                     </div>
                     <div class="strip-content">
@@ -425,6 +483,13 @@ const projects = projectsData.projects;
             checkMobile();
             buildStrips(projects);
             initScrollEngine();
+            // Snapshot icon heights after first layout so they don't grow during strip expansion
+            requestAnimationFrame(() => {
+                document.querySelectorAll('.strip-icon').forEach(icon => {
+                    const h = icon.getBoundingClientRect().height;
+                    if (h > 0) icon.style.maxHeight = h + 'px';
+                });
+            });
         });
     </script>
 </Layout>
