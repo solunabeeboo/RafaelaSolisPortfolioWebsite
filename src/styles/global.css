@@ -135,6 +135,7 @@ nav a:hover::after { width: 80%; }
     padding: 1.5rem 2rem;
     color: var(--text-primary);
     text-decoration: none;
+    text-align: center;
     transition: background 0.15s, color 0.15s;
 }
 
