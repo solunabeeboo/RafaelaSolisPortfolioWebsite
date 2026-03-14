@@ -26,164 +26,19 @@ const projects = projectsData.projects;
             cursor: pointer;
         }
 
-        .strip-bg {
+        /* ===== THUMBNAIL — absolute, covers full left side including header ===== */
+        .strip-thumbnail {
             position: absolute;
-            inset: 0;
-            background-size: cover;
-            background-position: center 50%;
+            top: 0; bottom: 0; left: 0;
+            width: 58.33%; /* 7fr out of 12fr */
+            z-index: 1;
             opacity: 0;
             transition: opacity 0.4s;
-            pointer-events: none;
-            filter: brightness(0.14) saturate(0.35);
-        }
-
-        /* ===== STRIP HEADER (36px) ===== */
-        .strip-header {
-            height: var(--compact-h);
-            min-height: var(--compact-h);
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0 0.85rem;
-            position: relative;
-            z-index: 2;
-            background: var(--bg);
-            border-bottom: 1px solid rgba(26, 26, 26, 0.1);
-            transition: background 0.3s, backdrop-filter 0.3s;
-        }
-
-        .strip-title-group {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            overflow: hidden;
-            min-width: 0;
-        }
-
-        .strip-icon {
-            width: auto;
-            aspect-ratio: 1;
-            align-self: stretch;
-            margin: 0.3rem 0;
-            border-radius: 50%;
-            flex-shrink: 0;
-            background-size: cover;
-            background-position: center;
-            background-color: var(--accent-sage);
-            border: 1.5px solid rgba(26,26,26,0.2);
-        }
-
-        .section-strip.strip-active .strip-header {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(26, 26, 26, 0.15);
-        }
-
-        /* ===== OVERVIEW ROW ===== */
-        .strip-overview-row {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0 0.85rem;
-            position: relative;
-            z-index: 2;
-            background: var(--bg);
-            overflow: hidden;
-        }
-
-        .section-strip.strip-active .strip-overview-row { display: none; }
-
-        .strip-num {
-            font-size: 0.58rem; font-weight: 700; color: var(--accent-sage);
-            letter-spacing: 0.1em; flex-shrink: 0;
-            font-variant-numeric: tabular-nums; min-width: 1.6rem; line-height: 1;
-        }
-
-        .strip-title {
-            font-size: 2rem; font-weight: 700; color: var(--text-primary);
-            text-transform: uppercase; letter-spacing: 0.04em;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-            line-height: 1;
-        }
-
-        .strip-sep { width: 1px; height: 12px; background: rgba(26,26,26,0.2); flex-shrink: 0; }
-
-        .strip-short-desc {
-            position: absolute;
-            left: 18%; right: 18%; top: 0; bottom: 0;
-            display: flex; align-items: center; justify-content: center;
-            overflow: hidden;
-            font-size: 0.92rem; color: var(--text-secondary);
-            pointer-events: none;
-        }
-        .strip-short-desc > span {
-            display: inline-block; max-width: 100%;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        }
-
-        .strip-header-tags {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 0.2rem;
-            flex-shrink: 0;
-            width: 18%;
-            overflow: hidden;
-            margin-left: auto;
-        }
-
-        .strip-tag-row {
-            display: flex;
-            justify-content: flex-end;
-            gap: 0.3rem;
-            overflow: hidden;
-        }
-
-        .strip-tag {
-            font-size: 0.72rem; font-weight: 600;
-            border: 1.5px solid rgba(26,26,26,0.35);
-            padding: 0.15rem 0.5rem; color: var(--text-secondary); white-space: nowrap;
-        }
-
-        .strip-hint {
-            font-size: 0.6rem; color: var(--text-muted);
-            flex-shrink: 0; margin-left: auto; line-height: 1;
-        }
-
-        .section-strip.strip-active .strip-hint { opacity: 0; }
-
-        /* ===== EXPANDED CONTENT ===== */
-        .strip-content {
-            flex: 0 0 0;
-            position: relative; z-index: 2;
-            opacity: 0; transition: opacity 0.35s;
-            overflow: hidden; display: flex;
-        }
-
-        .section-strip.strip-active .strip-content { opacity: 1; flex: 1; }
-
-        .strip-content-grid {
-            display: grid; grid-template-columns: 7fr 5fr;
-            width: 100%; height: 100%;
-        }
-
-        /* ===== THUMBNAIL (left) ===== */
-        .strip-thumbnail {
-            position: relative;
             overflow: hidden;
             background: #111;
         }
 
-        .strip-thumbnail-img {
-            width: 100%; height: 100%;
-            object-fit: cover; object-position: center;
-            display: block;
-        }
+        .section-strip.strip-active .strip-thumbnail { opacity: 1; }
 
         .strip-thumb-slide {
             position: absolute;
@@ -212,20 +67,6 @@ const projects = projectsData.projects;
             flex-direction: column;
             gap: 0.5rem;
             z-index: 2;
-        }
-
-        .strip-thumbnail-eyebrow {
-            display: inline-flex;
-            align-self: flex-start;
-            background: rgba(0,0,0,0.55);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            color: var(--accent-sage);
-            padding: 0.22rem 0.65rem;
-            font-size: 0.62rem; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 0.18em;
-            line-height: 1;
-            border: 1px solid rgba(255,255,255,0.1);
         }
 
         /* ===== CAROUSEL CONTROLS ===== */
@@ -259,13 +100,122 @@ const projects = projectsData.projects;
             text-shadow: 0 2px 16px rgba(0,0,0,0.5);
         }
 
-        /* ===== INFO PANEL (right) ===== */
+        /* ===== STRIP HEADER (36px) ===== */
+        .strip-header {
+            height: var(--compact-h);
+            min-height: var(--compact-h);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0 0.85rem 0 54px; /* 54px = icon width + gap */
+            position: relative;
+            z-index: 2;
+            background: var(--bg);
+            border-bottom: 1px solid rgba(26, 26, 26, 0.1);
+            transition: background 0.3s, backdrop-filter 0.3s;
+        }
+
+        .strip-title-group {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            overflow: hidden;
+            min-width: 0;
+        }
+
+        .section-strip.strip-active .strip-header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(26, 26, 26, 0.15);
+        }
+
+        .strip-title {
+            font-size: 2rem; font-weight: 700; color: var(--text-primary);
+            text-transform: uppercase; letter-spacing: 0.04em;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            line-height: 1;
+        }
+
+        .strip-hint {
+            font-size: 0.6rem; color: var(--text-muted);
+            flex-shrink: 0; margin-left: auto; line-height: 1;
+        }
+
+        .section-strip.strip-active .strip-hint { opacity: 0; }
+
+        /* ===== OVERVIEW ROW ===== */
+        .strip-overview-row {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0 0.85rem 0 54px;
+            position: relative;
+            z-index: 2;
+            background: var(--bg);
+            overflow: hidden;
+        }
+
+        .section-strip.strip-active .strip-overview-row { display: none; }
+
+        /* ===== ICON — full-height circle on left ===== */
+        .strip-icon {
+            position: absolute;
+            left: 3px; top: 3px; bottom: 3px;
+            width: auto;
+            aspect-ratio: 1;
+            z-index: 3;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            background-color: var(--accent-sage);
+            transition: opacity 0.3s;
+        }
+
+        /* Hide icon when project is expanded (thumbnail covers left side) */
+        .section-strip.strip-active .strip-icon {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .strip-sep { width: 1px; height: 12px; background: rgba(26,26,26,0.2); flex-shrink: 0; }
+
+        .strip-short-desc {
+            position: absolute;
+            left: 18%; right: 5%; top: 0; bottom: 0;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
+            font-size: 0.92rem; color: var(--text-secondary);
+            pointer-events: none;
+        }
+        .strip-short-desc > span {
+            display: inline-block; max-width: 100%;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+
+        /* ===== EXPANDED CONTENT — info panel in right 41.67% ===== */
+        .strip-content {
+            flex: 0 0 0;
+            position: relative; z-index: 2;
+            opacity: 0; transition: opacity 0.35s;
+            overflow: hidden; display: flex;
+            margin-left: 58.33%;
+        }
+
+        .section-strip.strip-active .strip-content { opacity: 1; flex: 1; }
+
+        /* ===== INFO PANEL ===== */
         .strip-info {
             padding: 1.5rem 1.75rem;
             background: rgba(245, 242, 235, 0.97);
             backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             display: flex; flex-direction: column; gap: 0.8rem;
             overflow-y: auto; border-left: 2px solid var(--border);
+            width: 100%;
         }
 
         .strip-label {
@@ -315,13 +265,14 @@ const projects = projectsData.projects;
             #scrollDriver { height: auto !important; }
             .sections-stage { position: static; height: auto !important; overflow: visible; }
             .section-strip { height: auto !important; min-height: 100svh; cursor: default; border-bottom: 3px solid var(--border); }
+            .strip-icon { display: none; }
             .strip-header { background: rgba(255,255,255,0.92) !important; backdrop-filter: blur(12px); flex-wrap: wrap; height: auto !important; min-height: 36px; padding: 0.5rem 1rem; gap: 0.5rem; }
             /* Hide overview row — full content is always expanded on mobile */
             .strip-overview-row { display: none; }
-            /* Ensure content panel expands to fill the strip */
-            .strip-content { opacity: 1 !important; flex: 1 !important; min-height: calc(100svh - 60px); }
-            .strip-content-grid { grid-template-columns: 1fr; grid-template-rows: 260px auto; }
-            .strip-thumbnail { min-height: 260px; border-bottom: 2px solid var(--border); }
+            /* Thumbnail: static, full width, fixed height */
+            .strip-thumbnail { position: static; width: 100%; height: 260px; opacity: 1; }
+            /* Info panel: full width, no left margin */
+            .strip-content { opacity: 1 !important; flex: 1 !important; margin-left: 0; min-height: calc(100svh - 300px); }
             .strip-info { border-left: none; overflow-y: visible; }
         }
     </style>
@@ -337,8 +288,8 @@ const projects = projectsData.projects;
         const COMPACT   = 36;
         const BUF_VH    = 0.25;
         const SEC_VH    = 0.80;
-        const HERO_HOLD = 0.25;  // hero hold duration as a fraction of SEC_VH scroll
-        const HERO_FRAC = 0.80;  // hero strip fills this fraction of stage height
+        const HERO_HOLD = 0.25;
+        const HERO_FRAC = 0.80;
 
         let isMobile = false;
 
@@ -379,11 +330,6 @@ const projects = projectsData.projects;
                 const bgFallback = project.gradient || 'linear-gradient(135deg, #2d5016, #6b8f47)';
                 const bgStyle    = bgSrc ? `background-image: url('${bgSrc}')` : `background: ${bgFallback}`;
 
-                const allTags  = project.tags.slice(0, 6);
-                const split    = Math.floor(allTags.length / 2);
-                const tagsRow1 = allTags.slice(0, split).map(t => `<span class="strip-tag">${t}</span>`).join('');
-                const tagsRow2 = allTags.slice(split).map(t => `<span class="strip-tag">${t}</span>`).join('');
-                const headerTags = `<div class="strip-tag-row">${tagsRow1}</div><div class="strip-tag-row">${tagsRow2}</div>`;
                 const fullTags   = project.tags.map(t => `<span class="tag">${t}</span>`).join('');
 
                 const metaItems = [
@@ -414,43 +360,36 @@ const projects = projectsData.projects;
 
                 const hasMultiple = mediaArr.length > 1;
                 const thumbSlides = buildThumbSlides(mediaArr.filter(Boolean));
-                const eyebrow = project.tags.slice(0, 3).join(' · ');
 
                 strip.innerHTML = `
-                    <div class="strip-bg" style="${bgStyle}"></div>
+                    <div class="strip-thumbnail">
+                        ${thumbSlides}
+                        <div class="strip-thumbnail-overlay">
+                            <span class="strip-thumbnail-title">${project.title}</span>
+                        </div>
+                        ${hasMultiple ? `
+                            <button class="gallery-btn gallery-btn-prev" aria-label="Previous">&#8592;</button>
+                            <button class="gallery-btn gallery-btn-next" aria-label="Next">&#8594;</button>
+                            <span class="gallery-counter"><span class="gallery-cur">1</span> / ${mediaArr.filter(Boolean).length}</span>
+                        ` : ''}
+                    </div>
+                    <div class="strip-icon" style="${iconStyle}"></div>
                     <div class="strip-header">
-                        <span class="strip-num">${String(i + 1).padStart(2, '0')}</span>
                         <div class="strip-title-group">
                             <span class="strip-title">${project.title}</span>
                         </div>
                         <span class="strip-hint">&#8597;</span>
                     </div>
                     <div class="strip-overview-row">
-                        <div class="strip-icon" style="${iconStyle}"></div>
                         <span class="strip-short-desc"><span>${project.shortDescription || ''}</span></span>
-                        <div class="strip-header-tags">${headerTags}</div>
                     </div>
                     <div class="strip-content">
-                        <div class="strip-content-grid">
-                            <div class="strip-thumbnail">
-                                ${thumbSlides}
-                                <div class="strip-thumbnail-overlay">
-                                    <span class="strip-thumbnail-eyebrow">${eyebrow}</span>
-                                    <span class="strip-thumbnail-title">${project.title}</span>
-                                </div>
-                                ${hasMultiple ? `
-                                    <button class="gallery-btn gallery-btn-prev" aria-label="Previous">&#8592;</button>
-                                    <button class="gallery-btn gallery-btn-next" aria-label="Next">&#8594;</button>
-                                    <span class="gallery-counter"><span class="gallery-cur">1</span> / ${mediaArr.filter(Boolean).length}</span>
-                                ` : ''}
-                            </div>
-                            <div class="strip-info">
-                                <span class="strip-label">About</span>
-                                <div class="strip-description">${desc}</div>
-                                ${metaItems ? `<div class="strip-meta-row">${metaItems}</div>` : ''}
-                                <div class="strip-tags-full">${fullTags}</div>
-                                <a href="${linkHref}" class="strip-link" target="_blank" rel="noopener noreferrer">${linkText} &rarr;</a>
-                            </div>
+                        <div class="strip-info">
+                            <span class="strip-label">About</span>
+                            <div class="strip-description">${desc}</div>
+                            ${metaItems ? `<div class="strip-meta-row">${metaItems}</div>` : ''}
+                            <div class="strip-tags-full">${fullTags}</div>
+                            <a href="${linkHref}" class="strip-link" target="_blank" rel="noopener noreferrer">${linkText} &rarr;</a>
                         </div>
                     </div>
                 `;
@@ -495,20 +434,17 @@ const projects = projectsData.projects;
 
                 const stageH   = window.innerHeight - NAV_H;
                 const heroH    = stageH * HERO_FRAC;
-                // height each non-hero strip gets during hero hold (may be < COMPACT = squished)
                 const otherH   = N > 1 ? (stageH - heroH) / (N - 1) : 0;
                 const bufPx    = BUF_VH * window.innerHeight;
                 const secPx    = SEC_VH * window.innerHeight;
-                const slotSize = 1 + HERO_HOLD; // scroll units per section
+                const slotSize = 1 + HERO_HOLD;
                 const scrollY  = window.scrollY;
 
                 const heights = new Array(N).fill(otherH);
                 let activeIdx = -1;
 
                 if (scrollY <= bufPx) {
-                    // Buffer phase: section 0 grows from equal-height distribution to heroH.
-                    // Only activate once h0 reaches heroH (e.g. when clicking back to project 1
-                    // from further down — scroll lands at bufPx where t=1 and h0=heroH).
+                    // Buffer phase: all strips equal on load, project 0 grows to heroH on scroll.
                     const t      = bufPx > 0 ? scrollY / bufPx : 1;
                     const equalH = stageH / N;
                     const h0     = equalH + (heroH - equalH) * t;
@@ -519,25 +455,20 @@ const projects = projectsData.projects;
                 } else {
                     const frac     = (scrollY - bufPx) / secPx;
                     const slotIdx  = Math.floor(frac / slotSize);
-                    const slotFrac = frac - slotIdx * slotSize; // 0..slotSize within this slot
+                    const slotFrac = frac - slotIdx * slotSize;
                     const lo       = Math.min(slotIdx, N - 1);
 
                     if (lo >= N - 1) {
-                        // Scrolled past last section — keep it at hero
                         heights[N - 1] = heroH;
                         for (let i = 0; i < N - 1; i++) heights[i] = otherH;
                         activeIdx = N - 1;
                     } else if (slotFrac <= HERO_HOLD) {
-                        // ── HERO HOLD: section lo fills heroH, others squished ──
                         heights[lo] = heroH;
                         for (let i = 0; i < N; i++) if (i !== lo) heights[i] = otherH;
                         activeIdx = lo;
                     } else {
-                        // ── TRANSITION: lo shrinks, lo+1 grows — "back to normal" ──
-                        const t  = slotFrac - HERO_HOLD; // 0..1
+                        const t  = slotFrac - HERO_HOLD;
                         const hi = lo + 1;
-                        // lo: heroH → otherH,  hi: otherH → heroH
-                        // math keeps total = stageH at all times
                         heights[lo] = heroH * (1 - t) + otherH * t;
                         heights[hi] = otherH * (1 - t) + heroH * t;
                         for (let i = 0; i < N; i++) {

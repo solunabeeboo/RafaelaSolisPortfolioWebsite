@@ -232,13 +232,14 @@ import Layout from '../../layouts/Layout.astro';
         <div class="wheel-container" aria-label="Contact links">
 
             <svg class="spokes-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-                <line id="spoke-email"     class="spoke-line" x1="50" y1="50" x2="50"   y2="11"  />
-                <line id="spoke-linkedin"  class="spoke-line" x1="50" y1="50" x2="80.5" y2="25.7"/>
-                <line id="spoke-bluesky"   class="spoke-line" x1="50" y1="50" x2="88"   y2="58.7"/>
-                <line id="spoke-itch"      class="spoke-line" x1="50" y1="50" x2="66.9" y2="85.1"/>
-                <line id="spoke-instagram" class="spoke-line" x1="50" y1="50" x2="33.1" y2="85.1"/>
-                <line id="spoke-discord"   class="spoke-line" x1="50" y1="50" x2="12"   y2="58.7"/>
-                <line id="spoke-github"    class="spoke-line" x1="50" y1="50" x2="19.5" y2="25.7"/>
+                <!-- Endpoints shortened to stop at card edge (±11 x, ±13 y half-card) -->
+                <line id="spoke-email"     class="spoke-line" x1="50" y1="50" x2="50"   y2="24"  />
+                <line id="spoke-linkedin"  class="spoke-line" x1="50" y1="50" x2="69.5" y2="34.5"/>
+                <line id="spoke-bluesky"   class="spoke-line" x1="50" y1="50" x2="77"   y2="56.2"/>
+                <line id="spoke-itch"      class="spoke-line" x1="50" y1="50" x2="60.6" y2="72.1"/>
+                <line id="spoke-instagram" class="spoke-line" x1="50" y1="50" x2="39.4" y2="72.1"/>
+                <line id="spoke-discord"   class="spoke-line" x1="50" y1="50" x2="23"   y2="56.2"/>
+                <line id="spoke-github"    class="spoke-line" x1="50" y1="50" x2="30.5" y2="34.5"/>
             </svg>
 
             <div class="hub">
@@ -359,6 +360,73 @@ import Layout from '../../layouts/Layout.astro';
     </div>
 
     <script>
+        // ── Compute spoke endpoints to exactly hit each card's edge ──────────
+        function updateSpokeEndpoints() {
+            const svg       = document.querySelector('.spokes-svg') as SVGElement | null;
+            const container = document.querySelector('.wheel-container') as HTMLElement | null;
+            if (!svg || !container) return;
+
+            const cr  = container.getBoundingClientRect();
+            if (cr.width === 0 || cr.height === 0) return; // hidden (mobile)
+
+            const hubX = cr.width  / 2;
+            const hubY = cr.height / 2;
+
+            document.querySelectorAll<HTMLAnchorElement>('.node[data-spoke]').forEach(node => {
+                const spokeId = node.dataset.spoke!;
+                const line    = document.getElementById(spokeId);
+                const card    = node.querySelector('.node-card') as HTMLElement | null;
+                if (!line || !card) return;
+
+                const box = card.getBoundingClientRect();
+
+                // Card bounds relative to container
+                const cl = box.left   - cr.left;
+                const cright = box.right  - cr.left;
+                const ct = box.top    - cr.top;
+                const cb = box.bottom - cr.top;
+
+                // Direction from hub to card center
+                const cx = (cl + cright) / 2;
+                const cy = (ct + cb)     / 2;
+                const dx = cx - hubX;
+                const dy = cy - hubY;
+
+                // Find the smallest t where the hub→center ray hits a card edge
+                const EPS = 2;
+                let tMin = Infinity;
+
+                const tryT = (t: number, x: number, y: number) => {
+                    if (t > 0.01 && t < tMin &&
+                        x >= cl - EPS && x <= cright + EPS &&
+                        y >= ct - EPS && y <= cb + EPS) {
+                        tMin = t;
+                    }
+                };
+
+                if (Math.abs(dx) > 0.5) {
+                    const tL = (cl     - hubX) / dx;
+                    const tR = (cright - hubX) / dx;
+                    tryT(tL, cl,     hubY + tL * dy);
+                    tryT(tR, cright, hubY + tR * dy);
+                }
+                if (Math.abs(dy) > 0.5) {
+                    const tT = (ct - hubY) / dy;
+                    const tB = (cb - hubY) / dy;
+                    tryT(tT, hubX + tT * dx, ct);
+                    tryT(tB, hubX + tB * dx, cb);
+                }
+
+                if (tMin === Infinity) return;
+
+                // Intersection in pixels → SVG viewBox (0–100)
+                const px = hubX + tMin * dx;
+                const py = hubY + tMin * dy;
+                line.setAttribute('x2', ((px / cr.width)  * 100).toFixed(2));
+                line.setAttribute('y2', ((py / cr.height) * 100).toFixed(2));
+            });
+        }
+
         // ── Spoke draw-in on load ──
         const delays: Record<string, number> = {
             'spoke-email':     350,
@@ -369,6 +437,10 @@ import Layout from '../../layouts/Layout.astro';
             'spoke-discord':   850,
             'spoke-github':    950,
         };
+
+        // Update endpoints first (layout is ready), then animate draw-in
+        updateSpokeEndpoints();
+        window.addEventListener('resize', updateSpokeEndpoints);
 
         Object.entries(delays).forEach(([id, delay]) => {
             const line = document.getElementById(id);
