@@ -846,6 +846,8 @@ const projects = projectsData.projects;
                             <div class="strip-description">${desc}</div>
                             ${metaItems ? `<div class="strip-meta-row">${metaItems}</div>` : ''}
                             <div class="strip-tags-full">${fullTags}</div>
+                            ${project.challenges ? `<span class="strip-label">Challenges</span><div class="strip-description">${project.challenges}</div>` : ''}
+                            ${project.learnings  ? `<span class="strip-label">Learnings</span><div class="strip-description">${project.learnings}</div>`  : ''}
                             <div style="display:flex;gap:0.65rem;flex-wrap:wrap;align-items:flex-start;margin-top:auto">
                                 <a href="${linkHref}" class="strip-link" target="_blank" rel="noopener noreferrer">${linkText} &rarr;</a>
                                 ${canPlay ? `<button class="strip-play-btn" data-embed="${project.embedUrl}" data-title="${project.title}">&#9654; Play Now</button>` : ''}
