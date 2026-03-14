@@ -1,5 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import siteData from '../../data/site.json';
+const contactData = (siteData as any).contact;
 ---
 <Layout title="Contact - Rafaela Solis">
     <style>
@@ -219,7 +221,112 @@ import Layout from '../../layouts/Layout.astro';
         .mobile-link-label { font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.1em; color: var(--accent); }
         .mobile-link-handle { font-size: 0.78rem; color: var(--text-secondary); }
         .mobile-link-info { display: flex; flex-direction: column; gap: 0.1rem; }
+
+        /* ===== EDIT MODE ===== */
+        .page-edit-toolbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 2000;
+            background: var(--bg); border-bottom: 2px solid var(--border);
+            display: flex; align-items: center; gap: 1rem;
+            padding: 0.6rem 1.5rem; font-size: 0.75rem;
+        }
+        .page-edit-badge { font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); }
+        .page-edit-spacer { flex: 1; }
+        .page-edit-btn-primary {
+            background: var(--accent); color: var(--bg); border: 2px solid var(--border);
+            padding: 0.4rem 1.1rem; font-weight: 700; font-size: 0.72rem;
+            text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer; font-family: inherit;
+        }
+        .page-edit-btn-secondary {
+            background: transparent; color: var(--text-secondary); border: 2px solid var(--border);
+            padding: 0.4rem 1.1rem; font-weight: 700; font-size: 0.72rem;
+            text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer; font-family: inherit;
+        }
+        body.page-edit-mode { padding-top: 2.5rem; }
+        .page-edit-overlay {
+            position: fixed; inset: 0; z-index: 2100; background: rgba(0,0,0,0.7);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .page-edit-modal {
+            background: var(--bg); border: 2px solid var(--border); box-shadow: 8px 8px 0 var(--border);
+            padding: 1.5rem 1.75rem; width: min(90vw, 420px);
+            display: flex; flex-direction: column; gap: 0.75rem;
+        }
+        .page-edit-modal h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin: 0; }
+        .page-edit-modal label { font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); display: flex; flex-direction: column; gap: 0.3rem; }
+        .page-edit-modal input {
+            background: var(--card-bg); border: 1.5px solid var(--border); color: var(--text-primary);
+            padding: 0.45rem 0.65rem; font-size: 0.85rem; font-family: inherit; width: 100%; box-sizing: border-box;
+        }
+        .page-pw-overlay {
+            position: fixed; inset: 0; z-index: 3000; background: rgba(0,0,0,0.6);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .page-pw-box {
+            background: var(--bg); border: 2px solid var(--border); box-shadow: 8px 8px 0 var(--border);
+            padding: 1.75rem; width: min(90vw, 340px); display: flex; flex-direction: column; gap: 0.75rem;
+        }
+        .page-pw-box h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin: 0; }
+        .page-pw-box input {
+            background: var(--card-bg); border: 1.5px solid var(--border); color: var(--text-primary);
+            padding: 0.5rem 0.65rem; font-size: 0.9rem; font-family: inherit; width: 100%; box-sizing: border-box;
+        }
+        .page-pw-error { color: #e55; font-size: 0.75rem; display: none; }
+        .page-pw-actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
+        /* Node edit button */
+        .node-edit-btn {
+            display: none; position: absolute; top: 4px; right: 4px;
+            background: var(--accent); color: var(--bg); border: none;
+            font-size: 0.65rem; padding: 2px 5px; cursor: pointer; font-family: inherit;
+            z-index: 10;
+        }
+        body.page-edit-mode .node-edit-btn { display: block; }
     </style>
+
+    <!-- Edit toolbar -->
+    <div id="pageEditToolbar" class="page-edit-toolbar" style="display:none">
+        <span class="page-edit-badge">&#9998; Edit Mode</span>
+        <div class="page-edit-spacer"></div>
+        <button class="page-edit-btn-secondary" id="pageEditCancel">Cancel</button>
+        <button class="page-edit-btn-secondary" id="pageEditAddNode" style="color:var(--bg);background:var(--accent-sage);border-color:var(--border)">+ Add Node</button>
+        <button class="page-edit-btn-primary" id="pageEditSave">Save Changes</button>
+    </div>
+
+    <!-- Password modal -->
+    <div id="contactPwOverlay" class="page-pw-overlay" style="display:none">
+        <div class="page-pw-box">
+            <h3>Edit Mode</h3>
+            <input type="password" id="contactPwInput" placeholder="Password" autocomplete="off">
+            <span class="page-pw-error" id="contactPwError">Incorrect password</span>
+            <div class="page-pw-actions">
+                <button class="page-edit-btn-secondary" id="contactPwCancel">Cancel</button>
+                <button class="page-edit-btn-primary" id="contactPwSubmit">Unlock</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Node editor modal -->
+    <div id="nodeEditorModal" class="page-edit-overlay" style="display:none">
+        <div class="page-edit-modal">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+                <h3 style="margin:0">Edit Contact Node</h3>
+                <div style="display:flex;gap:0.35rem">
+                    <button id="ne-up"   class="page-edit-btn-secondary" title="Move up"   style="padding:0.3rem 0.6rem">▲</button>
+                    <button id="ne-down" class="page-edit-btn-secondary" title="Move down" style="padding:0.3rem 0.6rem">▼</button>
+                </div>
+            </div>
+            <label>Icon (emoji)<br><input id="ne-icon" type="text" autocomplete="off"></label>
+            <label>Label<br><input id="ne-label" type="text" autocomplete="off"></label>
+            <label>Handle / Display text<br><input id="ne-handle" type="text" autocomplete="off"></label>
+            <label>URL / href<br><input id="ne-href" type="text" autocomplete="off"></label>
+            <div style="display:flex;gap:0.5rem;justify-content:space-between;margin-top:0.25rem;align-items:center">
+                <button id="ne-delete" class="page-edit-btn-secondary" style="color:#c0392b;border-color:#c0392b">Delete Node</button>
+                <div style="display:flex;gap:0.5rem">
+                    <button id="ne-cancel" class="page-edit-btn-secondary">Cancel</button>
+                    <button id="ne-save" class="page-edit-btn-primary">Save Node</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="contact-page">
 
@@ -232,138 +339,351 @@ import Layout from '../../layouts/Layout.astro';
         <div class="wheel-container" aria-label="Contact links">
 
             <svg class="spokes-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-                <!-- Endpoints shortened to stop at card edge (±11 x, ±13 y half-card) -->
-                <line id="spoke-email"     class="spoke-line" x1="50" y1="50" x2="50"   y2="24"  />
-                <line id="spoke-linkedin"  class="spoke-line" x1="50" y1="50" x2="69.5" y2="34.5"/>
-                <line id="spoke-bluesky"   class="spoke-line" x1="50" y1="50" x2="77"   y2="56.2"/>
-                <line id="spoke-itch"      class="spoke-line" x1="50" y1="50" x2="60.6" y2="72.1"/>
-                <line id="spoke-instagram" class="spoke-line" x1="50" y1="50" x2="39.4" y2="72.1"/>
-                <line id="spoke-discord"   class="spoke-line" x1="50" y1="50" x2="23"   y2="56.2"/>
-                <line id="spoke-github"    class="spoke-line" x1="50" y1="50" x2="30.5" y2="34.5"/>
+                {contactData.nodes.map((node: { id: string }) => (
+                    <line id={`spoke-${node.id}`} class="spoke-line" x1="50" y1="50" x2="50" y2="50" />
+                ))}
             </svg>
 
             <div class="hub">
                 <span class="hub-name">CONTACT</span>
             </div>
 
-            <a href="mailto:rafa@miguelsolis.com" class="node node-email" data-spoke="spoke-email">
-                <div class="node-card">
-                    <span class="node-icon">✉️</span>
-                    <span class="node-label">Email</span>
-                    <span class="node-handle">rafa@miguelsolis.com</span>
-                </div>
-            </a>
-
-            <a href="https://linkedin.com/in/rafaela-solis-3463b2245/" class="node node-linkedin" data-spoke="spoke-linkedin" target="_blank" rel="noopener noreferrer">
-                <div class="node-card">
-                    <span class="node-icon">💼</span>
-                    <span class="node-label">LinkedIn</span>
-                    <span class="node-handle">/rafaela-solis</span>
-                </div>
-            </a>
-
-            <a href="https://github.com/solunabeeboo" class="node node-github" data-spoke="spoke-github" target="_blank" rel="noopener noreferrer">
-                <div class="node-card">
-                    <span class="node-icon">💻</span>
-                    <span class="node-label">GitHub</span>
-                    <span class="node-handle">solunabeeboo</span>
-                </div>
-            </a>
-
-            <a href="https://itch.io/profile/solunabeeboo" class="node node-itch" data-spoke="spoke-itch" target="_blank" rel="noopener noreferrer">
-                <div class="node-card">
-                    <span class="node-icon">🎮</span>
-                    <span class="node-label">Itch.io</span>
-                    <span class="node-handle">solunabeeboo</span>
-                </div>
-            </a>
-
-            <a href="https://www.instagram.com/solunabeeboo/" class="node node-instagram" data-spoke="spoke-instagram" target="_blank" rel="noopener noreferrer">
-                <div class="node-card">
-                    <span class="node-icon">📷</span>
-                    <span class="node-label">Instagram</span>
-                    <span class="node-handle">@solunabeeboo</span>
-                </div>
-            </a>
-
-            <a href="https://discord.com/users/633013974279127043" class="node node-discord" data-spoke="spoke-discord" target="_blank" rel="noopener noreferrer">
-                <div class="node-card">
-                    <span class="node-icon">💬</span>
-                    <span class="node-label">Discord</span>
-                    <span class="node-handle">solunabeeboo</span>
-                </div>
-            </a>
-
-            <a href="https://bsky.app/profile/solunabeeboo.bsky.social" class="node node-bluesky" data-spoke="spoke-bluesky" target="_blank" rel="noopener noreferrer">
-                <div class="node-card">
-                    <span class="node-icon">🦋</span>
-                    <span class="node-label">Bluesky</span>
-                    <span class="node-handle">@solunabeeboo</span>
-                </div>
-            </a>
+            {contactData.nodes.map((node: { id: string; href: string; cssClass: string; icon: string; label: string; handle: string }) => (
+                <a
+                    href={node.href}
+                    class={`node ${node.cssClass}`}
+                    data-spoke={`spoke-${node.id}`}
+                    data-node-id={node.id}
+                    target={node.href.startsWith('mailto') ? undefined : '_blank'}
+                    rel="noopener noreferrer"
+                    style="position:absolute;"
+                >
+                    <div class="node-card" style="position:relative;">
+                        <span class="node-icon">{node.icon}</span>
+                        <span class="node-label">{node.label}</span>
+                        <span class="node-handle">{node.handle}</span>
+                        <button class="node-edit-btn" title="Edit node">&#9998;</button>
+                    </div>
+                </a>
+            ))}
 
         </div>
 
         <!-- ── MOBILE fallback ── -->
         <nav class="mobile-list" aria-label="Contact links">
-            <a href="mailto:rafa@miguelsolis.com" class="mobile-link">
-                <span class="mobile-link-icon">✉️</span>
-                <div class="mobile-link-info">
-                    <span class="mobile-link-label">Email</span>
-                    <span class="mobile-link-handle">rafa@miguelsolis.com</span>
-                </div>
-            </a>
-            <a href="https://linkedin.com/in/rafaela-solis-3463b2245/" class="mobile-link" target="_blank" rel="noopener noreferrer">
-                <span class="mobile-link-icon">💼</span>
-                <div class="mobile-link-info">
-                    <span class="mobile-link-label">LinkedIn</span>
-                    <span class="mobile-link-handle">/rafaela-solis-3463b2245</span>
-                </div>
-            </a>
-            <a href="https://github.com/solunabeeboo" class="mobile-link" target="_blank" rel="noopener noreferrer">
-                <span class="mobile-link-icon">💻</span>
-                <div class="mobile-link-info">
-                    <span class="mobile-link-label">GitHub</span>
-                    <span class="mobile-link-handle">solunabeeboo</span>
-                </div>
-            </a>
-            <a href="https://itch.io/profile/solunabeeboo" class="mobile-link" target="_blank" rel="noopener noreferrer">
-                <span class="mobile-link-icon">🎮</span>
-                <div class="mobile-link-info">
-                    <span class="mobile-link-label">Itch.io</span>
-                    <span class="mobile-link-handle">solunabeeboo</span>
-                </div>
-            </a>
-            <a href="https://www.instagram.com/solunabeeboo/" class="mobile-link" target="_blank" rel="noopener noreferrer">
-                <span class="mobile-link-icon">📷</span>
-                <div class="mobile-link-info">
-                    <span class="mobile-link-label">Instagram</span>
-                    <span class="mobile-link-handle">@solunabeeboo</span>
-                </div>
-            </a>
-            <a href="https://discord.com/users/633013974279127043" class="mobile-link" target="_blank" rel="noopener noreferrer">
-                <span class="mobile-link-icon">💬</span>
-                <div class="mobile-link-info">
-                    <span class="mobile-link-label">Discord</span>
-                    <span class="mobile-link-handle">solunabeeboo</span>
-                </div>
-            </a>
-            <a href="https://bsky.app/profile/solunabeeboo.bsky.social" class="mobile-link" target="_blank" rel="noopener noreferrer">
-                <span class="mobile-link-icon">🦋</span>
-                <div class="mobile-link-info">
-                    <span class="mobile-link-label">Bluesky</span>
-                    <span class="mobile-link-handle">@solunabeeboo.bsky.social</span>
-                </div>
-            </a>
+            {contactData.nodes.map((node: { id: string; href: string; icon: string; label: string; handle: string }) => (
+                <a
+                    href={node.href}
+                    class="mobile-link"
+                    data-node-id={node.id}
+                    target={node.href.startsWith('mailto') ? undefined : '_blank'}
+                    rel="noopener noreferrer"
+                >
+                    <span class="mobile-link-icon">{node.icon}</span>
+                    <div class="mobile-link-info">
+                        <span class="mobile-link-label">{node.label}</span>
+                        <span class="mobile-link-handle">{node.handle}</span>
+                    </div>
+                </a>
+            ))}
         </nav>
 
     </div>
 
-    <script>
+    <script define:vars={{ contactData }}>
+        const EDIT_PASSWORD = 'studio212';
+        let editMode = false;
+        let liveContactData = JSON.parse(JSON.stringify(contactData));
+        let activeNodeId = null;
+
+        function showPasswordModal() {
+            const overlay = document.getElementById('contactPwOverlay');
+            const input   = document.getElementById('contactPwInput');
+            const err     = document.getElementById('contactPwError');
+            if (!overlay || !input) return;
+            err.style.display = 'none';
+            input.value = '';
+            overlay.style.display = 'flex';
+            setTimeout(() => input.focus(), 50);
+        }
+
+        function hidePasswordModal() {
+            const overlay = document.getElementById('contactPwOverlay');
+            if (overlay) overlay.style.display = 'none';
+        }
+
+        function enterEditMode() {
+            editMode = true;
+            document.body.classList.add('page-edit-mode');
+            const toolbar = document.getElementById('pageEditToolbar');
+            if (toolbar) toolbar.style.display = 'flex';
+            attachNodeEditButtons();
+        }
+
+        function exitEditMode() {
+            editMode = false;
+            document.body.classList.remove('page-edit-mode');
+            const toolbar = document.getElementById('pageEditToolbar');
+            if (toolbar) toolbar.style.display = 'none';
+        }
+
+        function attachNodeEditButtons() {
+            document.querySelectorAll('.node[data-node-id]').forEach(nodeEl => {
+                const nodeId = nodeEl.dataset.nodeId;
+                const btn = nodeEl.querySelector('.node-edit-btn');
+                if (!btn) return;
+                btn.onclick = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    openNodeEditor(nodeId);
+                };
+            });
+        }
+
+        function openNodeEditor(nodeId) {
+            isAddingNode = false;
+            const nodeData = liveContactData.nodes.find(n => n.id === nodeId);
+            if (!nodeData) return;
+            activeNodeId = nodeId;
+            document.getElementById('ne-delete').style.visibility = 'visible';
+
+            document.getElementById('ne-icon').value   = nodeData.icon   || '';
+            document.getElementById('ne-label').value  = nodeData.label  || '';
+            document.getElementById('ne-handle').value = nodeData.handle || '';
+            document.getElementById('ne-href').value   = nodeData.href   || '';
+
+            const idx   = liveContactData.nodes.findIndex(n => n.id === nodeId);
+            const total = liveContactData.nodes.length;
+            document.getElementById('ne-up').disabled   = idx <= 0;
+            document.getElementById('ne-down').disabled = idx >= total - 1;
+
+            document.getElementById('nodeEditorModal').style.display = 'flex';
+            setTimeout(() => document.getElementById('ne-icon').focus(), 50);
+        }
+
+        function closeNodeEditor() {
+            document.getElementById('nodeEditorModal').style.display = 'none';
+            activeNodeId = null;
+        }
+
+        function saveNodeEdit() {
+            // ── Add new node ──
+            if (isAddingNode) {
+                isAddingNode = false;
+                const label = document.getElementById('ne-label').value.trim() || 'New Node';
+                const usedClasses = liveContactData.nodes.map(n => n.cssClass);
+                const cssClass = ALL_POSITIONS.find(p => !usedClasses.includes(p)) || ALL_POSITIONS[0];
+                const id = label.toLowerCase().replace(/[^a-z0-9]/g, '-') + '-' + Date.now();
+                const node = {
+                    id,
+                    icon:     document.getElementById('ne-icon').value.trim()   || '🔗',
+                    label,
+                    handle:   document.getElementById('ne-handle').value.trim() || '',
+                    href:     document.getElementById('ne-href').value.trim()   || '#',
+                    cssClass
+                };
+                liveContactData.nodes.push(node);
+                addNodeToDOM(node);
+                closeNodeEditor();
+                autoSaveContact();
+                return;
+            }
+
+            if (!activeNodeId) return;
+            const nodeData = liveContactData.nodes.find(n => n.id === activeNodeId);
+            if (!nodeData) return;
+
+            nodeData.icon   = document.getElementById('ne-icon').value.trim()   || nodeData.icon;
+            nodeData.label  = document.getElementById('ne-label').value.trim()  || nodeData.label;
+            nodeData.handle = document.getElementById('ne-handle').value.trim() || nodeData.handle;
+            nodeData.href   = document.getElementById('ne-href').value.trim()   || nodeData.href;
+
+            // Update wheel node DOM
+            const nodeEl = document.querySelector(`.node[data-node-id="${activeNodeId}"]`);
+            if (nodeEl) {
+                const iconEl   = nodeEl.querySelector('.node-icon');
+                const labelEl  = nodeEl.querySelector('.node-label');
+                const handleEl = nodeEl.querySelector('.node-handle');
+                if (iconEl)   iconEl.textContent   = nodeData.icon;
+                if (labelEl)  labelEl.textContent  = nodeData.label;
+                if (handleEl) handleEl.textContent = nodeData.handle;
+                nodeEl.href = nodeData.href;
+                if (nodeData.href.startsWith('mailto')) {
+                    nodeEl.removeAttribute('target');
+                } else {
+                    nodeEl.setAttribute('target', '_blank');
+                }
+            }
+
+            // Update mobile node DOM
+            const mobileEl = document.querySelector(`.mobile-link[data-node-id="${activeNodeId}"]`);
+            if (mobileEl) {
+                const iconEl   = mobileEl.querySelector('.mobile-link-icon');
+                const labelEl  = mobileEl.querySelector('.mobile-link-label');
+                const handleEl = mobileEl.querySelector('.mobile-link-handle');
+                if (iconEl)   iconEl.textContent   = nodeData.icon;
+                if (labelEl)  labelEl.textContent  = nodeData.label;
+                if (handleEl) handleEl.textContent = nodeData.handle;
+                mobileEl.href = nodeData.href;
+                if (nodeData.href.startsWith('mailto')) {
+                    mobileEl.removeAttribute('target');
+                } else {
+                    mobileEl.setAttribute('target', '_blank');
+                }
+            }
+
+            closeNodeEditor();
+        }
+
+        // All 7 wheel spoke positions in clockwise order
+        const ALL_POSITIONS = ['node-email','node-linkedin','node-bluesky','node-itch','node-instagram','node-discord','node-github'];
+
+        let isAddingNode = false;
+
+        function openNewNodeEditor() {
+            isAddingNode = true;
+            activeNodeId = null;
+            document.getElementById('ne-icon').value   = '';
+            document.getElementById('ne-label').value  = '';
+            document.getElementById('ne-handle').value = '';
+            document.getElementById('ne-href').value   = '';
+            document.getElementById('ne-up').disabled   = true;
+            document.getElementById('ne-down').disabled = true;
+            document.getElementById('ne-delete').style.visibility = 'hidden';
+            document.getElementById('nodeEditorModal').style.display = 'flex';
+            setTimeout(() => document.getElementById('ne-icon').focus(), 50);
+        }
+
+        function addNodeToDOM(node) {
+            // 1. Add SVG spoke line
+            const svg = document.querySelector('.spokes-svg');
+            if (svg) {
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.id = `spoke-${node.id}`;
+                line.classList.add('spoke-line');
+                line.setAttribute('x1', '50'); line.setAttribute('y1', '50');
+                line.setAttribute('x2', '50'); line.setAttribute('y2', '50');
+                svg.appendChild(line);
+            }
+
+            // 2. Add wheel node
+            const wheelContainer = document.querySelector('.wheel-container');
+            if (wheelContainer) {
+                const a = document.createElement('a');
+                a.href = node.href;
+                a.className = `node ${node.cssClass}`;
+                a.dataset.spoke  = `spoke-${node.id}`;
+                a.dataset.nodeId = node.id;
+                if (!node.href.startsWith('mailto')) a.target = '_blank';
+                a.rel = 'noopener noreferrer';
+                a.style.position = 'absolute';
+                a.innerHTML = `<div class="node-card" style="position:relative;">
+                    <span class="node-icon">${node.icon}</span>
+                    <span class="node-label">${node.label}</span>
+                    <span class="node-handle">${node.handle}</span>
+                    <button class="node-edit-btn" title="Edit node">&#9998;</button>
+                </div>`;
+                const editBtn = a.querySelector('.node-edit-btn');
+                if (editBtn) editBtn.onclick = (e) => { e.preventDefault(); e.stopPropagation(); openNodeEditor(node.id); };
+                const line = document.getElementById(`spoke-${node.id}`);
+                if (line) {
+                    a.addEventListener('mouseenter', () => line.classList.add('spoke-active'));
+                    a.addEventListener('mouseleave', () => line.classList.remove('spoke-active'));
+                }
+                wheelContainer.appendChild(a);
+            }
+
+            // 3. Add mobile link
+            const mobileList = document.querySelector('.mobile-list');
+            if (mobileList) {
+                const a = document.createElement('a');
+                a.href = node.href;
+                a.className = 'mobile-link';
+                a.dataset.nodeId = node.id;
+                if (!node.href.startsWith('mailto')) a.target = '_blank';
+                a.rel = 'noopener noreferrer';
+                a.innerHTML = `<span class="mobile-link-icon">${node.icon}</span>
+                    <div class="mobile-link-info">
+                        <span class="mobile-link-label">${node.label}</span>
+                        <span class="mobile-link-handle">${node.handle}</span>
+                    </div>`;
+                mobileList.appendChild(a);
+            }
+
+            positionNodesEvenly();
+        }
+
+        // Distribute all wheel nodes evenly around the ellipse based on array order
+        function positionNodesEvenly() {
+            const container = document.querySelector('.wheel-container');
+            if (!container) return;
+            const { width: cw, height: ch } = container.getBoundingClientRect();
+            if (!cw || !ch) return;
+
+            const rx = cw * 0.38;
+            const ry = ch * 0.39;
+
+            liveContactData.nodes.forEach((nodeData, i) => {
+                const el = document.querySelector(`.node[data-node-id="${nodeData.id}"]`);
+                if (!el) return;
+                const angle = -Math.PI / 2 + (2 * Math.PI / liveContactData.nodes.length) * i;
+                el.style.left = (50 + (rx / cw * 100) * Math.cos(angle)).toFixed(2) + '%';
+                el.style.top  = (50 + (ry / ch * 100) * Math.sin(angle)).toFixed(2) + '%';
+            });
+
+            updateSpokeEndpoints();
+        }
+
+        function rebuildContactNodes() {
+            // Re-order mobile list to match liveContactData order
+            const mobileList = document.querySelector('.mobile-list');
+            if (mobileList) {
+                liveContactData.nodes.forEach(node => {
+                    const el = mobileList.querySelector(`[data-node-id="${node.id}"]`);
+                    if (el) mobileList.appendChild(el);
+                });
+            }
+
+            // Reposition wheel nodes evenly
+            positionNodesEvenly();
+        }
+
+        async function autoSaveContact() {
+            try {
+                const siteResp = await fetch('/api/site');
+                const site = await siteResp.json();
+                site.contact = liveContactData;
+                await fetch('/api/site', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(site)
+                });
+            } catch (e) {
+                console.error('Auto-save failed:', e);
+            }
+        }
+
+        async function saveChanges() {
+            try {
+                const siteResp = await fetch('/api/site');
+                const site = await siteResp.json();
+                site.contact = liveContactData;
+                await fetch('/api/site', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(site)
+                });
+                exitEditMode();
+                location.reload();
+            } catch (e) {
+                alert('Save failed: ' + e);
+            }
+        }
+
         // ── Compute spoke endpoints to exactly hit each card's edge ──────────
         function updateSpokeEndpoints() {
-            const svg       = document.querySelector('.spokes-svg') as SVGElement | null;
-            const container = document.querySelector('.wheel-container') as HTMLElement | null;
+            const svg       = document.querySelector('.spokes-svg');
+            const container = document.querySelector('.wheel-container');
             if (!svg || !container) return;
 
             const cr  = container.getBoundingClientRect();
@@ -372,19 +692,19 @@ import Layout from '../../layouts/Layout.astro';
             const hubX = cr.width  / 2;
             const hubY = cr.height / 2;
 
-            document.querySelectorAll<HTMLAnchorElement>('.node[data-spoke]').forEach(node => {
-                const spokeId = node.dataset.spoke!;
+            document.querySelectorAll('.node[data-spoke]').forEach(node => {
+                const spokeId = node.dataset.spoke;
                 const line    = document.getElementById(spokeId);
-                const card    = node.querySelector('.node-card') as HTMLElement | null;
+                const card    = node.querySelector('.node-card');
                 if (!line || !card) return;
 
                 const box = card.getBoundingClientRect();
 
                 // Card bounds relative to container
-                const cl = box.left   - cr.left;
+                const cl     = box.left   - cr.left;
                 const cright = box.right  - cr.left;
-                const ct = box.top    - cr.top;
-                const cb = box.bottom - cr.top;
+                const ct     = box.top    - cr.top;
+                const cb     = box.bottom - cr.top;
 
                 // Direction from hub to card center
                 const cx = (cl + cright) / 2;
@@ -396,7 +716,7 @@ import Layout from '../../layouts/Layout.astro';
                 const EPS = 2;
                 let tMin = Infinity;
 
-                const tryT = (t: number, x: number, y: number) => {
+                const tryT = (t, x, y) => {
                     if (t > 0.01 && t < tMin &&
                         x >= cl - EPS && x <= cright + EPS &&
                         y >= ct - EPS && y <= cb + EPS) {
@@ -424,39 +744,119 @@ import Layout from '../../layouts/Layout.astro';
                 const py = hubY + tMin * dy;
                 line.setAttribute('x2', ((px / cr.width)  * 100).toFixed(2));
                 line.setAttribute('y2', ((py / cr.height) * 100).toFixed(2));
+
+                // Also set x1/y1 to hub center in SVG coords
+                line.setAttribute('x1', ((hubX / cr.width)  * 100).toFixed(2));
+                line.setAttribute('y1', ((hubY / cr.height) * 100).toFixed(2));
             });
         }
 
         // ── Spoke draw-in on load ──
-        const delays: Record<string, number> = {
-            'spoke-email':     350,
-            'spoke-linkedin':  450,
-            'spoke-bluesky':   550,
-            'spoke-itch':      650,
-            'spoke-instagram': 750,
-            'spoke-discord':   850,
-            'spoke-github':    950,
-        };
+        function initSpokes() {
+            positionNodesEvenly();
+            window.addEventListener('resize', positionNodesEvenly);
 
-        // Update endpoints first (layout is ready), then animate draw-in
-        updateSpokeEndpoints();
-        window.addEventListener('resize', updateSpokeEndpoints);
+            liveContactData.nodes.forEach((node, i) => {
+                const delay = 350 + i * 100;
+                const line = document.getElementById(`spoke-${node.id}`);
+                if (!line) return;
+                setTimeout(() => {
+                    line.style.animation = 'spoke-draw 0.5s ease-out forwards';
+                }, delay);
+            });
 
-        Object.entries(delays).forEach(([id, delay]) => {
-            const line = document.getElementById(id);
-            if (!line) return;
-            setTimeout(() => {
-                line.style.animation = `spoke-draw 0.5s ease-out forwards`;
-            }, delay);
-        });
+            // Spoke green highlight on node hover
+            document.querySelectorAll('.node[data-spoke]').forEach(node => {
+                const spokeId = node.dataset.spoke;
+                const line = document.getElementById(spokeId);
+                if (!line) return;
+                node.addEventListener('mouseenter', () => line.classList.add('spoke-active'));
+                node.addEventListener('mouseleave', () => line.classList.remove('spoke-active'));
+            });
+        }
 
-        // ── Spoke green highlight on node hover ──
-        document.querySelectorAll<HTMLAnchorElement>('.node[data-spoke]').forEach(node => {
-            const spokeId = node.dataset.spoke!;
-            const line = document.getElementById(spokeId);
-            if (!line) return;
-            node.addEventListener('mouseenter', () => line.classList.add('spoke-active'));
-            node.addEventListener('mouseleave', () => line.classList.remove('spoke-active'));
+        document.addEventListener('DOMContentLoaded', () => {
+            initSpokes();
+
+            // Triple-click footer to activate
+            let clicks = 0, timer = null;
+            document.querySelector('footer')?.addEventListener('click', () => {
+                clicks++;
+                if (clicks === 1) timer = setTimeout(() => { clicks = 0; }, 700);
+                if (clicks >= 3) { clearTimeout(timer); clicks = 0; showPasswordModal(); }
+            });
+
+            // Password modal buttons
+            document.getElementById('contactPwCancel')?.addEventListener('click', hidePasswordModal);
+            document.getElementById('contactPwSubmit')?.addEventListener('click', () => {
+                const input = document.getElementById('contactPwInput');
+                const err   = document.getElementById('contactPwError');
+                if (input.value === EDIT_PASSWORD) {
+                    hidePasswordModal();
+                    enterEditMode();
+                } else {
+                    err.style.display = 'block';
+                    input.value = '';
+                    input.focus();
+                }
+            });
+            document.getElementById('contactPwInput')?.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') document.getElementById('contactPwSubmit')?.click();
+                if (e.key === 'Escape') hidePasswordModal();
+            });
+
+            // Toolbar buttons
+            document.getElementById('pageEditCancel')?.addEventListener('click', exitEditMode);
+            document.getElementById('pageEditSave')?.addEventListener('click', saveChanges);
+            document.getElementById('pageEditAddNode')?.addEventListener('click', openNewNodeEditor);
+
+            // Node editor modal buttons
+            document.getElementById('ne-cancel')?.addEventListener('click', closeNodeEditor);
+            document.getElementById('ne-save')?.addEventListener('click', saveNodeEdit);
+            document.getElementById('ne-delete')?.addEventListener('click', () => {
+                if (!activeNodeId) return;
+                if (!confirm('Delete this contact node?')) return;
+                // Remove from data
+                liveContactData.nodes = liveContactData.nodes.filter(n => n.id !== activeNodeId);
+                // Remove deleted node from DOM
+                document.querySelector(`.node[data-node-id="${activeNodeId}"]`)?.remove();
+                document.querySelector(`.mobile-link[data-node-id="${activeNodeId}"]`)?.remove();
+                closeNodeEditor();
+                // Reposition remaining nodes evenly and auto-save
+                positionNodesEvenly();
+                autoSaveContact();
+            });
+            document.getElementById('ne-up')?.addEventListener('click', () => {
+                const idx = liveContactData.nodes.findIndex(n => n.id === activeNodeId);
+                if (idx <= 0) return;
+                [liveContactData.nodes[idx - 1], liveContactData.nodes[idx]] =
+                    [liveContactData.nodes[idx], liveContactData.nodes[idx - 1]];
+                rebuildContactNodes();
+                autoSaveContact();
+                const newIdx = liveContactData.nodes.findIndex(n => n.id === activeNodeId);
+                document.getElementById('ne-up').disabled   = newIdx <= 0;
+                document.getElementById('ne-down').disabled = newIdx >= liveContactData.nodes.length - 1;
+            });
+
+            document.getElementById('ne-down')?.addEventListener('click', () => {
+                const idx = liveContactData.nodes.findIndex(n => n.id === activeNodeId);
+                if (idx < 0 || idx >= liveContactData.nodes.length - 1) return;
+                [liveContactData.nodes[idx], liveContactData.nodes[idx + 1]] =
+                    [liveContactData.nodes[idx + 1], liveContactData.nodes[idx]];
+                rebuildContactNodes();
+                autoSaveContact();
+                const newIdx = liveContactData.nodes.findIndex(n => n.id === activeNodeId);
+                document.getElementById('ne-up').disabled   = newIdx <= 0;
+                document.getElementById('ne-down').disabled = newIdx >= liveContactData.nodes.length - 1;
+            });
+
+            document.getElementById('nodeEditorModal')?.addEventListener('click', (e) => {
+                if (e.target === document.getElementById('nodeEditorModal')) closeNodeEditor();
+            });
+            document.getElementById('ne-href')?.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') saveNodeEdit();
+                if (e.key === 'Escape') closeNodeEditor();
+            });
         });
     </script>
 </Layout>

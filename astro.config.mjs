@@ -46,6 +46,43 @@ function devAdminPlugin() {
                 }
             });
 
+            const SITE_PATH = path.join(__dirname, 'src/data/site.json');
+
+            server.middlewares.use('/api/site', async (req, res, next) => {
+                res.setHeader('Content-Type', 'application/json');
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                try {
+                    if (req.method === 'GET') {
+                        res.statusCode = 200;
+                        res.end(fs.readFileSync(SITE_PATH, 'utf-8'));
+                    } else if (req.method === 'POST') {
+                        const body = await readBody(req);
+                        fs.writeFileSync(SITE_PATH, JSON.stringify(body, null, 2));
+                        res.statusCode = 200;
+                        res.end(JSON.stringify({ ok: true }));
+                    } else { next(); }
+                } catch (e) {
+                    res.statusCode = 500;
+                    res.end(JSON.stringify({ error: String(e) }));
+                }
+            });
+
+            server.middlewares.use('/api/upload-headshot', async (req, res, next) => {
+                res.setHeader('Content-Type', 'application/json');
+                if (req.method !== 'POST') { next(); return; }
+                try {
+                    const body = await readBody(req);
+                    const safe = path.basename(body.filename).replace(/[^a-z0-9._\-() ]/gi, '_');
+                    const base64 = body.data.replace(/^data:[^;]+;base64,/, '');
+                    fs.writeFileSync(path.join(__dirname, 'public', safe), Buffer.from(base64, 'base64'));
+                    res.statusCode = 200;
+                    res.end(JSON.stringify({ ok: true, path: '/' + safe }));
+                } catch(e) {
+                    res.statusCode = 500;
+                    res.end(JSON.stringify({ error: String(e) }));
+                }
+            });
+
             server.middlewares.use('/api/upload', async (req, res, next) => {
                 res.setHeader('Content-Type', 'application/json');
                 res.setHeader('Access-Control-Allow-Origin', '*');

@@ -1,5 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import siteData from '../../data/site.json';
+const about = (siteData as any).about;
 ---
 <Layout title="About - Rafaela Solis">
     <style>
@@ -304,40 +306,141 @@ import Layout from '../../layouts/Layout.astro';
             .skills-grid { grid-template-columns: 1fr; }
             .skills-category.wide { grid-column: span 1; }
         }
+
+        /* ===== EDIT MODE ===== */
+        .page-edit-toolbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 2000;
+            background: var(--bg); border-bottom: 2px solid var(--border);
+            display: flex; align-items: center; gap: 1rem;
+            padding: 0.6rem 1.5rem; font-size: 0.75rem;
+        }
+        .page-edit-badge { font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); }
+        .page-edit-spacer { flex: 1; }
+        .page-edit-btn-primary {
+            background: var(--accent); color: var(--bg); border: 2px solid var(--border);
+            padding: 0.4rem 1.1rem; font-weight: 700; font-size: 0.72rem;
+            text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer; font-family: inherit;
+        }
+        .page-edit-btn-secondary {
+            background: transparent; color: var(--text-secondary); border: 2px solid var(--border);
+            padding: 0.4rem 1.1rem; font-weight: 700; font-size: 0.72rem;
+            text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer; font-family: inherit;
+        }
+        body.page-edit-mode [data-editable] {
+            outline: 2px dashed var(--accent); outline-offset: 2px; cursor: text;
+        }
+        body.page-edit-mode { padding-top: 2.5rem; }
+        .page-edit-overlay {
+            position: fixed; inset: 0; z-index: 2100; background: rgba(0,0,0,0.7);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .page-edit-modal {
+            background: var(--bg); border: 2px solid var(--border); box-shadow: 8px 8px 0 var(--border);
+            padding: 1.5rem 1.75rem; width: min(90vw, 420px);
+            display: flex; flex-direction: column; gap: 0.75rem;
+        }
+        .page-edit-modal h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin: 0; }
+        .page-edit-modal label { font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); display: flex; flex-direction: column; gap: 0.3rem; }
+        .page-edit-modal input {
+            background: var(--card-bg); border: 1.5px solid var(--border); color: var(--text-primary);
+            padding: 0.45rem 0.65rem; font-size: 0.85rem; font-family: inherit; width: 100%; box-sizing: border-box;
+        }
+        .page-pw-overlay {
+            position: fixed; inset: 0; z-index: 3000; background: rgba(0,0,0,0.6);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .page-pw-box {
+            background: var(--bg); border: 2px solid var(--border); box-shadow: 8px 8px 0 var(--border);
+            padding: 1.75rem; width: min(90vw, 340px); display: flex; flex-direction: column; gap: 0.75rem;
+        }
+        .page-pw-box h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin: 0; }
+        .page-pw-box input {
+            background: var(--card-bg); border: 1.5px solid var(--border); color: var(--text-primary);
+            padding: 0.5rem 0.65rem; font-size: 0.9rem; font-family: inherit; width: 100%; box-sizing: border-box;
+        }
+        .page-pw-error { color: #e55; font-size: 0.75rem; display: none; }
+        .page-pw-actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
+        /* Skill editing */
+        .skill-badge-wrap { position: relative; display: inline-flex; align-items: center; }
+        body.page-edit-mode .skill-remove-btn { display: inline-flex; }
+        .skill-remove-btn {
+            display: none; position: absolute; top: -6px; right: -6px;
+            background: var(--border); color: var(--bg); border: none;
+            border-radius: 50%; width: 14px; height: 14px; font-size: 9px;
+            cursor: pointer; align-items: center; justify-content: center; padding: 0; line-height: 1;
+        }
+        .skill-add-btn {
+            display: none; background: transparent; border: 1.5px dashed var(--accent);
+            color: var(--accent); padding: 0.25rem 0.55rem; font-size: 0.72rem;
+            cursor: pointer; font-family: inherit;
+        }
+        body.page-edit-mode .skill-add-btn { display: inline-flex; }
+        /* Headshot edit affordance */
+        body.page-edit-mode .headshot-circle {
+            cursor: pointer;
+            box-shadow: 10px 10px 0 var(--border), 0 0 0 3px var(--bg), 0 0 0 5px var(--accent);
+        }
+        body.page-edit-mode .headshot-circle:hover { opacity: 0.85; }
+        body.page-edit-mode .headshot-hint { display: block; }
+        .headshot-hint {
+            display: none;
+            font-size: 0.65rem;
+            color: rgba(245,242,235,0.6);
+            margin-top: -1.25rem;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
     </style>
+
+    <!-- Edit toolbar -->
+    <div id="pageEditToolbar" class="page-edit-toolbar" style="display:none">
+        <span class="page-edit-badge">&#9998; Edit Mode</span>
+        <div class="page-edit-spacer"></div>
+        <button class="page-edit-btn-secondary" id="pageEditCancel">Cancel</button>
+        <button class="page-edit-btn-primary" id="pageEditSave">Save Changes</button>
+    </div>
+
+    <!-- Password modal -->
+    <div id="aboutPwOverlay" class="page-pw-overlay" style="display:none">
+        <div class="page-pw-box">
+            <h3>Edit Mode</h3>
+            <input type="password" id="aboutPwInput" placeholder="Password" autocomplete="off">
+            <span class="page-pw-error" id="aboutPwError">Incorrect password</span>
+            <div class="page-pw-actions">
+                <button class="page-edit-btn-secondary" id="aboutPwCancel">Cancel</button>
+                <button class="page-edit-btn-primary" id="aboutPwSubmit">Unlock</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden file input for headshot upload -->
+    <input type="file" id="headshotFileInput" accept="image/*" style="display:none">
 
     <div class="about-page">
 
         <!-- ── LEFT: sticky photo panel ── -->
         <aside class="about-left">
             <img
-                src="/headshot.jpg"
+                id="aboutHeadshot"
+                src={about.headshotUrl}
                 alt="Rafaela Solis"
                 class="headshot-circle"
                 onerror="this.style.display='none'"
             >
+            <span class="headshot-hint">Click to change photo</span>
             <p class="left-name">Rafaela Solis</p>
             <p class="left-title">Game Developer &amp; Designer</p>
             <div class="left-divider"></div>
             <div class="left-stats">
-                <div class="stat-item">
-                    <span class="stat-label">School</span>
-                    <span class="stat-value">Champlain College '28</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Major</span>
-                    <span class="stat-value">Game Design &amp; Programming</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Based in</span>
-                    <span class="stat-value">Austin, TX / Burlington, VT</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Open to</span>
-                    <span class="stat-value">Internships &amp; Projects — US / CA / EU</span>
-                </div>
+                {about.stats.map((s: { label: string; value: string }, i: number) => (
+                    <div class="stat-item">
+                        <span class="stat-label" data-editable={`about.stats.${i}.label`} spellcheck="false">{s.label}</span>
+                        <span class="stat-value" data-editable={`about.stats.${i}.value`} spellcheck="false">{s.value}</span>
+                    </div>
+                ))}
             </div>
-            <a href="/resume/" class="left-resume-btn">View Resume ↗</a>
+            <a href="/resume/" class="left-resume-btn">View Resume &#8599;</a>
         </aside>
 
         <!-- ── RIGHT: scrollable content ── -->
@@ -347,85 +450,297 @@ import Layout from '../../layouts/Layout.astro';
             <div class="accent-rule"></div>
 
             <div class="bio">
-                <p>Hi! I'm Rafaela Solis, a passionate game developer dedicated to creating engaging, immersive, and emotional player-focused gaming experiences. My journey in game development started as a tiny baby. My father started a company during the tech boom, and performed IT services for the city of Austin, Texas. He always had every kind of computer, and quite often we would sit down together in front of a 4 inch thick laptop to play obscure cobbled together kids games that my tiny brain could understand. I've been hooked ever since.</p>
-
-                <p>I major in Game Design and Game Programming at Champlain College (2028), with specific focus in gameplay programming, system design, level design, technical design, narrative design, rapid prototyping, and more. I have experience with Unity, Unreal Engine, C#, C++, Python, Java, and Blueprints. I don't just love the games — I love the puzzle of making people happy. I've worked across a plethora of genres: Maze-Puzzle, Action-Adventure, Educational, Drawing-Combat, Multiplayer Coop/Competitive, and more.</p>
-
-                <p>I've shipped two non-academic large-team projects — Mega Market Mayhem and Scriptorium — both in demo stages with Scriptorium in active development. Beyond that, dozens of indie and jam games, and a plethora of academic prototypes. Each project has taught me invaluable lessons about teamwork, scope, design, and the importance of the player.</p>
+                {about.bio.map((para: string, i: number) => (
+                    <p data-editable={`about.bio.${i}`} spellcheck="false">{para}</p>
+                ))}
             </div>
 
             <div class="content-divider"></div>
 
             <h2>Skills &amp; Expertise</h2>
             <div class="skills-grid">
-                <div class="skills-category">
-                    <h3>Game Engines</h3>
-                    <div class="skills">
-                        <span class="skill-badge">Unity</span>
-                        <span class="skill-badge">Unreal Engine</span>
-                        <span class="skill-badge">UEFN</span>
+                {about.skillCategories.map((cat: { name: string; wide: boolean; skills: string[] }, ci: number) => (
+                    <div class={`skills-category${cat.wide ? ' wide' : ''}`} data-cat-index={ci}>
+                        <h3 data-editable={`about.skillCategories.${ci}.name`} spellcheck="false">{cat.name}</h3>
+                        <div class="skills">
+                            {cat.skills.map((skill: string, si: number) => (
+                                <span class="skill-badge-wrap" data-cat={ci} data-skill={si}>
+                                    <span class="skill-badge" spellcheck="false">{skill}</span>
+                                    <button class="skill-remove-btn" title="Remove skill">&#10005;</button>
+                                </span>
+                            ))}
+                            <button class="skill-add-btn" data-cat-add={ci} title="Add skill">+ Add</button>
+                        </div>
                     </div>
-                </div>
-
-                <div class="skills-category">
-                    <h3>Programming Languages</h3>
-                    <div class="skills">
-                        <span class="skill-badge">C#</span>
-                        <span class="skill-badge">C++</span>
-                        <span class="skill-badge">Python</span>
-                        <span class="skill-badge">Java</span>
-                    </div>
-                </div>
-
-                <div class="skills-category wide">
-                    <h3>Game Development</h3>
-                    <div class="skills">
-                        <span class="skill-badge">Game Design</span>
-                        <span class="skill-badge">Game Programming</span>
-                        <span class="skill-badge">Level Design</span>
-                        <span class="skill-badge">Systems Design</span>
-                        <span class="skill-badge">Technical Design</span>
-                        <span class="skill-badge">Implementation</span>
-                        <span class="skill-badge">Documentation</span>
-                        <span class="skill-badge">Scrum / Agile / Waterfall</span>
-                        <span class="skill-badge">UI/UX Design</span>
-                        <span class="skill-badge">Gameplay Programming</span>
-                        <span class="skill-badge">AI / Neural Model Development</span>
-                        <span class="skill-badge">Game Infrastructure Design</span>
-                    </div>
-                </div>
-
-                <div class="skills-category wide">
-                    <h3>Tools &amp; Software</h3>
-                    <div class="skills">
-                        <span class="skill-badge">Git</span>
-                        <span class="skill-badge">Subversion</span>
-                        <span class="skill-badge">Blender</span>
-                        <span class="skill-badge">Aseprite</span>
-                        <span class="skill-badge">Photoshop</span>
-                        <span class="skill-badge">Illustrator</span>
-                        <span class="skill-badge">DaVinci Resolve</span>
-                        <span class="skill-badge">Audacity</span>
-                        <span class="skill-badge">Taiga</span>
-                        <span class="skill-badge">Jira + Confluence</span>
-                        <span class="skill-badge">Google Suite</span>
-                        <span class="skill-badge">CMake</span>
-                    </div>
-                </div>
+                ))}
             </div>
 
             <div class="content-divider"></div>
 
             <h2>What I'm Looking For</h2>
-            <div class="looking-for-card">
-                I'm currently seeking passionately led projects and game industry internships in the US, Canada, and EU regions. I'm particularly excited about work involving player psychology, narrative-driven experiences, large-scale multiplayer, and community-driven development.
+            <div class="looking-for-card" data-editable="about.lookingFor" spellcheck="false">
+                {about.lookingFor}
             </div>
 
             <div class="resume-buttons">
-                <a href="https://docs.google.com/document/d/1v0lK7-rZYCnJ68tqIrMUsZItaMFcUgHx-enojmvdkaY/export?format=pdf" class="resume-button" download="Rafaela_Solis_Resume.pdf" target="_blank">Download Resume</a>
+                <a href={about.resumeDownloadUrl} class="resume-button" download="Rafaela_Solis_Resume.pdf" target="_blank">Download Resume</a>
                 <a href="/resume/" class="resume-button secondary">View Resume</a>
             </div>
         </main>
 
     </div>
+
+    <script define:vars={{ about }}>
+        const EDIT_PASSWORD = 'studio212';
+        let editMode = false;
+
+        function setNestedPath(obj, pathStr, value) {
+            const parts = pathStr.split('.');
+            let cur = obj;
+            for (let i = 0; i < parts.length - 1; i++) {
+                const key = isNaN(parts[i]) ? parts[i] : parseInt(parts[i]);
+                cur = cur[key];
+            }
+            const last = parts[parts.length - 1];
+            cur[isNaN(last) ? last : parseInt(last)] = value;
+        }
+
+        function showPasswordModal() {
+            const overlay = document.getElementById('aboutPwOverlay');
+            const input   = document.getElementById('aboutPwInput');
+            const err     = document.getElementById('aboutPwError');
+            if (!overlay || !input) return;
+            err.style.display = 'none';
+            input.value = '';
+            overlay.style.display = 'flex';
+            setTimeout(() => input.focus(), 50);
+        }
+
+        function hidePasswordModal() {
+            const overlay = document.getElementById('aboutPwOverlay');
+            if (overlay) overlay.style.display = 'none';
+        }
+
+        function enterEditMode() {
+            editMode = true;
+            document.body.classList.add('page-edit-mode');
+            const toolbar = document.getElementById('pageEditToolbar');
+            if (toolbar) toolbar.style.display = 'flex';
+
+            // Make simple text fields contenteditable
+            document.querySelectorAll('[data-editable]').forEach(el => {
+                el.contentEditable = 'true';
+            });
+
+            // Wrap skill badges for remove buttons
+            document.querySelectorAll('.skill-badge-wrap').forEach(wrap => {
+                const badge = wrap.querySelector('.skill-badge');
+                if (badge) badge.contentEditable = 'true';
+                const btn = wrap.querySelector('.skill-remove-btn');
+                if (btn) btn.style.display = 'inline-flex';
+            });
+        }
+
+        function exitEditMode() {
+            editMode = false;
+            document.body.classList.remove('page-edit-mode');
+            const toolbar = document.getElementById('pageEditToolbar');
+            if (toolbar) toolbar.style.display = 'none';
+
+            document.querySelectorAll('[data-editable]').forEach(el => {
+                el.contentEditable = 'false';
+            });
+            document.querySelectorAll('.skill-badge-wrap .skill-badge').forEach(b => {
+                b.contentEditable = 'false';
+            });
+            document.querySelectorAll('.skill-remove-btn').forEach(btn => {
+                btn.style.display = 'none';
+            });
+        }
+
+        async function saveChanges() {
+            try {
+                const siteResp = await fetch('/api/site');
+                const site = await siteResp.json();
+
+                // Read all simple contenteditable fields
+                document.querySelectorAll('[data-editable]').forEach(el => {
+                    const pathStr = el.dataset.editable;
+                    setNestedPath(site, pathStr, el.textContent.trim());
+                });
+
+                // Rebuild skill categories from DOM
+                site.about.skillCategories = Array.from(document.querySelectorAll('.skills-category')).map(cat => {
+                    const nameEl = cat.querySelector('h3');
+                    return {
+                        name: nameEl ? nameEl.textContent.trim() : '',
+                        wide: cat.classList.contains('wide'),
+                        skills: Array.from(cat.querySelectorAll('.skill-badge')).map(b => b.textContent.trim())
+                    };
+                });
+
+                await fetch('/api/site', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(site)
+                });
+                exitEditMode();
+                location.reload();
+            } catch (e) {
+                alert('Save failed: ' + e);
+            }
+        }
+
+        function addSkillToCategory(catIndex) {
+            const skillName = prompt('Enter new skill name:');
+            if (!skillName || !skillName.trim()) return;
+            const catEl = document.querySelector(`.skills-category[data-cat-index="${catIndex}"]`);
+            if (!catEl) return;
+            const skillsEl = catEl.querySelector('.skills');
+            if (!skillsEl) return;
+
+            const wrap = document.createElement('span');
+            wrap.className = 'skill-badge-wrap';
+
+            const badge = document.createElement('span');
+            badge.className = 'skill-badge';
+            badge.textContent = skillName.trim();
+            badge.spellcheck = false;
+            if (editMode) badge.contentEditable = 'true';
+
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'skill-remove-btn';
+            removeBtn.title = 'Remove skill';
+            removeBtn.innerHTML = '&#10005;';
+            removeBtn.style.display = editMode ? 'inline-flex' : 'none';
+            removeBtn.addEventListener('click', () => wrap.remove());
+
+            wrap.appendChild(badge);
+            wrap.appendChild(removeBtn);
+
+            // Insert before the add button
+            const addBtn = skillsEl.querySelector('.skill-add-btn');
+            skillsEl.insertBefore(wrap, addBtn);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Triple-click footer to activate
+            let clicks = 0, timer = null;
+            document.querySelector('footer')?.addEventListener('click', () => {
+                clicks++;
+                if (clicks === 1) timer = setTimeout(() => { clicks = 0; }, 700);
+                if (clicks >= 3) { clearTimeout(timer); clicks = 0; showPasswordModal(); }
+            });
+
+            // Password modal buttons
+            document.getElementById('aboutPwCancel')?.addEventListener('click', hidePasswordModal);
+            document.getElementById('aboutPwSubmit')?.addEventListener('click', () => {
+                const input = document.getElementById('aboutPwInput');
+                const err   = document.getElementById('aboutPwError');
+                if (input.value === EDIT_PASSWORD) {
+                    hidePasswordModal();
+                    enterEditMode();
+                } else {
+                    err.style.display = 'block';
+                    input.value = '';
+                    input.focus();
+                }
+            });
+            document.getElementById('aboutPwInput')?.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') document.getElementById('aboutPwSubmit')?.click();
+                if (e.key === 'Escape') hidePasswordModal();
+            });
+
+            // Toolbar buttons
+            document.getElementById('pageEditCancel')?.addEventListener('click', exitEditMode);
+            document.getElementById('pageEditSave')?.addEventListener('click', saveChangesWithHeadshot);
+
+            // Skill remove buttons (existing from SSR)
+            document.querySelectorAll('.skill-remove-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btn.closest('.skill-badge-wrap')?.remove();
+                });
+            });
+
+            // Skill add buttons
+            document.querySelectorAll('.skill-add-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const catIndex = btn.dataset.catAdd;
+                    addSkillToCategory(catIndex);
+                });
+            });
+
+            // Headshot upload
+            const headshotImg = document.getElementById('aboutHeadshot');
+            const fileInput   = document.getElementById('headshotFileInput');
+
+            headshotImg?.addEventListener('click', () => {
+                if (!editMode) return;
+                fileInput?.click();
+            });
+
+            fileInput?.addEventListener('change', async (e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = async (ev) => {
+                    try {
+                        const dataUrl = ev.target.result;
+                        const resp = await fetch('/api/upload-headshot', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ filename: file.name, data: dataUrl })
+                        });
+                        const result = await resp.json();
+                        if (result.ok) {
+                            headshotImg.src = result.path + '?t=' + Date.now();
+                            // Store new path so saveChanges can read it
+                            headshotImg.dataset.newPath = result.path;
+                        } else {
+                            alert('Upload failed: ' + (result.error || 'unknown'));
+                        }
+                    } catch (err) {
+                        alert('Upload error: ' + err);
+                    }
+                };
+                reader.readAsDataURL(file);
+                // Reset input so same file can be re-selected
+                fileInput.value = '';
+            });
+        });
+
+        async function saveChangesWithHeadshot() {
+            // Patch headshot URL into site before saving
+            const newPath = document.getElementById('aboutHeadshot')?.dataset.newPath;
+            if (newPath) {
+                try {
+                    const siteResp = await fetch('/api/site');
+                    const site = await siteResp.json();
+                    // Read simple fields
+                    document.querySelectorAll('[data-editable]').forEach(el => {
+                        setNestedPath(site, el.dataset.editable, el.textContent.trim());
+                    });
+                    site.about.headshotUrl = newPath;
+                    // Rebuild skills
+                    site.about.skillCategories = Array.from(document.querySelectorAll('.skills-category')).map(cat => ({
+                        name: cat.querySelector('h3')?.textContent.trim() || '',
+                        wide: cat.classList.contains('wide'),
+                        skills: Array.from(cat.querySelectorAll('.skill-badge')).map(b => b.textContent.trim())
+                    }));
+                    await fetch('/api/site', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(site)
+                    });
+                    exitEditMode();
+                    location.reload();
+                } catch (e) {
+                    alert('Save failed: ' + e);
+                }
+            } else {
+                await saveChanges();
+            }
+        }
+
+    </script>
 </Layout>
