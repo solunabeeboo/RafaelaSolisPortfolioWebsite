@@ -275,11 +275,375 @@ const projects = projectsData.projects;
             .strip-content { opacity: 1 !important; flex: 1 !important; margin-left: 0; min-height: calc(100svh - 300px); }
             .strip-info { border-left: none; overflow-y: visible; }
         }
+
+        /* ===== EDIT MODE ===== */
+
+        /* Per-strip edit button */
+        .strip-edit-btn {
+            display: none;
+            position: absolute; right: 2.5rem; top: 50%; transform: translateY(-50%);
+            background: var(--accent); color: var(--bg);
+            border: 2px solid var(--border); box-shadow: 2px 2px 0 var(--border);
+            padding: 0.15rem 0.65rem; cursor: pointer;
+            font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.08em; font-family: inherit; z-index: 10;
+            transition: transform 0.12s, box-shadow 0.12s;
+            white-space: nowrap;
+        }
+        .strip-edit-btn:hover {
+            transform: translateY(calc(-50% - 1px)) translateX(-1px);
+            box-shadow: 3px 3px 0 var(--border);
+        }
+        body.edit-mode .strip-edit-btn { display: block; }
+        body.edit-mode .strip-hint { display: none; }
+
+        /* Edit toolbar */
+        .edit-toolbar {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: var(--border);
+            color: var(--bg);
+            padding: 0.65rem 1.5rem;
+            display: flex; align-items: center; gap: 0.75rem;
+            z-index: 900; border-top: 3px solid var(--accent);
+        }
+        .edit-mode-badge {
+            font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.16em; color: var(--accent);
+        }
+        .edit-toolbar-spacer { flex: 1; }
+
+        /* Overlay backdrop */
+        .edit-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.72);
+            z-index: 1000;
+            display: flex; align-items: center; justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Modal box */
+        .edit-modal-box {
+            background: var(--bg);
+            border: 3px solid var(--border);
+            box-shadow: 8px 8px 0 var(--border);
+            width: min(92vw, 700px);
+            max-height: 88vh;
+            display: flex; flex-direction: column;
+            overflow: hidden;
+        }
+        .edit-modal-sm { width: min(90vw, 380px); max-height: none; }
+
+        .edit-modal-head {
+            padding: 1.1rem 1.5rem;
+            border-bottom: 2px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            flex-shrink: 0;
+        }
+        .edit-modal-head h3 {
+            font-size: 0.82rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.12em; color: var(--text-primary); margin: 0;
+        }
+        .edit-close-btn {
+            background: none; border: none; cursor: pointer;
+            font-size: 1.15rem; color: var(--text-muted);
+            padding: 0.2rem 0.4rem; line-height: 1;
+            transition: color 0.15s; font-family: inherit;
+        }
+        .edit-close-btn:hover { color: var(--text-primary); }
+
+        /* Tabs */
+        .edit-tab-bar {
+            display: flex; border-bottom: 2px solid var(--border);
+            flex-shrink: 0; background: #f0ede6;
+        }
+        .edit-tab {
+            padding: 0.6rem 1.2rem; background: none; border: none; cursor: pointer;
+            font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.1em; color: var(--text-muted);
+            border-bottom: 3px solid transparent; margin-bottom: -2px;
+            transition: color 0.15s, border-color 0.15s; font-family: inherit;
+        }
+        .edit-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+        .edit-tab:hover:not(.active) { color: var(--text-primary); }
+
+        /* Tab content */
+        .edit-tab-content {
+            flex: 1; overflow-y: auto;
+            padding: 1.25rem 1.5rem;
+            display: flex; flex-direction: column; gap: 0.9rem;
+        }
+
+        /* Form fields */
+        .edit-field { display: flex; flex-direction: column; gap: 0.35rem; }
+        .edit-label {
+            font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.13em; color: var(--accent);
+        }
+        .edit-input, .edit-textarea, .edit-select {
+            background: var(--bg); border: 2px solid var(--border);
+            color: var(--text-primary); font-family: inherit; font-size: 0.85rem;
+            padding: 0.5rem 0.7rem; width: 100%; box-sizing: border-box;
+            transition: border-color 0.15s;
+        }
+        .edit-input:focus, .edit-textarea:focus, .edit-select:focus {
+            outline: none; border-color: var(--accent);
+        }
+        .edit-textarea { resize: vertical; min-height: 76px; line-height: 1.6; }
+        .edit-row { display: flex; gap: 0.85rem; }
+        .edit-row .edit-field { flex: 1; }
+
+        /* Buttons */
+        .edit-btn-primary {
+            background: var(--accent); color: var(--bg);
+            border: 2px solid var(--border); box-shadow: 3px 3px 0 var(--border);
+            padding: 0.55rem 1.35rem; cursor: pointer;
+            font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.06em; font-family: inherit;
+            transition: transform 0.12s, box-shadow 0.12s; white-space: nowrap;
+        }
+        .edit-btn-primary:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--border); }
+
+        .edit-btn-secondary {
+            background: transparent; color: var(--text-primary);
+            border: 2px solid var(--border); box-shadow: 3px 3px 0 var(--border);
+            padding: 0.55rem 1.35rem; cursor: pointer;
+            font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.06em; font-family: inherit;
+            transition: transform 0.12s, box-shadow 0.12s; white-space: nowrap;
+        }
+        .edit-btn-secondary:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--border); }
+
+        .edit-btn-danger {
+            background: transparent; color: #c0392b;
+            border: 2px solid #c0392b; box-shadow: 3px 3px 0 #c0392b;
+            padding: 0.55rem 1.35rem; cursor: pointer;
+            font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.06em; font-family: inherit;
+            transition: transform 0.12s, box-shadow 0.12s; white-space: nowrap;
+        }
+        .edit-btn-danger:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 #c0392b; }
+
+        /* Modal footer */
+        .edit-modal-footer {
+            padding: 0.9rem 1.5rem;
+            border-top: 2px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            flex-shrink: 0; gap: 0.75rem; flex-wrap: wrap;
+        }
+        .edit-modal-footer-right { display: flex; gap: 0.65rem; }
+
+        /* Media tab */
+        .icon-preview {
+            width: 72px; height: 72px; border-radius: 50%;
+            background-size: cover; background-position: center;
+            background-color: var(--accent-sage);
+            border: 2px solid var(--border); flex-shrink: 0;
+        }
+        .icon-row { display: flex; align-items: center; gap: 1rem; }
+        .icon-row-fields { flex: 1; display: flex; flex-direction: column; gap: 0.5rem; }
+        .media-list { display: flex; flex-direction: column; gap: 0.4rem; }
+        .media-item {
+            display: flex; align-items: center; gap: 0.6rem;
+            padding: 0.4rem 0.6rem; border: 2px solid var(--border);
+        }
+        .media-item-thumb {
+            width: 52px; height: 36px; object-fit: cover;
+            background: #111; flex-shrink: 0;
+            border: 1px solid var(--border);
+        }
+        .media-item-thumb-vid {
+            width: 52px; height: 36px; flex-shrink: 0;
+            border: 1px solid var(--border);
+            background: #222; display: flex; align-items: center; justify-content: center;
+            font-size: 0.58rem; color: #888; font-weight: 700;
+        }
+        .media-item-name {
+            flex: 1; font-size: 0.75rem; color: var(--text-secondary);
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+        .media-item-btns { display: flex; gap: 0.25rem; flex-shrink: 0; }
+        .media-item-btn {
+            background: none; border: 1px solid var(--border); cursor: pointer;
+            padding: 0.2rem 0.42rem; font-size: 0.68rem; color: var(--text-muted);
+            font-family: inherit; transition: color 0.12s, background 0.12s;
+        }
+        .media-item-btn:hover { background: var(--border); color: var(--bg); }
+        .media-item-btn.del { border-color: #c0392b; color: #c0392b; }
+        .media-item-btn.del:hover { background: #c0392b; color: #fff; }
+        .media-add-row { display: flex; gap: 0.5rem; margin-top: 0.35rem; flex-wrap: wrap; }
+
+        /* Misc */
+        .edit-error { font-size: 0.73rem; color: #c0392b; margin: 0.2rem 0 0; }
+        .edit-hint  { font-size: 0.7rem; color: var(--text-muted); margin: 0; }
+        .edit-checkbox-label {
+            display: flex; align-items: center; gap: 0.5rem;
+            font-size: 0.82rem; color: var(--text-secondary); cursor: pointer;
+        }
     </style>
 
     <div id="scrollDriver">
         <div class="sections-stage" id="sectionsStage">
             <div class="loading-state">Loading projects...</div>
+        </div>
+    </div>
+
+    <!-- ── EDIT TOOLBAR ── -->
+    <div id="editToolbar" class="edit-toolbar" style="display:none">
+        <span class="edit-mode-badge">✎ Edit Mode</span>
+        <div class="edit-toolbar-spacer"></div>
+        <button id="addProjectBtn" class="edit-btn-secondary">+ Add Project</button>
+        <button id="exitEditBtn" class="edit-btn-primary">Exit Edit Mode</button>
+    </div>
+
+    <!-- ── PASSWORD MODAL ── -->
+    <div id="passwordModal" class="edit-overlay" style="display:none">
+        <div class="edit-modal-box edit-modal-sm">
+            <div class="edit-modal-head">
+                <h3>Enter Edit Password</h3>
+            </div>
+            <div class="edit-tab-content" style="flex:none;padding:1.25rem 1.5rem">
+                <div class="edit-field">
+                    <label class="edit-label" for="passwordInput">Password</label>
+                    <input type="password" id="passwordInput" class="edit-input"
+                           placeholder="••••••••" autocomplete="off">
+                    <p id="passwordError" class="edit-error" style="display:none">Incorrect password</p>
+                </div>
+            </div>
+            <div class="edit-modal-footer">
+                <div></div>
+                <div class="edit-modal-footer-right">
+                    <button id="passwordCancel" class="edit-btn-secondary">Cancel</button>
+                    <button id="passwordConfirm" class="edit-btn-primary">Enter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── PROJECT EDITOR MODAL ── -->
+    <div id="projectEditorModal" class="edit-overlay" style="display:none">
+        <div class="edit-modal-box">
+            <div class="edit-modal-head">
+                <h3 id="editorTitle">Edit Project</h3>
+                <button class="edit-close-btn" id="editorClose">✕</button>
+            </div>
+            <div class="edit-tab-bar">
+                <button class="edit-tab active" data-tab="basic">Basic</button>
+                <button class="edit-tab" data-tab="media">Media</button>
+                <button class="edit-tab" data-tab="links">Links</button>
+            </div>
+
+            <!-- Basic tab -->
+            <div class="edit-tab-content" data-tab="basic">
+                <div class="edit-field">
+                    <label class="edit-label" for="ef-title">Title</label>
+                    <input type="text" id="ef-title" class="edit-input">
+                </div>
+                <div class="edit-field">
+                    <label class="edit-label" for="ef-shortDesc">Short Description</label>
+                    <input type="text" id="ef-shortDesc" class="edit-input">
+                </div>
+                <div class="edit-field">
+                    <label class="edit-label" for="ef-fullDesc">Full Description</label>
+                    <textarea id="ef-fullDesc" class="edit-textarea" rows="6"></textarea>
+                </div>
+                <div class="edit-field">
+                    <label class="edit-label" for="ef-tags">Tags (comma-separated)</label>
+                    <input type="text" id="ef-tags" class="edit-input" placeholder="Unity, C#, Action">
+                </div>
+                <div class="edit-row">
+                    <div class="edit-field">
+                        <label class="edit-label" for="ef-devTime">Dev Time</label>
+                        <input type="text" id="ef-devTime" class="edit-input" placeholder="3 months">
+                    </div>
+                    <div class="edit-field">
+                        <label class="edit-label" for="ef-teamSize">Team Size</label>
+                        <input type="text" id="ef-teamSize" class="edit-input" placeholder="Solo project">
+                    </div>
+                </div>
+                <div class="edit-field">
+                    <label class="edit-label" for="ef-tools">Tools (comma-separated)</label>
+                    <input type="text" id="ef-tools" class="edit-input" placeholder="Unity, C#, Git">
+                </div>
+                <div class="edit-field">
+                    <label class="edit-label" for="ef-challenges">Challenges</label>
+                    <textarea id="ef-challenges" class="edit-textarea" rows="3"></textarea>
+                </div>
+                <div class="edit-field">
+                    <label class="edit-label" for="ef-learnings">Learnings</label>
+                    <textarea id="ef-learnings" class="edit-textarea" rows="3"></textarea>
+                </div>
+            </div>
+
+            <!-- Media tab -->
+            <div class="edit-tab-content" data-tab="media" style="display:none">
+                <div class="edit-field">
+                    <label class="edit-label">Icon / Main Image</label>
+                    <div class="icon-row">
+                        <div id="ef-iconPreview" class="icon-preview"></div>
+                        <div class="icon-row-fields">
+                            <input type="text" id="ef-iconUrl" class="edit-input"
+                                   placeholder="images/game.png  or  /projects/images/game.png">
+                            <button class="edit-btn-secondary" id="ef-iconUploadBtn">Upload Image</button>
+                        </div>
+                    </div>
+                    <input type="file" id="ef-iconUpload" accept="image/*" style="display:none">
+                    <p class="edit-hint">Path is relative to /projects/ (e.g. <code>images/game.png</code>)</p>
+                </div>
+                <div class="edit-field">
+                    <label class="edit-label">Screenshots &amp; Videos</label>
+                    <div id="ef-mediaList" class="media-list"></div>
+                    <div class="media-add-row">
+                        <button class="edit-btn-secondary" id="ef-addMediaUpload">Upload File(s)</button>
+                        <button class="edit-btn-secondary" id="ef-addMediaUrl">Add by URL</button>
+                    </div>
+                    <input type="file" id="ef-mediaUpload" accept="image/*,video/*" multiple style="display:none">
+                </div>
+            </div>
+
+            <!-- Links tab -->
+            <div class="edit-tab-content" data-tab="links" style="display:none">
+                <div class="edit-field">
+                    <label class="edit-label" for="ef-playLink">Play / Project Link</label>
+                    <input type="url" id="ef-playLink" class="edit-input" placeholder="https://itch.io/...">
+                </div>
+                <div class="edit-field">
+                    <label class="edit-label" for="ef-linkText">Link Button Text</label>
+                    <input type="text" id="ef-linkText" class="edit-input" placeholder="Play on itch.io">
+                </div>
+                <div class="edit-field">
+                    <label class="edit-checkbox-label">
+                        <input type="checkbox" id="ef-hasEmbed">
+                        Has Embed
+                    </label>
+                </div>
+                <div class="edit-row">
+                    <div class="edit-field">
+                        <label class="edit-label" for="ef-embedType">Embed Type</label>
+                        <select id="ef-embedType" class="edit-select edit-input">
+                            <option value="game">game</option>
+                            <option value="widget">widget</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="edit-field">
+                    <label class="edit-label" for="ef-embedUrl">Embed URL</label>
+                    <input type="url" id="ef-embedUrl" class="edit-input" placeholder="https://itch.io/embed/...">
+                </div>
+                <div class="edit-field">
+                    <label class="edit-label" for="ef-gradient">Background Gradient (CSS)</label>
+                    <input type="text" id="ef-gradient" class="edit-input"
+                           placeholder="linear-gradient(135deg, #667eea 0%, #764ba2 100%)">
+                </div>
+            </div>
+
+            <div class="edit-modal-footer">
+                <button id="editorDelete" class="edit-btn-danger" style="display:none">Delete Project</button>
+                <div class="edit-modal-footer-right">
+                    <button id="editorCancel" class="edit-btn-secondary">Cancel</button>
+                    <button id="editorSave" class="edit-btn-primary">Save Changes</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -290,6 +654,9 @@ const projects = projectsData.projects;
         const SEC_VH    = 0.80;
         const HERO_HOLD = 0.25;
         const HERO_FRAC = 0.80;
+
+        // ── Edit mode uses a mutable copy of the server-rendered project list ──
+        let liveProjects = JSON.parse(JSON.stringify(projects));
 
         let isMobile = false;
 
@@ -310,10 +677,10 @@ const projects = projectsData.projects;
             }).join('');
         }
 
-        function buildStrips(projects) {
+        function buildStrips(projectList) {
             const stage  = document.getElementById('sectionsStage');
             const driver = document.getElementById('scrollDriver');
-            const N = projects.length;
+            const N = projectList.length;
             const stageH = window.innerHeight - NAV_H;
 
             const slotSize = 1 + HERO_HOLD;
@@ -321,7 +688,7 @@ const projects = projectsData.projects;
             driver.style.height = ((BUF_VH + N * slotSize * SEC_VH) * window.innerHeight) + 'px';
             stage.innerHTML = '';
 
-            projects.forEach((project, i) => {
+            projectList.forEach((project, i) => {
                 const strip = document.createElement('div');
                 strip.className = 'section-strip';
                 strip.id = `strip-${i}`;
@@ -444,7 +811,6 @@ const projects = projectsData.projects;
                 let activeIdx = -1;
 
                 if (scrollY <= bufPx) {
-                    // Buffer phase: all strips equal on load, project 0 grows to heroH on scroll.
                     const t      = bufPx > 0 ? scrollY / bufPx : 1;
                     const equalH = stageH / N;
                     const h0     = equalH + (heroH - equalH) * t;
@@ -505,17 +871,355 @@ const projects = projectsData.projects;
             update();
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            checkMobile();
-            buildStrips(projects);
-            initScrollEngine();
-            // Snapshot icon heights after first layout so they don't grow during strip expansion
+        function snapshotIconHeights() {
             requestAnimationFrame(() => {
                 document.querySelectorAll('.strip-icon').forEach(icon => {
                     const h = icon.getBoundingClientRect().height;
                     if (h > 0) icon.style.maxHeight = h + 'px';
                 });
             });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            checkMobile();
+            buildStrips(liveProjects);
+            initScrollEngine();
+            snapshotIconHeights();
+
+            // ── Triple-click the footer to open the edit password prompt ──────
+            // Footer lives in the Layout (after the slot), so must be wired here.
+            let clicks = 0, clickTimer = null;
+            document.querySelector('footer')?.addEventListener('click', () => {
+                clicks++;
+                if (clicks === 1) {
+                    clickTimer = setTimeout(() => { clicks = 0; }, 700);
+                }
+                if (clicks >= 3) {
+                    clearTimeout(clickTimer);
+                    clicks = 0;
+                    showPasswordModal();
+                }
+            });
         });
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // EDIT MODE
+        // Change this password to whatever you like:
+        const EDIT_PASSWORD = 'studio212';
+
+        let editMode    = false;
+        let editingIdx  = null;     // null = new project, number = existing index
+        let editScreenshots = [];   // mutable copy for the media tab
+
+        // ── Password modal ────────────────────────────────────────────────────
+        function showPasswordModal() {
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('passwordError').style.display = 'none';
+            document.getElementById('passwordModal').style.display = 'flex';
+            setTimeout(() => document.getElementById('passwordInput').focus(), 60);
+        }
+
+        function hidePasswordModal() {
+            document.getElementById('passwordModal').style.display = 'none';
+        }
+
+        document.getElementById('passwordCancel').addEventListener('click', hidePasswordModal);
+
+        document.getElementById('passwordInput').addEventListener('keydown', e => {
+            if (e.key === 'Enter') checkPassword();
+            if (e.key === 'Escape') hidePasswordModal();
+        });
+
+        document.getElementById('passwordConfirm').addEventListener('click', checkPassword);
+
+        function checkPassword() {
+            if (document.getElementById('passwordInput').value === EDIT_PASSWORD) {
+                hidePasswordModal();
+                enterEditMode();
+            } else {
+                document.getElementById('passwordError').style.display = 'block';
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').focus();
+            }
+        }
+
+        // ── Activate / deactivate edit mode ───────────────────────────────────
+        function enterEditMode() {
+            editMode = true;
+            document.body.classList.add('edit-mode');
+            document.getElementById('editToolbar').style.display = 'flex';
+            attachEditButtons();
+        }
+
+        function attachEditButtons() {
+            document.querySelectorAll('.section-strip').forEach((strip, i) => {
+                if (strip.querySelector('.strip-edit-btn')) return; // already attached
+                const btn = document.createElement('button');
+                btn.className = 'strip-edit-btn';
+                btn.textContent = '✎ Edit';
+                btn.dataset.idx = i;
+                btn.addEventListener('click', e => {
+                    e.stopPropagation();
+                    openEditor(parseInt(btn.dataset.idx));
+                });
+                strip.querySelector('.strip-header').appendChild(btn);
+            });
+        }
+
+        function exitEditMode() {
+            editMode = false;
+            document.body.classList.remove('edit-mode');
+            document.getElementById('editToolbar').style.display = 'none';
+        }
+
+        document.getElementById('exitEditBtn').addEventListener('click', exitEditMode);
+        document.getElementById('addProjectBtn').addEventListener('click', () => openEditor(null));
+
+        // ── Rebuild strips after edit ──────────────────────────────────────────
+        function rebuildAfterEdit() {
+            buildStrips(liveProjects);
+            snapshotIconHeights();
+            if (editMode) attachEditButtons();
+            window.dispatchEvent(new Event('scroll'));
+        }
+
+        // ── Editor modal ──────────────────────────────────────────────────────
+        function openEditor(idx) {
+            editingIdx = idx;
+            const p = idx !== null ? liveProjects[idx] : {};
+
+            document.getElementById('editorTitle').textContent =
+                idx !== null ? `Edit: ${p.title || '(untitled)'}` : 'New Project';
+            document.getElementById('editorDelete').style.display =
+                idx !== null ? 'block' : 'none';
+
+            // Basic
+            document.getElementById('ef-title').value       = p.title || '';
+            document.getElementById('ef-shortDesc').value   = p.shortDescription || '';
+            document.getElementById('ef-fullDesc').value    = p.fullDescription || '';
+            document.getElementById('ef-tags').value        = (p.tags || []).join(', ');
+            document.getElementById('ef-devTime').value     = p.developmentTime || '';
+            document.getElementById('ef-teamSize').value    = p.teamSize || '';
+            document.getElementById('ef-tools').value       = (p.tools || []).join(', ');
+            document.getElementById('ef-challenges').value  = p.challenges || '';
+            document.getElementById('ef-learnings').value   = p.learnings || '';
+
+            // Links
+            document.getElementById('ef-playLink').value    = p.playLink || '';
+            document.getElementById('ef-linkText').value    = p.linkText || '';
+            document.getElementById('ef-hasEmbed').checked  = p.hasEmbed || false;
+            document.getElementById('ef-embedType').value   = p.embedType || 'game';
+            document.getElementById('ef-embedUrl').value    = p.embedUrl || '';
+            document.getElementById('ef-gradient').value    = p.gradient || '';
+
+            // Media
+            editScreenshots = [...(p.screenshots || [])];
+            renderIconPreview(p.image || '');
+            document.getElementById('ef-iconUrl').value = p.image || '';
+            renderMediaList();
+
+            switchTab('basic');
+            document.getElementById('projectEditorModal').style.display = 'flex';
+        }
+
+        function closeEditor() {
+            document.getElementById('projectEditorModal').style.display = 'none';
+        }
+
+        document.getElementById('editorClose').addEventListener('click', closeEditor);
+        document.getElementById('editorCancel').addEventListener('click', closeEditor);
+
+        // Close on backdrop click
+        document.getElementById('projectEditorModal').addEventListener('click', e => {
+            if (e.target === document.getElementById('projectEditorModal')) closeEditor();
+        });
+        document.getElementById('passwordModal').addEventListener('click', e => {
+            if (e.target === document.getElementById('passwordModal')) hidePasswordModal();
+        });
+
+        // ── Tabs ──────────────────────────────────────────────────────────────
+        document.querySelectorAll('.edit-tab').forEach(tab => {
+            tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+        });
+
+        function switchTab(name) {
+            document.querySelectorAll('.edit-tab').forEach(t =>
+                t.classList.toggle('active', t.dataset.tab === name));
+            document.querySelectorAll('.edit-tab-content[data-tab]').forEach(c =>
+                c.style.display = c.dataset.tab === name ? 'flex' : 'none');
+        }
+
+        // ── Icon preview ──────────────────────────────────────────────────────
+        document.getElementById('ef-iconUrl').addEventListener('input', e =>
+            renderIconPreview(e.target.value));
+
+        document.getElementById('ef-iconUploadBtn').addEventListener('click', () =>
+            document.getElementById('ef-iconUpload').click());
+
+        document.getElementById('ef-iconUpload').addEventListener('change', async e => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const result = await uploadFile(file, 'images');
+            if (result) {
+                document.getElementById('ef-iconUrl').value = result;
+                renderIconPreview(result);
+            }
+            e.target.value = '';
+        });
+
+        function renderIconPreview(src) {
+            document.getElementById('ef-iconPreview').style.backgroundImage =
+                src ? `url('${src}')` : 'none';
+        }
+
+        // ── Media list ────────────────────────────────────────────────────────
+        function renderMediaList() {
+            const list = document.getElementById('ef-mediaList');
+            list.innerHTML = '';
+            if (!editScreenshots.length) {
+                list.innerHTML = '<p style="font-size:0.75rem;color:var(--text-muted);margin:0">No screenshots yet</p>';
+                return;
+            }
+            editScreenshots.forEach((src, i) => {
+                const item = document.createElement('div');
+                item.className = 'media-item';
+                const vid = isVideo(src);
+                const thumbEl = vid
+                    ? `<div class="media-item-thumb-vid">VIDEO</div>`
+                    : `<img class="media-item-thumb" src="${src}" alt="" onerror="this.style.opacity=0.2">`;
+                item.innerHTML = `
+                    ${thumbEl}
+                    <span class="media-item-name" title="${src}">${src.split('/').pop()}</span>
+                    <div class="media-item-btns">
+                        <button class="media-item-btn" data-action="up"   data-idx="${i}" ${i === 0 ? 'disabled style="opacity:0.3"' : ''}>↑</button>
+                        <button class="media-item-btn" data-action="down" data-idx="${i}" ${i === editScreenshots.length - 1 ? 'disabled style="opacity:0.3"' : ''}>↓</button>
+                        <button class="media-item-btn del" data-action="del" data-idx="${i}">✕</button>
+                    </div>`;
+                list.appendChild(item);
+            });
+
+            list.querySelectorAll('[data-action]:not([disabled])').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const i = parseInt(btn.dataset.idx);
+                    if (btn.dataset.action === 'up') {
+                        [editScreenshots[i - 1], editScreenshots[i]] = [editScreenshots[i], editScreenshots[i - 1]];
+                    } else if (btn.dataset.action === 'down') {
+                        [editScreenshots[i], editScreenshots[i + 1]] = [editScreenshots[i + 1], editScreenshots[i]];
+                    } else if (btn.dataset.action === 'del') {
+                        editScreenshots.splice(i, 1);
+                    }
+                    renderMediaList();
+                });
+            });
+        }
+
+        document.getElementById('ef-addMediaUpload').addEventListener('click', () =>
+            document.getElementById('ef-mediaUpload').click());
+
+        document.getElementById('ef-addMediaUrl').addEventListener('click', () => {
+            const url = prompt('Enter image or video URL (or path relative to /projects/):');
+            if (url && url.trim()) {
+                editScreenshots.push(url.trim());
+                renderMediaList();
+            }
+        });
+
+        document.getElementById('ef-mediaUpload').addEventListener('change', async e => {
+            const files = Array.from(e.target.files);
+            for (const file of files) {
+                const result = await uploadFile(file, 'screenshots');
+                if (result) editScreenshots.push(result);
+            }
+            renderMediaList();
+            e.target.value = '';
+        });
+
+        // ── File upload helper ────────────────────────────────────────────────
+        async function uploadFile(file, subfolder) {
+            return new Promise(resolve => {
+                const reader = new FileReader();
+                reader.onload = async ev => {
+                    const safe = file.name.replace(/[^a-z0-9._\-() ]/gi, '_');
+                    try {
+                        const resp = await fetch('/api/upload', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ subfolder, filename: safe, data: ev.target.result })
+                        });
+                        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                        const json = await resp.json();
+                        resolve(json.path); // e.g. "screenshots/game.png"
+                    } catch (err) {
+                        alert('Upload failed: ' + err.message + '\n\nNote: uploads only work in dev mode (astro dev).');
+                        resolve(null);
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // ── Collect form data ─────────────────────────────────────────────────
+        function collectFormData() {
+            const existing = editingIdx !== null ? liveProjects[editingIdx] : {};
+            return {
+                ...existing,
+                title:            document.getElementById('ef-title').value.trim(),
+                shortDescription: document.getElementById('ef-shortDesc').value.trim(),
+                fullDescription:  document.getElementById('ef-fullDesc').value.trim(),
+                tags:             document.getElementById('ef-tags').value.split(',').map(t => t.trim()).filter(Boolean),
+                developmentTime:  document.getElementById('ef-devTime').value.trim(),
+                teamSize:         document.getElementById('ef-teamSize').value.trim(),
+                tools:            document.getElementById('ef-tools').value.split(',').map(t => t.trim()).filter(Boolean),
+                challenges:       document.getElementById('ef-challenges').value.trim(),
+                learnings:        document.getElementById('ef-learnings').value.trim(),
+                image:            document.getElementById('ef-iconUrl').value.trim(),
+                screenshots:      [...editScreenshots],
+                playLink:         document.getElementById('ef-playLink').value.trim(),
+                linkText:         document.getElementById('ef-linkText').value.trim(),
+                hasEmbed:         document.getElementById('ef-hasEmbed').checked,
+                embedType:        document.getElementById('ef-embedType').value,
+                embedUrl:         document.getElementById('ef-embedUrl').value.trim(),
+                gradient:         document.getElementById('ef-gradient').value.trim(),
+            };
+        }
+
+        // ── Save ──────────────────────────────────────────────────────────────
+        document.getElementById('editorSave').addEventListener('click', async () => {
+            const data = collectFormData();
+            if (!data.title) { alert('Title is required.'); return; }
+            if (editingIdx !== null) {
+                liveProjects[editingIdx] = data;
+            } else {
+                liveProjects.push(data);
+            }
+            await saveToAPI();
+            closeEditor();
+            rebuildAfterEdit();
+        });
+
+        // ── Delete ────────────────────────────────────────────────────────────
+        document.getElementById('editorDelete').addEventListener('click', async () => {
+            const title = liveProjects[editingIdx]?.title || 'this project';
+            if (!confirm(`Delete "${title}"?\n\nThis cannot be undone.`)) return;
+            liveProjects.splice(editingIdx, 1);
+            await saveToAPI();
+            closeEditor();
+            rebuildAfterEdit();
+        });
+
+        // ── POST projects.json to API ──────────────────────────────────────────
+        async function saveToAPI() {
+            try {
+                const resp = await fetch('/api/projects', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ projects: liveProjects })
+                });
+                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+            } catch (err) {
+                alert('Could not save to API: ' + err.message +
+                    '\n\nNote: saving only works in dev mode (astro dev).\nYour changes are applied locally for this session.');
+            }
+        }
     </script>
 </Layout>
