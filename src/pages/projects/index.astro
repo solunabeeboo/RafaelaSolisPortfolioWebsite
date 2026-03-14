@@ -67,6 +67,7 @@ const projects = projectsData.projects;
             flex-direction: column;
             gap: 0.5rem;
             z-index: 2;
+            pointer-events: none;
         }
 
         /* ===== CAROUSEL CONTROLS ===== */
@@ -274,6 +275,81 @@ const projects = projectsData.projects;
             /* Info panel: full width, no left margin */
             .strip-content { opacity: 1 !important; flex: 1 !important; margin-left: 0; min-height: calc(100svh - 300px); }
             .strip-info { border-left: none; overflow-y: visible; }
+        }
+
+        /* ===== GAME EMBED OVERLAY ===== */
+        .play-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.92);
+            z-index: 1100; /* above nav (1000) */
+            display: flex; flex-direction: column;
+            align-items: stretch;
+            justify-content: center;
+            padding: 1.75rem 1.75rem 5rem; /* extra bottom room for itch.io footer bar */
+            gap: 0.75rem;
+        }
+
+        .play-overlay-header {
+            display: flex; align-items: center; gap: 1rem;
+            flex-shrink: 0;
+        }
+
+        .play-overlay-title {
+            flex: 1; font-size: 0.8rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.14em;
+            color: rgba(255,255,255,0.55);
+        }
+
+        .play-close-btn {
+            background: none; border: 2px solid rgba(255,255,255,0.3);
+            color: rgba(255,255,255,0.7); cursor: pointer;
+            padding: 0.35rem 0.85rem; font-size: 0.72rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.08em; font-family: inherit;
+            transition: border-color 0.15s, color 0.15s;
+        }
+        .play-close-btn:hover { border-color: #fff; color: #fff; }
+        .play-fs-btn {
+            background: none; border: 2px solid rgba(255,255,255,0.3);
+            color: rgba(255,255,255,0.7); cursor: pointer;
+            padding: 0.35rem 0.85rem; font-size: 0.72rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.08em; font-family: inherit;
+            transition: border-color 0.15s, color 0.15s;
+        }
+        .play-fs-btn:hover { border-color: #fff; color: #fff; }
+
+        .play-iframe-wrap {
+            /* Widest possible 16:9 box that fits within the viewport height.
+               max-width caps the width so height = width*(9/16) never exceeds that. */
+            width: 100%;
+            max-width: calc((100vh - 8.75rem) * 16 / 9);
+            aspect-ratio: 16 / 9;
+            align-self: center;
+            background: #000;
+            border: 3px solid var(--border);
+            position: relative;
+            overflow: visible;   /* lets the itch.io footer bar hang below the border */
+        }
+        .play-iframe-wrap iframe {
+            position: absolute; top: 0; left: 0;
+            border: none; display: block;
+            transform-origin: top left;
+        }
+
+        /* Play Now button in info panel */
+        .strip-play-btn {
+            display: inline-flex; align-items: center; gap: 0.45rem;
+            background: transparent; color: var(--accent); text-decoration: none;
+            padding: 0.65rem 1.4rem; border: 2px solid var(--accent);
+            box-shadow: 3px 3px 0 var(--accent); font-weight: 700; font-size: 0.78rem;
+            text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer;
+            font-family: inherit;
+            transition: transform 0.15s, box-shadow 0.15s, background 0.15s, color 0.15s;
+            align-self: flex-start; flex-shrink: 0;
+        }
+        .strip-play-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0 var(--accent);
+            background: var(--accent); color: var(--bg);
         }
 
         /* ===== EDIT MODE ===== */
@@ -485,6 +561,19 @@ const projects = projectsData.projects;
     <div id="scrollDriver">
         <div class="sections-stage" id="sectionsStage">
             <div class="loading-state">Loading projects...</div>
+        </div>
+    </div>
+
+    <!-- ── GAME EMBED OVERLAY ── -->
+    <div id="playOverlay" class="play-overlay" style="display:none">
+        <div class="play-overlay-header">
+            <span class="play-overlay-title" id="playOverlayTitle"></span>
+            <button class="play-fs-btn" id="playFsBtn">⛶ Fullscreen</button>
+            <button class="play-close-btn" id="playCloseBtn">✕ Close</button>
+        </div>
+        <div class="play-iframe-wrap">
+            <iframe id="playIframe" allowfullscreen
+                allow="autoplay; fullscreen *; encrypted-media; gamepad"></iframe>
         </div>
     </div>
 
@@ -705,9 +794,10 @@ const projects = projectsData.projects;
                     project.tools && project.tools.length && `<div class="strip-meta-item"><span class="strip-meta-label">Tools</span><span class="strip-meta-value">${project.tools.slice(0, 4).join(', ')}</span></div>`,
                 ].filter(Boolean).join('');
 
-                const desc     = project.fullDescription || project.shortDescription || '';
-                const linkHref = project.playLink || '#';
-                const linkText = project.linkText || 'View Project';
+                const desc      = project.fullDescription || project.shortDescription || '';
+                const linkHref  = project.playLink || '#';
+                const linkText  = project.linkText || 'View Project';
+                const canPlay   = project.hasEmbed && project.embedType === 'game' && project.embedUrl;
 
                 const iconStyle = project.image
                     ? `background-image: url('${project.image}')`
@@ -756,7 +846,10 @@ const projects = projectsData.projects;
                             <div class="strip-description">${desc}</div>
                             ${metaItems ? `<div class="strip-meta-row">${metaItems}</div>` : ''}
                             <div class="strip-tags-full">${fullTags}</div>
-                            <a href="${linkHref}" class="strip-link" target="_blank" rel="noopener noreferrer">${linkText} &rarr;</a>
+                            <div style="display:flex;gap:0.65rem;flex-wrap:wrap;align-items:flex-start;margin-top:auto">
+                                <a href="${linkHref}" class="strip-link" target="_blank" rel="noopener noreferrer">${linkText} &rarr;</a>
+                                ${canPlay ? `<button class="strip-play-btn" data-embed="${project.embedUrl}" data-title="${project.title}">&#9654; Play Now</button>` : ''}
+                            </div>
                         </div>
                     </div>
                 `;
@@ -783,6 +876,14 @@ const projects = projectsData.projects;
                     const slotSize = 1 + HERO_HOLD;
                     window.scrollTo({ top: BUF_VH * window.innerHeight + i * slotSize * SEC_VH * window.innerHeight, behavior: 'smooth' });
                 });
+
+                const playBtn = strip.querySelector('.strip-play-btn');
+                if (playBtn) {
+                    playBtn.addEventListener('click', e => {
+                        e.stopPropagation();
+                        openGameEmbed(playBtn.dataset.embed, playBtn.dataset.title);
+                    });
+                }
 
                 stage.appendChild(strip);
             });
@@ -900,6 +1001,67 @@ const projects = projectsData.projects;
                     showPasswordModal();
                 }
             });
+        });
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // GAME EMBED OVERLAY
+
+        function openGameEmbed(url, title, nativeW = 960, nativeH = 600) {
+            const overlay = document.getElementById('playOverlay');
+            const iframe  = document.getElementById('playIframe');
+            document.getElementById('playOverlayTitle').textContent = title || '';
+            iframe.style.transform = '';   // reset any previous scale
+            overlay.style.display = 'flex';
+
+            requestAnimationFrame(() => {
+                const wrap = overlay.querySelector('.play-iframe-wrap');
+                const { width: cw, height: ch } = wrap.getBoundingClientRect();
+
+                let finalUrl = url;
+                if (url.includes('embed-upload')) {
+                    // Force black background so itch.io padding blends with our overlay
+                    finalUrl = finalUrl.replace(/[?&]color=[^&]*/i, '');
+                    const sep = finalUrl.includes('?') ? '&' : '?';
+                    finalUrl += `${sep}color=000000`;
+
+                    // Scale so the canvas fits inside the container (letterbox if needed).
+                    // scaleY is based on nativeH only — the itch.io footer hangs below
+                    // the container border (overflow:visible) and stays fully clickable.
+                    const scaleX = cw / nativeW;
+                    const scaleY = ch / nativeH;
+                    const scale  = Math.min(scaleX, scaleY);
+                    const ox = (cw - nativeW  * scale) / 2;
+                    const oy = (ch - nativeH  * scale) / 2;
+                    iframe.style.transform = `translate(${ox}px,${oy}px) scale(${scale})`;
+                    iframe.style.width  = nativeW + 'px';
+                    iframe.style.height = (nativeH + 42) + 'px';
+                }
+
+                iframe.src = finalUrl;
+            });
+        }
+
+        function closeGameEmbed() {
+            const iframe = document.getElementById('playIframe');
+            iframe.src = '';   // stops the game / audio
+            iframe.style.transform = '';
+            iframe.style.width  = '';
+            iframe.style.height = '';
+            document.getElementById('playOverlay').style.display = 'none';
+        }
+
+        document.getElementById('playCloseBtn').addEventListener('click', closeGameEmbed);
+        document.getElementById('playFsBtn').addEventListener('click', () => {
+            const iframe = document.getElementById('playIframe');
+            (iframe.requestFullscreen?.() ?? iframe.webkitRequestFullscreen?.());
+        });
+        document.getElementById('playOverlay').addEventListener('click', e => {
+            if (e.target === document.getElementById('playOverlay')) closeGameEmbed();
+        });
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape' && document.getElementById('playOverlay').style.display !== 'none') {
+                closeGameEmbed();
+            }
         });
 
         // ═══════════════════════════════════════════════════════════════════════
