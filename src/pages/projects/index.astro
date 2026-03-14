@@ -187,7 +187,7 @@ const projects = projectsData.projects;
 
         .strip-short-desc {
             position: absolute;
-            left: 18%; right: 5%; top: 0; bottom: 0;
+            left: 54px; right: 0.85rem; top: 0; bottom: 0;
             display: flex; align-items: center; justify-content: center;
             overflow: hidden;
             font-size: 0.92rem; color: var(--text-secondary);
@@ -425,6 +425,8 @@ const projects = projectsData.projects;
         }
         body.edit-mode .strip-edit-btn { display: block; }
         body.edit-mode .strip-hint { display: none; }
+        /* Pull short-desc away from reorder+edit buttons so text stays centered */
+        body.edit-mode .strip-short-desc { right: 14rem; left: 54px; }
 
         .strip-reorder-btns {
             display: none; position: absolute; right: 8rem; top: 50%;
@@ -549,14 +551,20 @@ const projects = projectsData.projects;
         .edit-btn-primary:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--border); }
 
         .edit-btn-secondary {
-            background: transparent; color: var(--bg);
-            border: 2px solid rgba(245,242,235,0.5); box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+            background: transparent; color: var(--text-primary);
+            border: 2px solid var(--border); box-shadow: 3px 3px 0 var(--border);
             padding: 0.55rem 1.35rem; cursor: pointer;
             font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
             letter-spacing: 0.06em; font-family: inherit;
             transition: transform 0.12s, box-shadow 0.12s; white-space: nowrap;
         }
         .edit-btn-secondary:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--border); }
+        /* On the dark toolbar, secondary buttons need light text */
+        .edit-toolbar .edit-btn-secondary {
+            color: var(--bg);
+            border-color: rgba(245,242,235,0.5);
+            box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+        }
 
         .edit-btn-danger {
             background: transparent; color: #c0392b;

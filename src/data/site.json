@@ -107,14 +107,6 @@
         "cssClass": "node-linkedin"
       },
       {
-        "id": "github",
-        "icon": "💻",
-        "label": "GitHub",
-        "handle": "solunabeeboo",
-        "href": "https://github.com/solunabeeboo",
-        "cssClass": "node-bluesky"
-      },
-      {
         "id": "itch",
         "icon": "🎮",
         "label": "Itch.io",
@@ -136,7 +128,15 @@
         "label": "Bluesky",
         "handle": "@solunabeeboo.bsky.social",
         "href": "https://bsky.app/profile/solunabeeboo.bsky.social",
-        "cssClass": "node-discord"
+        "cssClass": "node-bluesky"
+      },
+      {
+        "id": "github",
+        "icon": "💻",
+        "label": "GitHub",
+        "handle": "solunabeeboo",
+        "href": "https://github.com/solunabeeboo",
+        "cssClass": "node-bluesky"
       }
     ]
   }
