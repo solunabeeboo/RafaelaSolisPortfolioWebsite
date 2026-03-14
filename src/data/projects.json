@@ -192,7 +192,7 @@
     {
       "title": "Fishing For Fun",
       "shortDescription": "A fun arcade style shooter-looter, use your harpoon to swing around the level collecting fish and upgrading your stats!",
-      "fullDescription": "Fishing For Fun combines arcade shooting mechanics with looter progression systems, creating a unique experience where players use a harpoon both as a weapon and a traversal tool. The game focuses on fluid movement and satisfying collection mechanics.\n\nCore Mechanics:\n• Harpoon-based movement and combat system\n• Arcade-style shooting with physics-based projectiles\n• Loot collection and character progression\n• Swinging mechanics for dynamic traversal\n• Stat upgrades and equipment systems\n• Multiple level environments with different challenges\n• High-score based arcade progression\n\nThe game successfully merges several genres to create something that feels both familiar and fresh.",
+      "fullDescription": "Fishing For Fun combines arcade shooting mechanics with looter progression systems, creating a unique experience where players use a harpoon both as a weapon and a traversal tool. The game focuses on fluid movement and satisfying collection mechanics.\n\nCore Mechanics:\n• Harpoon-based movement and combat system\n• Arcade-style shooting with physics-based projectiles\n• Loot collection and character progression\n• Swinging mechanics for dynamic traversal\n• Stat upgrades and equipment systems\n• Multiple level environments with different challenges\n• High-score based arcade progression",
       "tags": [
         "Unreal Engine",
         "Blueprints",
@@ -221,7 +221,7 @@
         "Blender",
         "Aseprite"
       ],
-      "challenges": "Creating responsive harpoon physics that felt good for both movement and combat, as well as modifying unreal template blueprints to inject the new systems.",
+      "challenges": "Creating responsive harpoon physics that felt good for both movement and combat, as well as modifying unreal template blueprints to inject the new systems, all within the multiplayer Lyra framework.",
       "learnings": "This project improved my understanding of physics-based gameplay and arcade game design principles, and taught me a lot about the quirks of Unreal Engine."
     },
     {
@@ -280,7 +280,7 @@
       ],
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
       "playLink": "https://solunabeeboo.itch.io/navi",
-      "linkText": "View Project on Itch.io",
+      "linkText": "View on Itch.io",
       "hasEmbed": true,
       "embedType": "widget",
       "embedUrl": "https://itch.io/embed/3975751",
@@ -297,38 +297,6 @@
       "learnings": "This project taught me about environmental storytelling and how gameplay mechanics can enhance narrative themes."
     },
     {
-      "title": "Casino Game!",
-      "shortDescription": "A silly and simple casino game coded in pure C++ with text based inputs!",
-      "fullDescription": "A fun academic project that recreates the excitement of casino games through pure C++ programming with text-based interfaces. This project demonstrates fundamental programming concepts while creating an entertaining gambling simulation.\n\nFeatures:\n• Multiple casino games (slots, blackjack, poker)\n• Text-based user interface\n• Random number generation systems\n• Player statistics and money management\n• Save/load game functionality\n• Betting systems and odds calculation\n\nBuilt entirely in C++ without external libraries, this project showcases core programming skills and game logic implementation.",
-      "tags": [
-        "C++",
-        "Academic",
-        "Arcade",
-        "Gambling",
-        "Text-based",
-        "RNG"
-      ],
-      "image": "images/casinogame.png",
-      "screenshots": [
-        "screenshots/casino (1).mp4"
-      ],
-      "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
-      "playLink": "https://github.com/solunabeeboo/CSI240Casino",
-      "linkText": "View Code on GitHub",
-      "hasEmbed": true,
-      "embedUrl": "https://rafaelasolis.work/embeds/github-widget.html?user=solunabeeboo&repo=CSI240Casino",
-      "embedType": "widget",
-      "developmentTime": "2 weeks",
-      "teamSize": "Team of 2",
-      "tools": [
-        "C++",
-        "Visual Studio",
-        "Git"
-      ],
-      "challenges": "Implementing fair random number generation and managing complex game state without external libraries.",
-      "learnings": "This project strengthened my understanding of C++ fundamentals and probability systems in games."
-    },
-    {
       "title": "OpenGL Environments",
       "shortDescription": "Scenes and textures coded in C++ and OpenGL.",
       "fullDescription": "A collection of 3D scenes and environments built from scratch using C++ and OpenGL, demonstrating low-level graphics programming and mathematical concepts in computer graphics.\n\nTechnical Achievements:\n• Custom 3D rendering pipeline\n• Texture mapping and lighting systems\n• Shader programming (vertex and fragment)\n• Mathematical transformations and camera systems\n• Real-time rendering optimizations\n• Multiple scene compositions with different themes\n\nThese projects showcase the fundamentals of computer graphics programming and the mathematical principles that power modern game engines.",
@@ -343,6 +311,7 @@
       ],
       "image": "images/opengl.png",
       "screenshots": [
+        "screenshots/BeachScene(1).mp4",
         "screenshots/opengl (2).mp4",
         "screenshots/opengl (1).mp4",
         "screenshots/opengl (5).mp4",
@@ -370,20 +339,20 @@
     {
       "title": "Scrum Facilitation",
       "shortDescription": "The various tools I've created, researched, and implemented into team use to more easily facilitate the agile / scrum workflow.",
-      "fullDescription": "A comprehensive collection of tools, processes, and implementations designed to streamline agile and scrum workflows in game development teams. This project represents ongoing research and practical application of project management methodologies.\n\nTools & Implementations:\n• Custom sprint planning and tracking tools\n• Automated burndown chart generation\n• Team velocity analysis systems\n• Retrospective facilitation frameworks\n• Integration tools for development workflows\n• Documentation and training materials\n• Performance metrics and reporting systems\n\nThese tools have been tested and refined through real-world team implementations, focusing on practical solutions that actually improve team productivity.",
+      "fullDescription": "A comprehensive collection of tools, processes, and implementations designed to streamline agile and scrum workflows in game development teams. This project represents ongoing research and practical application of project management methodologies.\n\nTools & Implementations:\n• Custom sprint planning and tracking tools\n• Retrospective facilitation frameworks\n• Integration tools for development workflows\n\nSpecifically, this is an example of a tool I made that read our Taiga board (Jira Alternative), and posted automated daily standups for an asynchronous workflow. It generated its won board image using what it read and Github Actions to help facilitate teamwork.",
       "tags": [
         "Scrum",
         "Agile",
         "Python"
       ],
-      "image": "images/agile.png",
+      "image": "images/503815079-d1d027ba-d380-4e18-993c-73600280d486.png",
       "screenshots": [
-        "images/agile-1.jpg",
-        "images/agile-2.jpg"
+        "screenshots/Screenshot 2026-03-14 154847.png",
+        "screenshots/Screenshot 2026-03-14 154618.png"
       ],
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
-      "playLink": "https://rafaelasolis.work/projects",
-      "linkText": "View Documentation",
+      "playLink": "https://github.com/solunabeeboo/Discord-Taiga-Integration-with-Webhooks",
+      "linkText": "View Example on Github",
       "hasEmbed": false,
       "developmentTime": "Ongoing",
       "teamSize": "Solo research",
@@ -393,8 +362,10 @@
         "Git",
         "Excel/Sheets"
       ],
-      "challenges": "Balancing tool complexity with ease of use, and getting team buy-in for new processes.",
-      "learnings": "This project deepened my understanding of team dynamics and the practical challenges of implementing agile methodologies."
+      "challenges": "Balancing tool complexity with practical use and the various needed API's.",
+      "learnings": "This project deepened my understanding of team dynamics and the practical challenges of implementing agile methodologies.",
+      "embedType": "widget",
+      "embedUrl": "https://github.com/solunabeeboo/Discord-Taiga-Integration-with-Webhooks"
     },
     {
       "title": "Project Documentation",
@@ -407,27 +378,31 @@
         "Game Programming",
         "Game History"
       ],
-      "image": "images/documentation.png",
+      "image": "images/Screenshot 2026-03-14 160608.png",
       "screenshots": [
-        "images/documentation-1.jpg",
-        "images/documentation-2.jpg"
+        "screenshots/Screenshot 2026-03-14 160709.png",
+        "screenshots/Screenshot 2026-03-14 160057.png",
+        "screenshots/Screenshot 2026-03-14 160038.png",
+        "screenshots/Screenshot 2026-03-14 160005.png",
+        "screenshots/Screenshot 2026-03-14 160726.png",
+        "screenshots/Screenshot 2026-03-14 160654.png"
       ],
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
-      "playLink": "https://rafaelasolis.work/projects",
+      "playLink": "https://drive.google.com/drive/folders/1hvGCdWkKDu4m5sOoh1iUT9PrOuzKkuLB?usp=sharing",
       "linkText": "View Documentation",
       "hasEmbed": false,
       "developmentTime": "Ongoing",
       "teamSize": "Solo",
       "tools": [
-        "Markdown",
-        "LaTeX",
         "Confluence",
-        "Git"
+        "Jira",
+        "Git",
+        "Google Docs"
       ],
       "challenges": "Making technical documentation accessible to both technical and non-technical team members.",
       "learnings": "This work has improved my communication skills and understanding of historical game development practices.",
-      "embedType": "game",
-      "embedUrl": ""
+      "embedType": "widget",
+      "embedUrl": "https://drive.google.com/drive/folders/1hvGCdWkKDu4m5sOoh1iUT9PrOuzKkuLB?usp=sharing"
     }
   ]
 }
