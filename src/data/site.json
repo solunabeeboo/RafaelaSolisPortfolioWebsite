@@ -1,0 +1,143 @@
+{
+  "home": {
+    "role": "Game Developer & Designer",
+    "tagline": "Crafting immersive gaming experiences through innovative design, passionate development, and cutting-edge technology"
+  },
+  "about": {
+    "headshotUrl": "/headshot.jpg",
+    "stats": [
+      {
+        "label": "School",
+        "value": "Champlain College '28"
+      },
+      {
+        "label": "Major",
+        "value": "Game Design & Programming"
+      },
+      {
+        "label": "Based in",
+        "value": "San Antonio, TX / Burlington, VT"
+      },
+      {
+        "label": "Open to",
+        "value": "Internships & Projects — US / CA / EU"
+      }
+    ],
+    "bio": [
+      "Hi! I'm Rafaela Solis, a passionate game developer dedicated to creating engaging, immersive, and emotional player-focused gaming experiences. My journey in game development started as a tiny baby. My father started a company during the tech boom, and performed IT services for the city of Austin, Texas. He always had every kind of computer, and quite often we would sit down together in front of a 4 inch thick laptop to play obscure cobbled together kids games that my tiny brain could understand. I've been hooked ever since.",
+      "I major in Game Design and Game Programming at Champlain College (2028), with specific focus in gameplay programming, system design, level design, technical design, narrative design, rapid prototyping, and more. I have experience with Unity, Unreal Engine, C#, C++, Python, Java, and Blueprints. I don't just love the games — I love the puzzle of making people happy. I've worked across a plethora of genres: Maze-Puzzle, Action-Adventure, Educational, Drawing-Combat, Multiplayer Coop/Competitive, and more.",
+      "I've shipped two non-academic large-team project demos — Mega Market Mayhem and Scriptorium — both in demo stages with Scriptorium in active development. Beyond that, dozens of indie and jam games, and a plethora of academic prototypes. Each project has taught me invaluable lessons about teamwork, scope, design, and the importance of the player."
+    ],
+    "skillCategories": [
+      {
+        "name": "Game Engines",
+        "wide": false,
+        "skills": [
+          "Unity",
+          "Unreal Engine",
+          "UEFN"
+        ]
+      },
+      {
+        "name": "Programming Languages",
+        "wide": false,
+        "skills": [
+          "C#",
+          "C++",
+          "Python",
+          "Java"
+        ]
+      },
+      {
+        "name": "Game Development",
+        "wide": true,
+        "skills": [
+          "Game Design",
+          "Game Programming",
+          "Level Design",
+          "Systems Design",
+          "Technical Design",
+          "Implementation",
+          "Documentation",
+          "Scrum / Agile / Waterfall",
+          "UI/UX Design",
+          "Gameplay Programming",
+          "AI / Neural Model Development",
+          "Game Infrastructure Design"
+        ]
+      },
+      {
+        "name": "Tools & Software",
+        "wide": true,
+        "skills": [
+          "Git",
+          "Subversion",
+          "Blender",
+          "Aseprite",
+          "Photoshop",
+          "Illustrator",
+          "DaVinci Resolve",
+          "Audacity",
+          "Taiga",
+          "Jira + Confluence",
+          "Google Suite",
+          "CMake"
+        ]
+      }
+    ],
+    "lookingFor": "I'm currently seeking passionately led projects and game industry internships in the US, Canada, and EU regions. I'm particularly excited about work involving player psychology, narrative-driven experiences, large-scale multiplayer, and community-driven development.",
+    "resumeDownloadUrl": "https://docs.google.com/document/d/1v0lK7-rZYCnJ68tqIrMUsZItaMFcUgHx-enojmvdkaY/export?format=pdf"
+  },
+  "contact": {
+    "nodes": [
+      {
+        "id": "email",
+        "icon": "✉️",
+        "label": "Email",
+        "handle": "rafa@miguelsolis.com",
+        "href": "mailto:rafa@miguelsolis.com",
+        "cssClass": "node-email"
+      },
+      {
+        "id": "linkedin",
+        "icon": "💼",
+        "label": "LinkedIn",
+        "handle": "/rafaela-solis",
+        "href": "https://linkedin.com/in/rafaela-solis-3463b2245/",
+        "cssClass": "node-linkedin"
+      },
+      {
+        "id": "github",
+        "icon": "💻",
+        "label": "GitHub",
+        "handle": "solunabeeboo",
+        "href": "https://github.com/solunabeeboo",
+        "cssClass": "node-bluesky"
+      },
+      {
+        "id": "itch",
+        "icon": "🎮",
+        "label": "Itch.io",
+        "handle": "solunabeeboo",
+        "href": "https://itch.io/profile/solunabeeboo",
+        "cssClass": "node-itch"
+      },
+      {
+        "id": "instagram",
+        "icon": "📷",
+        "label": "Instagram",
+        "handle": "@solunabeeboo",
+        "href": "https://www.instagram.com/solunabeeboo/",
+        "cssClass": "node-instagram"
+      },
+      {
+        "id": "bluesky",
+        "icon": "🦋",
+        "label": "Bluesky",
+        "handle": "@solunabeeboo.bsky.social",
+        "href": "https://bsky.app/profile/solunabeeboo.bsky.social",
+        "cssClass": "node-discord"
+      }
+    ]
+  }
+}

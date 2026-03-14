@@ -426,6 +426,21 @@ const projects = projectsData.projects;
         body.edit-mode .strip-edit-btn { display: block; }
         body.edit-mode .strip-hint { display: none; }
 
+        .strip-reorder-btns {
+            display: none; position: absolute; right: 8rem; top: 50%;
+            transform: translateY(-50%); gap: 0.2rem; z-index: 10;
+        }
+        body.edit-mode .strip-reorder-btns { display: flex; }
+        .strip-reorder-btn {
+            background: rgba(245,242,235,0.12); color: var(--text-primary);
+            border: 2px solid var(--border); padding: 0.1rem 0.45rem;
+            cursor: pointer; font-size: 0.7rem; font-family: inherit;
+            transition: background 0.12s;
+        }
+        .strip-reorder-btn:hover { background: var(--accent); color: var(--bg); }
+        .strip-reorder-btn:disabled { opacity: 0.25; cursor: default; }
+        .strip-reorder-btn:disabled:hover { background: rgba(245,242,235,0.12); color: var(--text-primary); }
+
         /* Edit toolbar */
         .edit-toolbar {
             position: fixed;
@@ -534,8 +549,8 @@ const projects = projectsData.projects;
         .edit-btn-primary:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--border); }
 
         .edit-btn-secondary {
-            background: transparent; color: var(--text-primary);
-            border: 2px solid var(--border); box-shadow: 3px 3px 0 var(--border);
+            background: transparent; color: var(--bg);
+            border: 2px solid rgba(245,242,235,0.5); box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
             padding: 0.55rem 1.35rem; cursor: pointer;
             font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
             letter-spacing: 0.06em; font-family: inherit;
@@ -1245,8 +1260,12 @@ const projects = projectsData.projects;
         }
 
         function attachEditButtons() {
-            document.querySelectorAll('.section-strip').forEach((strip, i) => {
+            const strips = document.querySelectorAll('.section-strip');
+            const total  = strips.length;
+            strips.forEach((strip, i) => {
                 if (strip.querySelector('.strip-edit-btn')) return; // already attached
+
+                // Edit button
                 const btn = document.createElement('button');
                 btn.className = 'strip-edit-btn';
                 btn.textContent = '✎ Edit';
@@ -1256,6 +1275,36 @@ const projects = projectsData.projects;
                     openEditor(parseInt(btn.dataset.idx));
                 });
                 strip.querySelector('.strip-header').appendChild(btn);
+
+                // Reorder buttons
+                const wrap = document.createElement('div');
+                wrap.className = 'strip-reorder-btns';
+                const upBtn   = document.createElement('button');
+                const downBtn = document.createElement('button');
+                upBtn.className = downBtn.className = 'strip-reorder-btn';
+                upBtn.textContent = '▲'; downBtn.textContent = '▼';
+                upBtn.title   = 'Move up';   downBtn.title = 'Move down';
+                upBtn.disabled   = (i === 0);
+                downBtn.disabled = (i === total - 1);
+                upBtn.addEventListener('click', e => {
+                    e.stopPropagation();
+                    const idx = parseInt(btn.dataset.idx);
+                    if (idx === 0) return;
+                    [liveProjects[idx - 1], liveProjects[idx]] = [liveProjects[idx], liveProjects[idx - 1]];
+                    saveToAPI();
+                    rebuildAfterEdit();
+                });
+                downBtn.addEventListener('click', e => {
+                    e.stopPropagation();
+                    const idx = parseInt(btn.dataset.idx);
+                    if (idx >= liveProjects.length - 1) return;
+                    [liveProjects[idx], liveProjects[idx + 1]] = [liveProjects[idx + 1], liveProjects[idx]];
+                    saveToAPI();
+                    rebuildAfterEdit();
+                });
+                wrap.appendChild(upBtn);
+                wrap.appendChild(downBtn);
+                strip.querySelector('.strip-header').appendChild(wrap);
             });
         }
 

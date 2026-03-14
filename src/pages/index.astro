@@ -1,8 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import projectsData from '../data/projects.json';
+import siteData from '../data/site.json';
 
 const projects = (projectsData as any).projects as Array<{ screenshots?: string[] }>;
+const homeData = (siteData as any).home;
 
 // All available non-video screenshots — passed to client JS for random assignment
 const allImages: string[] = projects
@@ -212,7 +214,67 @@ const PANEL_COUNT = 11;
             .cta-button { width: 100%; max-width: 300px; justify-content: center; box-shadow: 2px 2px 0 var(--border); }
             .cta-button.secondary { box-shadow: 2px 2px 0 var(--accent); }
         }
+
+        /* ── EDIT MODE STYLES ── */
+        .page-edit-toolbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 2000;
+            background: var(--bg); border-bottom: 2px solid var(--border);
+            display: flex; align-items: center; gap: 1rem;
+            padding: 0.6rem 1.5rem; font-size: 0.75rem;
+        }
+        .page-edit-badge { font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); }
+        .page-edit-spacer { flex: 1; }
+        .page-edit-btn-primary {
+            background: var(--accent); color: var(--bg); border: 2px solid var(--border);
+            padding: 0.4rem 1.1rem; font-weight: 700; font-size: 0.72rem;
+            text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer; font-family: inherit;
+        }
+        .page-edit-btn-secondary {
+            background: transparent; color: var(--text-secondary); border: 2px solid var(--border);
+            padding: 0.4rem 1.1rem; font-weight: 700; font-size: 0.72rem;
+            text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer; font-family: inherit;
+        }
+        body.page-edit-mode [data-editable] {
+            outline: 2px dashed var(--accent); outline-offset: 2px; cursor: text;
+        }
+        body.page-edit-mode { padding-top: 2.5rem; }
+        .page-pw-overlay {
+            position: fixed; inset: 0; z-index: 3000; background: rgba(0,0,0,0.6);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .page-pw-box {
+            background: var(--bg); border: 2px solid var(--border); box-shadow: 8px 8px 0 var(--border);
+            padding: 1.75rem; width: min(90vw, 340px); display: flex; flex-direction: column; gap: 0.75rem;
+        }
+        .page-pw-box h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin: 0; }
+        .page-pw-box input {
+            background: var(--card-bg); border: 1.5px solid var(--border); color: var(--text-primary);
+            padding: 0.5rem 0.65rem; font-size: 0.9rem; font-family: inherit; width: 100%; box-sizing: border-box;
+        }
+        .page-pw-error { color: #e55; font-size: 0.75rem; display: none; }
+        .page-pw-actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
     </style>
+
+    <!-- Edit toolbar (hidden until edit mode) -->
+    <div id="pageEditToolbar" class="page-edit-toolbar" style="display:none">
+        <span class="page-edit-badge">&#9998; Edit Mode</span>
+        <div class="page-edit-spacer"></div>
+        <button class="page-edit-btn-secondary" id="pageEditCancel">Cancel</button>
+        <button class="page-edit-btn-primary" id="pageEditSave">Save Changes</button>
+    </div>
+
+    <!-- Password modal -->
+    <div id="homePwOverlay" class="page-pw-overlay" style="display:none">
+        <div class="page-pw-box">
+            <h3>Edit Mode</h3>
+            <input type="password" id="homePwInput" placeholder="Password" autocomplete="off">
+            <span class="page-pw-error" id="homePwError">Incorrect password</span>
+            <div class="page-pw-actions">
+                <button class="page-edit-btn-secondary" id="homePwCancel">Cancel</button>
+                <button class="page-edit-btn-primary" id="homePwSubmit">Unlock</button>
+            </div>
+        </div>
+    </div>
 
     <section class="hero">
         <div class="panel-bg">
@@ -231,8 +293,8 @@ const PANEL_COUNT = 11;
             <div class="hero-box">
                 <h1 class="hero-name">Rafaela Solis</h1>
                 <div class="accent-rule"></div>
-                <p class="hero-role">Game Developer &amp; Designer</p>
-                <p class="hero-tagline">Crafting immersive gaming experiences through innovative design, passionate development, and cutting-edge technology</p>
+                <p class="hero-role" data-editable="home.role" spellcheck="false">{homeData.role}</p>
+                <p class="hero-tagline" data-editable="home.tagline" spellcheck="false">{homeData.tagline}</p>
                 <div class="cta-group">
                     <a href="/projects/" class="cta-button">View My Work</a>
                     <a href="/contact/" class="cta-button secondary">Get In Touch</a>
@@ -329,5 +391,100 @@ const PANEL_COUNT = 11;
                 }
             });
         })();
+    </script>
+
+    <script define:vars={{ homeData }}>
+        // ── Edit mode ────────────────────────────────────────────────────────
+        const EDIT_PASSWORD = 'studio212';
+        let editMode = false;
+
+        function showPasswordModal() {
+            const overlay = document.getElementById('homePwOverlay');
+            const input   = document.getElementById('homePwInput');
+            const err     = document.getElementById('homePwError');
+            if (!overlay || !input) return;
+            err.style.display = 'none';
+            input.value = '';
+            overlay.style.display = 'flex';
+            setTimeout(() => input.focus(), 50);
+        }
+
+        function hidePasswordModal() {
+            const overlay = document.getElementById('homePwOverlay');
+            if (overlay) overlay.style.display = 'none';
+        }
+
+        function enterEditMode() {
+            editMode = true;
+            document.body.classList.add('page-edit-mode');
+            const toolbar = document.getElementById('pageEditToolbar');
+            if (toolbar) toolbar.style.display = 'flex';
+            document.querySelectorAll('[data-editable]').forEach(el => {
+                el.contentEditable = 'true';
+            });
+        }
+
+        function exitEditMode() {
+            editMode = false;
+            document.body.classList.remove('page-edit-mode');
+            const toolbar = document.getElementById('pageEditToolbar');
+            if (toolbar) toolbar.style.display = 'none';
+            document.querySelectorAll('[data-editable]').forEach(el => {
+                el.contentEditable = 'false';
+            });
+        }
+
+        async function saveChanges() {
+            try {
+                const siteResp = await fetch('/api/site');
+                const site = await siteResp.json();
+                const roleEl    = document.querySelector('[data-editable="home.role"]');
+                const taglineEl = document.querySelector('[data-editable="home.tagline"]');
+                if (roleEl)    site.home.role    = roleEl.textContent.trim() || site.home.role;
+                if (taglineEl) site.home.tagline = taglineEl.textContent.trim() || site.home.tagline;
+                await fetch('/api/site', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(site)
+                });
+                exitEditMode();
+                location.reload();
+            } catch (e) {
+                alert('Save failed: ' + e);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Triple-click footer to activate
+            let clicks = 0, timer = null;
+            document.querySelector('footer')?.addEventListener('click', () => {
+                clicks++;
+                if (clicks === 1) timer = setTimeout(() => { clicks = 0; }, 700);
+                if (clicks >= 3) { clearTimeout(timer); clicks = 0; showPasswordModal(); }
+            });
+
+            // Password modal buttons
+            document.getElementById('homePwCancel')?.addEventListener('click', hidePasswordModal);
+            document.getElementById('homePwSubmit')?.addEventListener('click', () => {
+                const input = document.getElementById('homePwInput');
+                const err   = document.getElementById('homePwError');
+                if (input.value === EDIT_PASSWORD) {
+                    hidePasswordModal();
+                    enterEditMode();
+                } else {
+                    err.style.display = 'block';
+                    input.value = '';
+                    input.focus();
+                }
+            });
+            document.getElementById('homePwInput')?.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') document.getElementById('homePwSubmit')?.click();
+                if (e.key === 'Escape') hidePasswordModal();
+            });
+
+            // Toolbar buttons
+            document.getElementById('pageEditCancel')?.addEventListener('click', exitEditMode);
+            document.getElementById('pageEditSave')?.addEventListener('click', saveChanges);
+        });
     </script>
 </Layout>
