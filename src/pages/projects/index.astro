@@ -277,6 +277,59 @@ const projects = projectsData.projects;
             .strip-info { border-left: none; overflow-y: visible; }
         }
 
+        /* ===== LIGHTBOX ===== */
+        .lightbox {
+            position: fixed; inset: 0; z-index: 1200;
+            background: rgba(0,0,0,0.95);
+            display: flex; flex-direction: column;
+            align-items: stretch; justify-content: center;
+            padding: 1.75rem;
+            gap: 0.75rem;
+        }
+        .lightbox-header {
+            display: flex; align-items: center; gap: 1rem; flex-shrink: 0;
+        }
+        .lightbox-title {
+            flex: 1; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.14em; color: rgba(255,255,255,0.55);
+        }
+        .lightbox-counter {
+            font-size: 0.75rem; color: rgba(255,255,255,0.4);
+            font-weight: 600; letter-spacing: 0.06em;
+        }
+        .lightbox-close {
+            background: none; border: 2px solid rgba(255,255,255,0.3);
+            color: rgba(255,255,255,0.7); cursor: pointer;
+            padding: 0.35rem 0.85rem; font-size: 0.72rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.08em; font-family: inherit;
+            transition: border-color 0.15s, color 0.15s;
+        }
+        .lightbox-close:hover { border-color: #fff; color: #fff; }
+        .lightbox-body {
+            flex: 1; min-height: 0;
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+        }
+        .lightbox-media {
+            max-width: 100%; max-height: 100%;
+            object-fit: contain; display: block;
+        }
+        .lightbox-media-video {
+            max-width: 100%; max-height: 100%;
+            display: block; outline: none;
+        }
+        .lightbox-nav {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(255,255,255,0.08); border: 2px solid rgba(255,255,255,0.2);
+            color: #fff; cursor: pointer; font-size: 1.25rem; line-height: 1;
+            padding: 0.6rem 0.9rem; transition: background 0.15s, border-color 0.15s;
+        }
+        .lightbox-nav:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.5); }
+        .lightbox-nav-prev { left: 0; }
+        .lightbox-nav-next { right: 0; }
+        /* make thumbnail clickable */
+        .strip-thumbnail { cursor: zoom-in; }
+
         /* ===== GAME EMBED OVERLAY ===== */
         .play-overlay {
             position: fixed; inset: 0;
@@ -565,6 +618,19 @@ const projects = projectsData.projects;
     </div>
 
     <!-- ── GAME EMBED OVERLAY ── -->
+    <!-- ── LIGHTBOX ── -->
+    <div id="lightbox" class="lightbox" style="display:none">
+        <div class="lightbox-header">
+            <span class="lightbox-title" id="lbTitle"></span>
+            <span class="lightbox-counter" id="lbCounter"></span>
+            <button class="lightbox-close" id="lbClose">✕ Close</button>
+        </div>
+        <div class="lightbox-body" id="lbBody">
+            <button class="lightbox-nav lightbox-nav-prev" id="lbPrev">&#8592;</button>
+            <button class="lightbox-nav lightbox-nav-next" id="lbNext">&#8594;</button>
+        </div>
+    </div>
+
     <div id="playOverlay" class="play-overlay" style="display:none">
         <div class="play-overlay-header">
             <span class="play-overlay-title" id="playOverlayTitle"></span>
@@ -856,8 +922,19 @@ const projects = projectsData.projects;
                     </div>
                 `;
 
+                // Lightbox: click thumbnail to expand
+                const thumb = strip.querySelector('.strip-thumbnail');
+                thumb.addEventListener('click', e => {
+                    if (e.target.closest('.gallery-btn')) return; // ignore nav arrow clicks
+                    const validMedia = mediaArr.filter(Boolean);
+                    // Find current visible slide index
+                    const activeSlide = thumb.querySelector('.strip-thumb-slide.active');
+                    const slides = Array.from(thumb.querySelectorAll('.strip-thumb-slide'));
+                    const startIdx = activeSlide ? slides.indexOf(activeSlide) : 0;
+                    openLightbox(validMedia, startIdx, project.title);
+                });
+
                 if (hasMultiple) {
-                    const thumb  = strip.querySelector('.strip-thumbnail');
                     const slides = Array.from(thumb.querySelectorAll('.strip-thumb-slide'));
                     const curEl  = thumb.querySelector('.gallery-cur');
                     let cur = 0;
@@ -1007,6 +1084,58 @@ const projects = projectsData.projects;
 
         // ═══════════════════════════════════════════════════════════════════════
         // GAME EMBED OVERLAY
+
+        /* ── LIGHTBOX ── */
+        let lbMedia = [], lbIdx = 0, lbProjectTitle = '';
+
+        function lbShow(idx) {
+            lbIdx = (idx + lbMedia.length) % lbMedia.length;
+            const src = lbMedia[lbIdx];
+            const body = document.getElementById('lbBody');
+            // Remove old media (keep nav buttons)
+            body.querySelectorAll('.lightbox-media, .lightbox-media-video').forEach(el => el.remove());
+            if (isVideo(src)) {
+                const v = document.createElement('video');
+                v.src = src; v.controls = true; v.autoplay = true;
+                v.muted = false; v.className = 'lightbox-media-video';
+                body.insertBefore(v, body.querySelector('.lightbox-nav-next'));
+            } else {
+                const img = document.createElement('img');
+                img.src = src; img.className = 'lightbox-media'; img.alt = '';
+                body.insertBefore(img, body.querySelector('.lightbox-nav-next'));
+            }
+            document.getElementById('lbCounter').textContent =
+                lbMedia.length > 1 ? `${lbIdx + 1} / ${lbMedia.length}` : '';
+            // Hide nav arrows if only one item
+            document.getElementById('lbPrev').style.display = lbMedia.length > 1 ? '' : 'none';
+            document.getElementById('lbNext').style.display = lbMedia.length > 1 ? '' : 'none';
+        }
+
+        function openLightbox(media, startIdx, projectTitle) {
+            lbMedia = media; lbProjectTitle = projectTitle || '';
+            document.getElementById('lbTitle').textContent = lbProjectTitle;
+            document.getElementById('lightbox').style.display = 'flex';
+            lbShow(startIdx);
+        }
+
+        function closeLightbox() {
+            // Pause any playing video
+            document.getElementById('lbBody').querySelectorAll('video').forEach(v => v.pause());
+            document.getElementById('lightbox').style.display = 'none';
+        }
+
+        document.getElementById('lbClose').addEventListener('click', closeLightbox);
+        document.getElementById('lbPrev').addEventListener('click', () => lbShow(lbIdx - 1));
+        document.getElementById('lbNext').addEventListener('click', () => lbShow(lbIdx + 1));
+        document.getElementById('lightbox').addEventListener('click', e => {
+            if (e.target === document.getElementById('lightbox')) closeLightbox();
+        });
+        document.addEventListener('keydown', e => {
+            if (document.getElementById('lightbox').style.display === 'none') return;
+            if (e.key === 'Escape')      closeLightbox();
+            if (e.key === 'ArrowLeft')   lbShow(lbIdx - 1);
+            if (e.key === 'ArrowRight')  lbShow(lbIdx + 1);
+        });
 
         function openGameEmbed(url, title, nativeW = 960, nativeH = 600) {
             const overlay = document.getElementById('playOverlay');
