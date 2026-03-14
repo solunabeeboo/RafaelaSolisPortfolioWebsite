@@ -115,14 +115,6 @@
         "cssClass": "node-itch"
       },
       {
-        "id": "instagram",
-        "icon": "📷",
-        "label": "Instagram",
-        "handle": "@solunabeeboo",
-        "href": "https://www.instagram.com/solunabeeboo/",
-        "cssClass": "node-instagram"
-      },
-      {
         "id": "bluesky",
         "icon": "🦋",
         "label": "Bluesky",
