@@ -102,7 +102,7 @@
         "id": "linkedin",
         "icon": "💼",
         "label": "LinkedIn",
-        "handle": "/rafaela-solis",
+        "handle": "rafaela-solis",
         "href": "https://linkedin.com/in/rafaela-solis-3463b2245/",
         "cssClass": "node-linkedin"
       },
@@ -118,8 +118,8 @@
         "id": "bluesky",
         "icon": "🦋",
         "label": "Bluesky",
-        "handle": "@solunabeeboo.bsky.social",
-        "href": "https://bsky.app/profile/solunabeeboo.bsky.social",
+        "handle": "@rafaelasolis.work",
+        "href": "https://bsky.app/profile/rafaelasolis.work",
         "cssClass": "node-bluesky"
       },
       {
