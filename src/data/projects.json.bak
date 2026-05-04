@@ -25,13 +25,13 @@
       ],
       "challenges": "A large challenge with Rat Attack was getting down an asthetic that would create a unique and immersive atmosphere, without being too scopey or nauseating for the player.",
       "learnings": "This academic project involved a massive amount of documentation, from creating multiple concepts and whittling them down, to visual system diagrams, and an entire GDD. This game helped connect all of the concepts between design and implementation, while allowing me to create a product I'm incredibly proud of.",
-      "image": "images/cc_wLMW7.webp",
+      "image": "images/cc_wLMW7.png",
       "screenshots": [
-        "screenshots/_wLMW7.webp",
-        "screenshots/FCGsCU.webp",
-        "screenshots/VT6R4w.webp",
-        "screenshots/7R6Cxd.webp",
-        "screenshots/Gl4uSU.webp"
+        "screenshots/_wLMW7.png",
+        "screenshots/FCGsCU.png",
+        "screenshots/VT6R4w.png",
+        "screenshots/7R6Cxd.png",
+        "screenshots/Gl4uSU.png"
       ],
       "playLink": "https://solunabeeboo.itch.io/rat-attack",
       "linkText": "Play on Itch.io",
@@ -51,11 +51,11 @@
         "Action",
         "Fighting"
       ],
-      "image": "images/megamarketmayhem.webp",
+      "image": "images/megamarketmayhem.png",
       "screenshots": [
-        "screenshots/mmm (1).webp",
-        "screenshots/mmm (2).webp",
-        "screenshots/mmm (3).webp"
+        "screenshots/mmm (1).png",
+        "screenshots/mmm (2).png",
+        "screenshots/mmm (3).png"
       ],
       "gradient": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
       "playLink": "https://studio-212.itch.io/mega-market-mayhem",
@@ -89,13 +89,13 @@
         "Roguelite",
         "Bloody"
       ],
-      "image": "images/scriptorium.webp",
+      "image": "images/scriptorium.png",
       "screenshots": [
-        "screenshots/scriptorium (1).webp",
+        "screenshots/scriptorium (1).png",
         "screenshots/scriptorium (5).mp4",
-        "screenshots/scriptorium (2).webp",
-        "screenshots/scriptorium (3).webp",
-        "screenshots/scriptorium (4).webp"
+        "screenshots/scriptorium (2).png",
+        "screenshots/scriptorium (3).png",
+        "screenshots/scriptorium (4).png"
       ],
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
       "playLink": "https://studio-212.itch.io/project-dungeon",
@@ -134,11 +134,11 @@
         "Maze",
         "Color Based Puzzles"
       ],
-      "image": "images/mazegame.webp",
+      "image": "images/mazegame.png",
       "screenshots": [
-        "screenshots/maze (1).webp",
-        "screenshots/maze (2).webp",
-        "screenshots/maze (3).webp"
+        "screenshots/maze (1).png",
+        "screenshots/maze (2).png",
+        "screenshots/maze (3).png"
       ],
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
       "playLink": "https://solunabeeboo.itch.io/mazetastic-colors",
@@ -185,7 +185,7 @@
       ],
       "challenges": "This project was by far the largest and most important where I've taken on a producer role. While I still did design and game architecture, my daily work was organizing the team and making sure communication and the Agile workflow all came together seamlessly.",
       "learnings": "I learned a massive amount about the intricacies of working on an unfamiliar team. I realized how important it is for a creative team to get comfortable with each other, and the critical need for everyone's voice to be heard in the design process for both product quality and scope's sake.",
-      "image": "images/Screenshot 2026-03-14 160608.webp",
+      "image": "images/Screenshot 2026-03-14 160608.png",
       "screenshots": [
         "screenshots/Recording 2026-03-01 233729.gif",
         "screenshots/Recording 2026-03-01 233432.gif",
@@ -215,11 +215,11 @@
         "Multi-Leveled",
         "Multi-Camera Rendering"
       ],
-      "image": "images/valentinebash.webp",
+      "image": "images/valentinebash.png",
       "screenshots": [
-        "screenshots/vertshooter (1).webp",
-        "screenshots/vertshooter (2).webp",
-        "screenshots/vertshooter (3).webp"
+        "screenshots/vertshooter (1).png",
+        "screenshots/vertshooter (2).png",
+        "screenshots/vertshooter (3).png"
       ],
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
       "playLink": "https://solunabeeboo.itch.io/valentine-bash",
@@ -249,11 +249,11 @@
         "Shooter-Looter",
         "Arcade"
       ],
-      "image": "images/fishingforfun.webp",
+      "image": "images/fishingforfun.png",
       "screenshots": [
-        "screenshots/fish (1).webp",
-        "screenshots/fish (2).webp",
-        "screenshots/fish (3).webp"
+        "screenshots/fish (1).png",
+        "screenshots/fish (2).png",
+        "screenshots/fish (3).png"
       ],
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
       "playLink": "https://solunabeeboo.itch.io/fishing-for-fun",
@@ -284,11 +284,11 @@
         "Collecting",
         "Survival"
       ],
-      "image": "images/benderman.webp",
+      "image": "images/benderman.png",
       "screenshots": [
-        "screenshots/bender (1).webp",
-        "screenshots/bender (2).webp",
-        "screenshots/bender (3).webp"
+        "screenshots/bender (1).jpg",
+        "screenshots/bender (2).jpg",
+        "screenshots/bender (3).jpg"
       ],
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
       "playLink": "https://solunabeeboo.itch.io/bender-man-the-something-something",
@@ -319,7 +319,7 @@
         "Textures",
         "Math"
       ],
-      "image": "images/opengl.webp",
+      "image": "images/opengl.png",
       "screenshots": [
         "screenshots/BeachScene(1).mp4",
         "screenshots/opengl (2).mp4",
@@ -355,10 +355,10 @@
         "Agile",
         "Python"
       ],
-      "image": "images/503815079-d1d027ba-d380-4e18-993c-73600280d486.webp",
+      "image": "images/503815079-d1d027ba-d380-4e18-993c-73600280d486.png",
       "screenshots": [
-        "screenshots/Screenshot 2026-03-14 154847.webp",
-        "screenshots/Screenshot 2026-03-14 154618.webp"
+        "screenshots/Screenshot 2026-03-14 154847.png",
+        "screenshots/Screenshot 2026-03-14 154618.png"
       ],
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
       "playLink": "https://github.com/solunabeeboo/Discord-Taiga-Integration-with-Webhooks",
@@ -388,14 +388,14 @@
         "Game Programming",
         "Game History"
       ],
-      "image": "images/LevelMockup.webp",
+      "image": "images/LevelMockup.png",
       "screenshots": [
-        "screenshots/Screenshot 2026-03-14 160709.webp",
-        "screenshots/Screenshot 2026-03-14 160057.webp",
-        "screenshots/Screenshot 2026-03-14 160038.webp",
-        "screenshots/Screenshot 2026-03-14 160005.webp",
-        "screenshots/Screenshot 2026-03-14 160726.webp",
-        "screenshots/Screenshot 2026-03-14 160654.webp"
+        "screenshots/Screenshot 2026-03-14 160709.png",
+        "screenshots/Screenshot 2026-03-14 160057.png",
+        "screenshots/Screenshot 2026-03-14 160038.png",
+        "screenshots/Screenshot 2026-03-14 160005.png",
+        "screenshots/Screenshot 2026-03-14 160726.png",
+        "screenshots/Screenshot 2026-03-14 160654.png"
       ],
       "gradient": "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
       "playLink": "https://drive.google.com/drive/folders/1hvGCdWkKDu4m5sOoh1iUT9PrOuzKkuLB?usp=sharing",
