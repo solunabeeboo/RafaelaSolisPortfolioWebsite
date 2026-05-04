@@ -298,15 +298,56 @@ const PANEL_COUNT = 11;
     </section>
 
     <script define:vars={{ allImages }}>
-        // ── Assign shuffled images to panel strips ────────────────────────────
-        // Strip 0 already has its image set inline (for LCP preload), skip it
+        // Sample a 4×4 thumbnail of each image to get its average hue
+        function getHue(src) {
+            return new Promise(resolve => {
+                const img = new Image();
+                img.onload = () => {
+                    const c = document.createElement('canvas');
+                    c.width = c.height = 4;
+                    const ctx = c.getContext('2d');
+                    ctx.drawImage(img, 0, 0, 4, 4);
+                    const d = ctx.getImageData(0, 0, 4, 4).data;
+                    let r = 0, g = 0, b = 0;
+                    for (let i = 0; i < d.length; i += 4) { r += d[i]; g += d[i+1]; b += d[i+2]; }
+                    const n = d.length / 4;
+                    r /= n; g /= n; b /= n;
+                    const max = Math.max(r, g, b), min = Math.min(r, g, b), delta = max - min;
+                    let h = 0;
+                    if (delta) {
+                        if (max === r)      h = ((g - b) / delta + 6) % 6;
+                        else if (max === g) h = (b - r) / delta + 2;
+                        else                h = (r - g) / delta + 4;
+                        h *= 60;
+                    }
+                    resolve(h);
+                };
+                img.onerror = () => resolve(0);
+                img.src = src;
+            });
+        }
+
         const strips = Array.from(document.querySelectorAll('.panel-strip'));
-        const pool   = [...allImages].sort(() => Math.random() - 0.5);
-        strips.forEach((strip, i) => {
-            if (i === 0) return;
-            const src   = pool[(i - 1) % pool.length];
-            const imgEl = strip.querySelector('.panel-img');
-            if (imgEl && src) imgEl.style.backgroundImage = `url('${src}')`;
+        const needed = strips.length - 1; // strip 0 keeps its inline LCP image
+
+        // Shuffle all images, then pick `needed` evenly-spaced entries so each
+        // slot draws from a different part of the collection (no project clusters)
+        const shuffled = [...allImages].sort(() => Math.random() - 0.5);
+        const step = Math.max(1, Math.floor(shuffled.length / needed));
+        const pool = Array.from({ length: needed }, (_, i) => shuffled[(i * step) % shuffled.length]);
+
+        // Sort that diverse selection by hue for the rainbow effect
+        Promise.all(pool.map(getHue)).then(hues => {
+            const sorted = pool
+                .map((src, i) => ({ src, hue: hues[i] }))
+                .sort((a, b) => a.hue - b.hue)
+                .map(x => x.src);
+
+            strips.forEach((strip, i) => {
+                if (i === 0) return;
+                const imgEl = strip.querySelector('.panel-img');
+                if (imgEl) imgEl.style.backgroundImage = `url('${sorted[i - 1]}')`;
+            });
         });
     </script>
 
