@@ -6,13 +6,18 @@ import siteData from '../data/site.json';
 const projects = (projectsData as any).projects as Array<{ screenshots?: string[] }>;
 const homeData = (siteData as any).home;
 
-// All available non-video screenshots — passed to client JS for random assignment
+// Static images only — exclude video and GIF formats (GIFs can be tens of MB each)
 const allImages: string[] = projects
     .flatMap(p =>
         (p.screenshots ?? [])
-            .filter((s: string) => !s.endsWith('.mp4') && !s.endsWith('.webm'))
+            .filter((s: string) =>
+                !s.endsWith('.mp4') && !s.endsWith('.webm') && !s.endsWith('.gif')
+            )
     )
     .map(s => `/projects/${s}`);
+
+// First image is set inline so the browser can discover and preload it without JS
+const heroImage = allImages[0] ?? '';
 
 const PANEL_COUNT = 11;
 ---
@@ -21,6 +26,7 @@ const PANEL_COUNT = 11;
     description="Passionate game developer creating engaging and immersive experiences. Specializing in gameplay programming, level design, and systems design."
     ogUrl="https://rafaelasolis.work/"
 >
+    {heroImage && <link slot="head" rel="preload" as="image" href={heroImage} fetchpriority="high">}
     <style>
         .hero {
             min-height: 100vh;
@@ -65,15 +71,6 @@ const PANEL_COUNT = 11;
             transform: skewX(8deg);       /* counter-skew so image stays upright */
             transform-origin: center center;
             filter: brightness(0.55);
-        }
-
-        .panel-tint {
-            position: absolute;
-            inset: 0;
-            mix-blend-mode: color;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.6s ease;
         }
 
         /* ── HERO BOX ── */
@@ -205,11 +202,6 @@ const PANEL_COUNT = 11;
                 left: -15%; right: -15%;
             }
 
-            .panel-tint {
-                transform: none;
-                top: 0; bottom: 0; left: 0; right: 0;
-            }
-
             .cta-group { flex-direction: column; align-items: center; }
             .cta-button { width: 100%; max-width: 300px; justify-content: center; box-shadow: 2px 2px 0 var(--border); }
             .cta-button.secondary { box-shadow: 2px 2px 0 var(--accent); }
@@ -283,8 +275,10 @@ const PANEL_COUNT = 11;
                     class="panel-strip"
                     style={`left: calc(${i} / ${PANEL_COUNT} * 100%); width: calc(100% / ${PANEL_COUNT} + 1px);`}
                 >
-                    <div class="panel-img"></div>
-                    <div class="panel-tint"></div>
+                    <div
+                        class="panel-img"
+                        style={i === 0 && heroImage ? `background-image: url('${heroImage}')` : ''}
+                    ></div>
                 </div>
             ))}
         </div>
@@ -304,93 +298,16 @@ const PANEL_COUNT = 11;
     </section>
 
     <script define:vars={{ allImages }}>
-        // ── Color extraction helpers ──────────────────────────────────────────
-        function extractDominantColor(src) {
-            return new Promise(resolve => {
-                const img = new Image();
-                img.onload = () => {
-                    try {
-                        const size = 20;
-                        const canvas = document.createElement('canvas');
-                        canvas.width = size; canvas.height = size;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, size, size);
-                        const data = ctx.getImageData(0, 0, size, size).data;
-                        let r = 0, g = 0, b = 0, n = 0;
-                        for (let i = 0; i < data.length; i += 4) {
-                            const ri = data[i], gi = data[i+1], bi = data[i+2];
-                            const max = Math.max(ri, gi, bi);
-                            const min = Math.min(ri, gi, bi);
-                            const sat = max > 0 ? (max - min) / max : 0;
-                            // Weight saturated, non-dark pixels more (pop color)
-                            if (sat > 0.15 && max > 40) {
-                                const w = sat * (max / 255);
-                                r += ri * w; g += gi * w; b += bi * w; n += w;
-                            }
-                        }
-                        if (n < 1) { r = 128; g = 128; b = 128; n = 1; }
-                        resolve({ r: r/n, g: g/n, b: b/n });
-                    } catch(e) {
-                        resolve({ r: 128, g: 128, b: 128 });
-                    }
-                };
-                img.onerror = () => resolve({ r: 128, g: 128, b: 128 });
-                img.src = src;
-            });
-        }
-
-        function rgbToHue(r, g, b) {
-            r /= 255; g /= 255; b /= 255;
-            const max = Math.max(r,g,b), min = Math.min(r,g,b);
-            if (max === min) return 0;
-            const d = max - min;
-            let h;
-            if      (max === r) h = (g - b) / d + (g < b ? 6 : 0);
-            else if (max === g) h = (b - r) / d + 2;
-            else                h = (r - g) / d + 4;
-            return h / 6;
-        }
-
-        // ── Assign images and apply rainbow tint ─────────────────────────────
-        (async () => {
-            const strips = Array.from(document.querySelectorAll('.panel-strip'));
-            const count  = strips.length;
-            const pool   = [...allImages].sort(() => Math.random() - 0.5);
-            const chosen = pool.slice(0, count).concat(
-                pool.slice(0, Math.max(0, count - pool.length))
-            );
-
-            // First pass: show images immediately (no delay)
-            strips.forEach((strip, i) => {
-                const src = chosen[i % chosen.length];
-                const imgEl = strip.querySelector('.panel-img');
-                if (imgEl) imgEl.style.backgroundImage = `url('${src}')`;
-            });
-
-            // Second pass: extract colors in parallel
-            const colorData = await Promise.all(chosen.map(async (src, i) => {
-                const { r, g, b } = await extractDominantColor(src);
-                const hue = rgbToHue(r, g, b);
-                return { src, hue };
-            }));
-
-            // Sort images by extracted hue so warm images land on warm strips etc.
-            colorData.sort((a, b) => a.hue - b.hue);
-
-            // Force evenly-spaced rainbow hues (red→violet) regardless of image colors
-            strips.forEach((strip, i) => {
-                const { src } = colorData[i % colorData.length];
-                const imgEl  = strip.querySelector('.panel-img');
-                const tintEl = strip.querySelector('.panel-tint');
-                if (imgEl) imgEl.style.backgroundImage = `url('${src}')`;
-                if (tintEl) {
-                    // Spread hue evenly from 0° (red) to 300° (violet) across all strips
-                    const hueDeg = Math.round((i / Math.max(count - 1, 1)) * 300);
-                    tintEl.style.background = `hsl(${hueDeg}, 90%, 55%)`;
-                    tintEl.style.opacity    = '0.25';
-                }
-            });
-        })();
+        // ── Assign shuffled images to panel strips ────────────────────────────
+        // Strip 0 already has its image set inline (for LCP preload), skip it
+        const strips = Array.from(document.querySelectorAll('.panel-strip'));
+        const pool   = [...allImages].sort(() => Math.random() - 0.5);
+        strips.forEach((strip, i) => {
+            if (i === 0) return;
+            const src   = pool[(i - 1) % pool.length];
+            const imgEl = strip.querySelector('.panel-img');
+            if (imgEl && src) imgEl.style.backgroundImage = `url('${src}')`;
+        });
     </script>
 
     <script define:vars={{ homeData }}>

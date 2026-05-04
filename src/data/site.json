@@ -11,8 +11,8 @@
         "value": "Champlain College '28"
       },
       {
-        "label": "Major",
-        "value": "Game Design & Programming"
+        "label": "MajorS",
+        "value": "Game Design & Computer Science"
       },
       {
         "label": "Based in",
@@ -25,8 +25,8 @@
     ],
     "bio": [
       "Hi! I'm Rafaela Solis, a passionate game developer dedicated to creating engaging, immersive, and emotional player-focused gaming experiences. My journey in game development started as a tiny baby. My father started a company during the tech boom, and performed IT services for the city of Austin, Texas. He always had every kind of computer, and quite often we would sit down together in front of a 4 inch thick laptop to play obscure cobbled together kids games that my tiny brain could understand. I've been hooked ever since.",
-      "I major in Game Design and Game Programming at Champlain College (2028), with specific focus in gameplay programming, system design, level design, technical design, narrative design, rapid prototyping, and more. I have experience with Unity, Unreal Engine, C#, C++, Python, Java, and Blueprints. I don't just love the games — I love the puzzle of making people happy. I've worked across a plethora of genres: Maze-Puzzle, Action-Adventure, Educational, Drawing-Combat, Multiplayer Coop/Competitive, and more.",
-      "I've shipped two non-academic large-team project demos — Mega Market Mayhem and Scriptorium — both in demo stages with Scriptorium in active development. Beyond that, dozens of indie and jam games, and a plethora of academic prototypes. Each project has taught me invaluable lessons about teamwork, scope, design, and the importance of the player."
+      "I double major in Game Design and Computer Science at Champlain College (2028), with specific focus in gameplay programming, system design, level design, technical design, narrative design, rapid prototyping, and more. I have experience with Unity, Unreal Engine, Astro, Next.js, CSS, HTML, C#, C++, Python, Java, and Blueprints. I love the puzzle of making people happy. I've worked across a plethora of genres and projects: Maze-Puzzle, Action-Adventure, Educational, Drawing-Combat, Multiplayer Coop/Competitive, Website Portfolios, Web Tools, and more!",
+      "I've shipped two non-academic large-team project demos: Mega Market Mayhem and Scriptorium, both in demo stages with Scriptorium in active development. Beyond that, dozens of indie and jam games, and a plethora of academic prototypes and web centered projects, like the one your on right now! Each project has taught me invaluable lessons about teamwork, scope, design, and the importance of the user."
     ],
     "skillCategories": [
       {
@@ -45,7 +45,10 @@
           "C#",
           "C++",
           "Python",
-          "Java"
+          "Java",
+          "HTML",
+          "Astro",
+          "Next.js"
         ]
       },
       {
@@ -85,7 +88,7 @@
         ]
       }
     ],
-    "lookingFor": "I'm currently seeking passionately led projects and game industry internships in the US, Canada, and EU regions. I'm particularly excited about work involving player psychology, narrative-driven experiences, large-scale multiplayer, and community-driven development.",
+    "lookingFor": "I'm currently seeking passionately led projects and game industry internships in the US, Canada, and EU regions. I'm particularly excited about work involving user psychology, narrative-driven experiences, large-scale multiplayer stacks, and community-driven development.",
     "resumeDownloadUrl": "https://docs.google.com/document/d/1v0lK7-rZYCnJ68tqIrMUsZItaMFcUgHx-enojmvdkaY/export?format=pdf"
   },
   "contact": {
