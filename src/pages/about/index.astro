@@ -88,7 +88,7 @@ const about = (siteData as any).about;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.16em;
-            color: rgba(245, 242, 235, 0.45);
+            color: rgba(245, 242, 235, 0.75);
         }
 
         .stat-value {
@@ -108,7 +108,7 @@ const about = (siteData as any).about;
         .section-eyebrow {
             font-size: 0.68rem;
             font-weight: 700;
-            color: var(--accent-sage);
+            color: #4a6628;
             text-transform: uppercase;
             letter-spacing: 0.2em;
             margin-bottom: 0.5rem;
@@ -426,6 +426,9 @@ const about = (siteData as any).about;
                 src={about.headshotUrl}
                 alt="Rafaela Solis"
                 class="headshot-circle"
+                width="240"
+                height="240"
+                fetchpriority="high"
                 onerror="this.style.display='none'"
             >
             <span class="headshot-hint">Click to change photo</span>
