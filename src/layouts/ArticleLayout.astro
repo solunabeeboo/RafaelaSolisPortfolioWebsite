@@ -1,0 +1,164 @@
+---
+import '../styles/global.css';
+
+interface Props {
+    title: string;
+    description?: string;
+    ogUrl?: string;
+}
+
+const {
+    title,
+    description = 'A curated reading environment demonstrating modern web typography, semantic HTML, and SEO best practices.',
+    ogUrl = 'https://rafaelasolis.work/article/',
+} = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title}</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="canonical" href={ogUrl}>
+
+    <meta name="description" content={description}>
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Rafaela Solis">
+    <meta name="keywords" content="web development, SEO, design, article, studio journal">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content={ogUrl}>
+    <meta property="og:title" content={title}>
+    <meta property="og:description" content={description}>
+    <meta property="og:image" content="https://rafaelasolis.work/headshot.jpg">
+    <meta property="article:author" content="Rafaela Solis">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content={title}>
+    <meta name="twitter:description" content={description}>
+    <meta name="twitter:image" content="https://rafaelasolis.work/headshot.jpg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=optional" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=optional" rel="stylesheet"></noscript>
+
+    <script type="application/ld+json">{JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [
+        { "@type": "WebSite", "name": "Rafaela Solis Portfolio", "url": "https://rafaelasolis.work/" },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://rafaelasolis.work/" },
+            { "@type": "ListItem", "position": 2, "name": "Studio Journal", "item": "https://rafaelasolis.work/article/" }
+          ]
+        }
+      ]
+    })}</script>
+
+    <slot name="head" />
+</head>
+<body>
+    <style>
+        :root { --pub-header-h: 56px; }
+
+        body { background: #e8e5e0; }
+
+        .pub-header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: var(--pub-header-h);
+            z-index: 200;
+            background: #111111;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.75rem;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .pub-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            text-decoration: none;
+        }
+
+        .pub-logo-mark {
+            width: 28px; height: 28px;
+            background: #f5f2eb;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 900;
+            color: #111111;
+            letter-spacing: -0.03em;
+            flex-shrink: 0;
+        }
+
+        .pub-logo-text { display: flex; flex-direction: column; gap: 0; }
+
+        .pub-logo-name {
+            font-size: 0.88rem;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            color: #f5f2eb;
+            line-height: 1.1;
+        }
+
+        .pub-logo-tag {
+            font-size: 0.6rem;
+            font-weight: 400;
+            color: rgba(245,242,235,0.4);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .pub-back {
+            font-size: 0.68rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(245,242,235,0.45);
+            text-decoration: none;
+            transition: color 0.15s;
+            white-space: nowrap;
+        }
+        .pub-back:hover { color: #f5f2eb; }
+
+        .pub-footer {
+            background: #111111;
+            color: rgba(245,242,235,0.35);
+            text-align: center;
+            padding: 1.75rem 2rem;
+            font-size: 0.75rem;
+            letter-spacing: 0.03em;
+            border-top: 1px solid #2a2a2a;
+        }
+        .pub-footer a { color: rgba(245,242,235,0.55); text-decoration: none; transition: color 0.15s; }
+        .pub-footer a:hover { color: #f5f2eb; }
+
+        @media (max-width: 768px) {
+            .pub-logo-tag { display: none; }
+            .pub-header { padding: 0 1rem; }
+        }
+    </style>
+
+    <header class="pub-header">
+        <a href="/article/" class="pub-logo">
+            <div class="pub-logo-mark">SJ</div>
+            <div class="pub-logo-text">
+                <span class="pub-logo-name">Studio Journal</span>
+                <span class="pub-logo-tag">by Rafaela Solis</span>
+            </div>
+        </a>
+        <a href="/" class="pub-back">← Portfolio</a>
+    </header>
+
+    <slot />
+
+    <footer class="pub-footer">
+        Studio Journal &nbsp;·&nbsp; A reading &amp; editing environment demo by <a href="/">Rafaela Solis</a>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,1323 @@
+---
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+
+const SEED = [
+  {
+    id: 'deep-work',
+    title: 'Deep Work',
+    author: 'Rafaela Solis',
+    date: '2026-05-01',
+    tags: ['Productivity', 'Focus', 'Work'],
+    coverSeed: 'deepwork77',
+    body: `<h2>Finding Focus</h2>
+<figure class="art-figure">
+  <img src="https://picsum.photos/seed/workspace42/1000/480" alt="A quiet, distraction-free workspace" loading="lazy">
+  <figcaption>A dedicated workspace free from distraction signals to the brain that focused effort is required.</figcaption>
+</figure>
+<p>Lorem ipsum dolor sit amet, <a data-art-id="color-theory">consectetur adipiscing elit</a>, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat duis aute irure dolor.</p>
+<p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit <a data-art-id="games-stories">voluptatem accusantium doloremque</a> laudantium totam rem aperiam.</p>
+<figure class="art-figure art-figure-placeholder">
+  <svg class="art-ph-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+  <span class="art-ph-label">Image Placeholder</span>
+</figure>
+<h2>The Cost of Distraction</h2>
+<p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia <a data-art-id="color-theory">consequuntur magni dolores</a> eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est qui dolorem ipsum quia dolor sit amet.</p>
+<p>Ut labore et dolore magnam aliquam quaerat voluptatem. Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur vel illum qui dolorem eum fugiat quo voluptas nulla pariatur.</p>
+<h2>Reclaiming Your Time</h2>
+<figure class="art-figure art-figure-half">
+  <img src="https://picsum.photos/seed/ritual88/700/420" alt="Morning ritual and routine" loading="lazy">
+  <figcaption>Consistent rituals serve as reliable triggers that shift the brain into a focused state.</figcaption>
+</figure>
+<p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis <a data-art-id="games-stories">praesentium voluptatum deleniti</a> atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.</p>
+<p>Similique sunt in culpa qui officia deserunt mollitia animi id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio nam libero tempore cum soluta nobis eligendi optio cumque.</p>
+<h2>Rest as Strategy</h2>
+<figure class="art-figure art-figure-placeholder">
+  <svg class="art-ph-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+  <span class="art-ph-label">Image Placeholder</span>
+</figure>
+<p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus ut aut reiciendis.</p>
+<p>Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim.</p>`
+  },
+  {
+    id: 'color-theory',
+    title: 'Color Theory',
+    author: 'Rafaela Solis',
+    date: '2026-04-18',
+    tags: ['Design', 'Color', 'Visual'],
+    coverSeed: 'colorwheel21',
+    body: `<h2>Color as Communication</h2>
+<figure class="art-figure">
+  <img src="https://picsum.photos/seed/palette55/1000/480" alt="A designer's color palette" loading="lazy">
+  <figcaption>Color communicates before a single word is read — the first layer of nonverbal design language.</figcaption>
+</figure>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, <a data-art-id="deep-work">quis nostrud exercitation ullamco</a> laboris nisi ut aliquip ex ea commodo consequat.</p>
+<p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident sunt in culpa qui <a data-art-id="games-stories">officia deserunt mollit anim</a> id est laborum.</p>
+<figure class="art-figure art-figure-placeholder">
+  <svg class="art-ph-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+  <span class="art-ph-label">Image Placeholder</span>
+</figure>
+<h2>The Color Wheel</h2>
+<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium totam rem aperiam eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+<p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit sed quia <a data-art-id="deep-work">consequuntur magni dolores</a> eos qui ratione voluptatem sequi nesciunt neque porro quisquam est.</p>
+<h2>Hue, Saturation, Value</h2>
+<figure class="art-figure art-figure-half">
+  <img src="https://picsum.photos/seed/spectrum33/700/420" alt="Light spectrum and color gradients" loading="lazy">
+  <figcaption>Saturation and value are independent axes — mastering both separates deliberate palettes from accidental ones.</figcaption>
+</figure>
+<p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.</p>
+<p>Similique sunt in culpa qui officia deserunt mollitia animi id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio nam libero tempore cum soluta nobis eligendi optio cumque.</p>
+<h2>Contrast and Accessibility</h2>
+<figure class="art-figure art-figure-placeholder">
+  <svg class="art-ph-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+  <span class="art-ph-label">Image Placeholder</span>
+</figure>
+<p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae itaque earum rerum hic tenetur a sapiente delectus.</p>
+<p>Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur vel illum qui dolorem eum fugiat quo <a data-art-id="games-stories">voluptas nulla pariatur</a> lorem ipsum dolor sit amet consectetur.</p>`
+  },
+  {
+    id: 'games-stories',
+    title: 'Games & Stories',
+    author: 'Rafaela Solis',
+    date: '2026-04-02',
+    tags: ['Game Design', 'Narrative', 'Development'],
+    coverSeed: 'gamedesign14',
+    body: `<h2>When Mechanics Mean Something</h2>
+<figure class="art-figure">
+  <img src="https://picsum.photos/seed/controller99/1000/480" alt="A game controller resting on design sketches" loading="lazy">
+  <figcaption>The best game narratives emerge from the rules themselves, not from text layered on top of them.</figcaption>
+</figure>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, <a data-art-id="color-theory">quis nostrud exercitation ullamco</a> laboris nisi ut aliquip ex ea commodo consequat.</p>
+<p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui <a data-art-id="deep-work">officia deserunt mollit anim</a> id est laborum.</p>
+<figure class="art-figure art-figure-placeholder">
+  <svg class="art-ph-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+  <span class="art-ph-label">Image Placeholder</span>
+</figure>
+<h2>Three Layers of Narrative</h2>
+<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium totam rem aperiam eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+<p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit sed quia <a data-art-id="color-theory">consequuntur magni dolores</a> eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est qui dolorem ipsum quia dolor sit amet.</p>
+<p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident similique.</p>
+<h2>Player Agency</h2>
+<figure class="art-figure art-figure-half">
+  <img src="https://picsum.photos/seed/leveldesign66/700/420" alt="Level design sketches and flow diagrams" loading="lazy">
+  <figcaption>Great level design tells players where to go without ever telling them where to go.</figcaption>
+</figure>
+<p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae itaque earum rerum hic tenetur a sapiente delectus.</p>
+<p>Similique sunt in culpa qui officia deserunt mollitia animi id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio nam libero tempore cum soluta nobis eligendi optio cumque nihil.</p>
+<h2>Start Small</h2>
+<figure class="art-figure art-figure-placeholder">
+  <svg class="art-ph-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+  <span class="art-ph-label">Image Placeholder</span>
+</figure>
+<p>Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur vel illum qui <a data-art-id="deep-work">dolorem eum fugiat</a> quo voluptas nulla pariatur. Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation.</p>`
+  }
+];
+---
+<ArticleLayout
+  title="Studio Journal — Rafaela Solis"
+  description="A live article reading and editing environment demonstrating modern web typography, semantic HTML, and SEO best practices. Customize your reading experience and write your own articles."
+  ogUrl="https://rafaelasolis.work/article/"
+>
+  <script slot="head" type="application/ld+json" id="artWebAppJsonLd">{JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Studio Journal",
+    "description": "A live article reading and editing environment demonstrating modern web typography and SEO best practices.",
+    "url": "https://rafaelasolis.work/article/",
+    "applicationCategory": "DesignApplication",
+    "operatingSystem": "Any",
+    "author": { "@type": "Person", "name": "Rafaela Solis", "url": "https://rafaelasolis.work/" }
+  })}</script>
+
+  <style is:global>
+    /* Override global.css overflow-x:hidden — that breaks position:fixed */
+    body { overflow-x: clip; }
+
+    :root { --toolbar-h: 52px; }
+
+    /* ── Toolbar ── */
+    #artToolbar {
+      position: fixed;
+      top: var(--pub-header-h, 56px);
+      left: 0; right: 0;
+      height: var(--toolbar-h);
+      z-index: 150;
+      background: #ffffff;
+      border-bottom: 1px solid #d8d5d0;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0 1rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    #artToolbar::-webkit-scrollbar { display: none; }
+
+    .art-tb-group { display: flex; align-items: center; gap: 0.2rem; flex-shrink: 0; }
+    .art-tb-sep { width: 1px; height: 18px; background: #d0cdc8; flex-shrink: 0; margin: 0 0.25rem; }
+    .art-tb-spacer { flex: 1; min-width: 0.5rem; }
+
+    #artToolbar button {
+      background: transparent;
+      border: 1.5px solid #d0cdc8;
+      color: #3a3a3a;
+      font-family: inherit;
+      font-size: 0.67rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      padding: 0.27rem 0.55rem;
+      cursor: pointer;
+      line-height: 1;
+      white-space: nowrap;
+      transition: background 0.1s, color 0.1s, border-color 0.1s;
+    }
+    #artToolbar button:hover { background: #1a1a1a; color: #f5f2eb; border-color: #1a1a1a; }
+    #artToolbar button.art-active { background: #1a1a1a; color: #f5f2eb; border-color: #1a1a1a; }
+
+    #artSizeSlider { width: 70px; accent-color: #1a1a1a; cursor: pointer; vertical-align: middle; }
+    #artSidebarToggle { font-size: 0.85rem; }
+
+    #artSeoToggle, #artEditToggle {
+      font-size: 0.78rem;
+      padding: 0.42rem 1.1rem;
+      letter-spacing: 0.12em;
+      border-width: 2px;
+    }
+    #artSeoToggle { border-color: #e06020; color: #e06020; }
+    #artSeoToggle:hover, #artSeoToggle.art-active { background: #e06020; color: #fff; border-color: #e06020; }
+    #artEditToggle { border-color: var(--art-accent, #2d5016); color: var(--art-accent, #2d5016); }
+    #artEditToggle:hover, #artEditToggle.art-active { background: var(--art-accent, #2d5016); color: #fff; border-color: var(--art-accent, #2d5016); }
+
+    /* ── Shell ── */
+    #artShell {
+      display: flex;
+      padding-top: calc(var(--pub-header-h, 56px) + var(--toolbar-h));
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ── */
+    #artSidebar {
+      width: 240px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: calc(var(--pub-header-h, 56px) + var(--toolbar-h));
+      height: calc(100vh - var(--pub-header-h, 56px) - var(--toolbar-h));
+      overflow: hidden;
+      background: #1a1a1a;
+      border-right: 1px solid #2e2e2e;
+      transition: width 0.25s, border-color 0.25s;
+    }
+
+    #artShell.sidebar-hidden #artSidebar { width: 0; border-right-color: transparent; }
+
+    .art-sidebar-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid #2e2e2e;
+      flex-shrink: 0;
+    }
+
+    .art-sidebar-label {
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: rgba(245,242,235,0.35);
+      white-space: nowrap;
+    }
+
+    #artNewBtn {
+      background: #2d5016;
+      color: #f5f2eb;
+      border: none;
+      width: 20px; height: 20px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; font-weight: 400;
+      cursor: pointer; padding: 0; line-height: 1;
+      flex-shrink: 0;
+      transition: background 0.1s;
+    }
+    #artNewBtn:hover { background: #3d6a20; }
+
+    #artList { flex: 1; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #333 #1a1a1a; }
+
+    .art-list-item {
+      width: 100%;
+      background: none;
+      border: none;
+      border-bottom: 1px solid #252525;
+      padding: 0.75rem 1rem;
+      text-align: left;
+      cursor: pointer;
+      font-family: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      transition: background 0.1s;
+      overflow: hidden;
+    }
+    .art-list-item:hover { background: rgba(255,255,255,0.05); }
+    .art-list-item.art-list-active { background: #2d5016; }
+
+    .art-list-title {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: rgba(245,242,235,0.8);
+      line-height: 1.35;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .art-list-item.art-list-active .art-list-title { color: #f5f2eb; }
+
+    .art-list-date { font-size: 0.65rem; color: rgba(245,242,235,0.3); }
+    .art-list-item.art-list-active .art-list-date { color: rgba(245,242,235,0.65); }
+
+    /* ── Main ── */
+    #artMain {
+      flex: 1;
+      background: var(--art-bg, #ffffff);
+      color: var(--art-text, #1a1a1a);
+      transition: background 0.25s, color 0.25s;
+      min-height: calc(100vh - var(--pub-header-h, 56px) - var(--toolbar-h));
+    }
+
+    /* ── Cover hero — green band spans full width, image stays in column ── */
+    #artCoverWrap {
+      width: 100%;
+      background: var(--art-accent, #2d5016);
+      padding: 0.75rem 0;
+    }
+
+    #artCover {
+      max-width: var(--art-width, 720px);
+      width: calc(100% - 4rem);
+      margin: 0 auto;
+      aspect-ratio: 21/7;
+      overflow: hidden;
+      background: #d8d5d0;
+      position: relative;
+    }
+    #artCover img { width: 100%; height: 100%; object-fit: cover; display: block; border: none; }
+    #artCover .art-cover-placeholder {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 0.5rem;
+      background: repeating-linear-gradient(45deg, #e0ddd8, #e0ddd8 12px, #d4d1cc 12px, #d4d1cc 24px);
+      color: #aaa8a4;
+    }
+    #artCover .art-cover-placeholder span {
+      font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em;
+    }
+    #artCover .art-cover-placeholder svg { opacity: 0.5; }
+
+    /* ── Edit strip ── */
+    #artEditStrip {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--art-bg, #fff);
+      border-bottom: 1px solid var(--art-border, #e8e8e8);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 2rem;
+      font-size: 0.72rem;
+      transition: background 0.25s, border-color 0.25s;
+    }
+
+    .art-edit-hint { color: var(--art-muted, #aaa); font-size: 0.66rem; font-style: italic; }
+    .art-word-count { color: var(--art-muted, #aaa); font-size: 0.66rem; margin-left: auto; }
+
+    #artEditStrip button {
+      background: transparent;
+      border: 1.5px solid var(--art-border, #e8e8e8);
+      color: var(--art-text, #1a1a1a);
+      font-family: inherit;
+      font-size: 0.66rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      padding: 0.25rem 0.65rem;
+      cursor: pointer; line-height: 1;
+      transition: background 0.1s, color 0.1s;
+      white-space: nowrap;
+    }
+    #artEditStrip button:hover { background: var(--art-text, #1a1a1a); color: var(--art-bg, #fff); }
+    #artDeleteBtn { color: #b03030 !important; border-color: #b03030 !important; }
+    #artDeleteBtn:hover { background: #b03030 !important; color: #fff !important; }
+    #artSaveBtn { background: var(--art-accent, #2d5016) !important; color: #fff !important; border-color: var(--art-accent, #2d5016) !important; }
+
+    /* ── Content wrapper ── */
+    #artContentWrapper {
+      max-width: var(--art-width, 720px);
+      margin: 0 auto;
+      padding: 0 2rem 6rem;
+      position: relative;
+    }
+
+    /* ── Article content ── */
+    article#artArticle {
+      width: 100%;
+      font-family: var(--art-font, inherit);
+      font-size: var(--art-size, 18px);
+      line-height: 1.8;
+    }
+
+    .art-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 1.1rem; }
+    .art-tag {
+      font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+      padding: 0.18rem 0.55rem;
+      border: 1.5px solid var(--art-accent, #2d5016);
+      color: var(--art-accent, #2d5016);
+    }
+
+    #artTitle {
+      font-size: clamp(1.75rem, 4vw, 3rem);
+      font-weight: 700; line-height: 1.15; letter-spacing: -0.02em;
+      color: var(--art-text, #1a1a1a);
+      margin: 0 0 1.1rem; outline: none;
+    }
+
+    .art-byline {
+      display: flex; flex-wrap: wrap; gap: 1rem;
+      font-size: 0.82rem; color: var(--art-muted, #888);
+      padding-bottom: 2rem; margin-bottom: 0;
+      border-bottom: 1px solid var(--art-border, #e8e8e8);
+    }
+    #artAuthor { font-weight: 600; color: var(--art-text, #1a1a1a); outline: none; }
+
+    .art-header { padding-top: 2rem; }
+
+    /* ── Share bar ── */
+    .art-share {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 1.25rem 0 0;
+      flex-wrap: wrap;
+    }
+    .art-share-label {
+      font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.12em; color: var(--art-muted, #888); margin-right: 0.15rem;
+    }
+    .art-share-btn {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      padding: 0.3rem 0.7rem;
+      border: 1.5px solid var(--art-border, #e0e0e0);
+      box-shadow: 2px 2px 0 var(--art-border, #e0e0e0);
+      background: transparent;
+      color: var(--art-text, #1a1a1a);
+      font-size: 0.64rem; font-weight: 700; font-family: inherit;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      cursor: pointer; text-decoration: none; line-height: 1;
+      transition: background 0.12s, border-color 0.12s, color 0.12s, box-shadow 0.12s, transform 0.12s;
+    }
+    .art-share-btn:hover {
+      background: var(--art-text, #1a1a1a);
+      color: var(--art-bg, #fff);
+      border-color: var(--art-text, #1a1a1a);
+      box-shadow: 2px 2px 0 var(--art-text, #1a1a1a);
+      transform: translate(-1px, -1px);
+    }
+
+    /* ── Body lead bolding ── */
+    .art-lead { font-weight: 700; }
+
+    /* ── Image placeholder ── */
+    .art-body figure.art-figure-placeholder {
+      border: 2px dashed var(--art-accent, #2d5016);
+      background: rgba(45,80,22,0.04);
+      aspect-ratio: 16/7;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 0.6rem;
+      color: var(--art-accent, #2d5016);
+      margin: 2em 0;
+    }
+    .art-figure-placeholder .art-ph-icon { opacity: 0.35; }
+    .art-figure-placeholder .art-ph-label {
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.12em; opacity: 0.45;
+    }
+
+    .art-body { outline: none; caret-color: var(--art-accent, #2d5016); margin-top: 2.5rem; }
+    .art-body h2 { font-size: 1.4em; font-weight: 700; line-height: 1.25; margin: 2.5em 0 0.75em; color: var(--art-text, #1a1a1a); letter-spacing: -0.01em; }
+    .art-body h3 { font-size: 1.15em; font-weight: 600; margin: 2em 0 0.5em; color: var(--art-text, #1a1a1a); }
+    .art-body p { margin: 0 0 1.5em; }
+    .art-body ul, .art-body ol { margin: 0 0 1.5em 1.75em; }
+    .art-body li { margin-bottom: 0.4em; }
+    .art-body a { color: var(--art-accent, #2d5016); }
+    .art-body strong { font-weight: 700; }
+    .art-body em { font-style: italic; }
+    .art-body blockquote {
+      border-left: 3px solid var(--art-accent, #2d5016);
+      margin: 2em 0; padding: 0.75em 1.5em;
+      color: var(--art-muted, #888); font-style: italic;
+    }
+
+    .art-body figure.art-figure { margin: 2em 0; width: 100%; }
+    .art-body figure.art-figure img {
+      width: 100%; height: auto; display: block; background: #d8d5d0;
+      border: 7.5px solid var(--art-accent, #2d5016);
+    }
+    .art-body figure.art-figure figcaption {
+      font-size: 0.75em; color: var(--art-muted, #888);
+      padding: 0.55em 0.5em; font-style: italic; line-height: 1.5;
+    }
+
+    article#artArticle.art-editing #artTitle,
+    article#artArticle.art-editing #artAuthor,
+    article#artArticle.art-editing .art-body {
+      outline: 2px dashed var(--art-accent, #2d5016); outline-offset: 6px;
+    }
+
+    /* ── Popular Reads (right rail, absolutely positioned beside first h2) ── */
+    #artPopular {
+      position: absolute;
+      top: var(--art-popular-top, 0);
+      left: var(--art-popular-left, 100%);
+      width: 340px;
+      background: var(--art-bg, #fff);
+      color: var(--art-text, #1a1a1a);
+      border: 1.5px solid var(--art-text, #1a1a1a);
+      box-shadow: 6px 6px 0 var(--art-accent, #2d5016);
+      padding: 1.4rem 1.4rem 0.75rem;
+      z-index: 5;
+      font-family: var(--art-font, inherit);
+      transition: background 0.25s, color 0.25s, border-color 0.25s, box-shadow 0.25s;
+    }
+    #artPopular.art-popular-hidden { display: none; }
+
+    .art-popular-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin: 0 0 0.5rem;
+    }
+    .art-popular-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      margin: 0;
+      color: var(--art-text, #1a1a1a);
+    }
+    .art-popular-eyebrow {
+      font-size: 0.55rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--art-accent, #2d5016);
+      padding: 0.18rem 0.45rem;
+      border: 1.5px solid var(--art-accent, #2d5016);
+      line-height: 1;
+    }
+    .art-popular-divider {
+      height: 2px;
+      background: var(--art-text, #1a1a1a);
+      margin: 0 0 0.4rem;
+    }
+
+    .art-popular-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 0.95rem 0;
+      cursor: pointer;
+      font-family: inherit;
+      text-align: left;
+      color: inherit;
+      border-bottom: 1px solid var(--art-border, #e8e8e8);
+      transition: transform 0.15s ease, opacity 0.15s;
+    }
+    .art-popular-item:last-child { border-bottom: none; }
+    .art-popular-item:hover { transform: translateX(3px); }
+    .art-popular-item:hover .art-popular-item-title { color: var(--art-accent, #2d5016); }
+
+    .art-popular-thumb-wrap {
+      width: 100%;
+      aspect-ratio: 16/7;
+      overflow: hidden;
+      background: var(--art-border, #e8e8e8);
+      border: 4px solid var(--art-accent, #2d5016);
+      display: block;
+    }
+    .art-popular-thumb {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .art-popular-thumb-ph {
+      width: 100%; height: 100%;
+      background: repeating-linear-gradient(45deg, var(--art-border, #e0ddd8), var(--art-border, #e0ddd8) 8px, var(--art-bg, #d4d1cc) 8px, var(--art-bg, #d4d1cc) 16px);
+    }
+
+    .art-popular-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+    }
+    .art-popular-tag {
+      font-size: 0.55rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0.14rem 0.4rem;
+      border: 1.25px solid var(--art-accent, #2d5016);
+      color: var(--art-accent, #2d5016);
+      line-height: 1.2;
+    }
+    .art-popular-item-title {
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      color: var(--art-text, #1a1a1a);
+      transition: color 0.12s;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+    .art-popular-excerpt {
+      font-size: 0.78rem;
+      line-height: 1.5;
+      color: var(--art-muted, #888);
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+    .art-popular-foot {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.62rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--art-muted, #888);
+    }
+    .art-popular-foot-dot {
+      width: 3px; height: 3px; border-radius: 50%;
+      background: var(--art-muted, #888); flex-shrink: 0;
+    }
+
+    /* Hide when there's no room beside the article column */
+    @media (max-width: 1400px) {
+      #artPopular { display: none; }
+    }
+
+    @media (max-width: 768px) {
+      #artSidebar {
+        position: fixed;
+        top: calc(var(--pub-header-h, 56px) + var(--toolbar-h));
+        left: 0;
+        height: calc(100vh - var(--pub-header-h, 56px) - var(--toolbar-h));
+        z-index: 140; width: 260px !important;
+        transform: translateX(-100%); transition: transform 0.25s;
+        border-right: 1px solid #2e2e2e !important;
+      }
+      #artSidebar.art-sidebar-open { transform: translateX(0); }
+      #artShell.sidebar-hidden #artSidebar { transform: translateX(-100%); }
+
+      #artContentWrapper { padding: 0 1.25rem 4rem; }
+      #artEditStrip { padding: 0.4rem 1.25rem; }
+      .art-edit-hint { display: none; }
+      .art-related-card { width: calc(50% - 0.5rem); }
+    }
+
+    /* ── SEO inspector — element outlines ── */
+    body.seo-active [data-seo] {
+      outline: 2px dashed #e06020 !important;
+      outline-offset: 2px;
+      cursor: help !important;
+    }
+
+    /* ── SEO tooltip ── */
+    #artSeoTooltip {
+      position: fixed;
+      z-index: 9999;
+      background: #1a1a1a;
+      color: #f5f2eb;
+      font-size: 0.65rem;
+      font-family: 'Space Grotesk', monospace;
+      padding: 0.35rem 0.75rem;
+      border: 1px solid #e06020;
+      max-width: 340px;
+      line-height: 1.5;
+      pointer-events: none;
+      box-shadow: 2px 2px 0 #e06020;
+    }
+
+    /* ── SEO panel ── */
+    #artSeoPanel {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 500;
+      width: 290px;
+      background: #1a1a1a;
+      border: 1.5px solid #e06020;
+      box-shadow: 3px 3px 0 #e06020;
+      font-family: 'Space Grotesk', monospace;
+      color: #f5f2eb;
+      max-height: calc(100vh - 3rem);
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #333 #1a1a1a;
+    }
+    .seo-panel-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #2e2e2e;
+      font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em;
+      color: #e06020; flex-shrink: 0;
+      position: sticky; top: 0; background: #1a1a1a;
+    }
+    .seo-panel-header button {
+      background: none; border: none; color: rgba(245,242,235,0.5); cursor: pointer;
+      font-size: 0.8rem; padding: 0 0.15rem; line-height: 1;
+    }
+    .seo-panel-header button:hover { color: #f5f2eb; }
+    .seo-panel-row {
+      display: flex; flex-direction: column;
+      padding: 0.3rem 0.75rem;
+      border-bottom: 1px solid #222;
+      gap: 0.1rem;
+    }
+    .seo-panel-label {
+      font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.09em;
+      color: rgba(245,242,235,0.3);
+    }
+    .seo-panel-value {
+      font-size: 0.64rem; color: rgba(245,242,235,0.75); word-break: break-all; line-height: 1.4;
+    }
+    .seo-panel-value.seo-good { color: #6db56d; }
+    .seo-panel-value.seo-warn { color: #e0a040; }
+  </style>
+
+  <!-- Toolbar -->
+  <div id="artToolbar" role="toolbar" aria-label="Reading preferences">
+    <div class="art-tb-group">
+      <button id="artSidebarToggle" aria-label="Toggle article list" title="Toggle sidebar">☰</button>
+    </div>
+    <div class="art-tb-sep"></div>
+    <div class="art-tb-group">
+      <button class="art-theme-btn" data-theme="light">Light</button>
+      <button class="art-theme-btn" data-theme="dark">Dark</button>
+      <button class="art-theme-btn" data-theme="sepia">Sepia</button>
+    </div>
+    <div class="art-tb-sep"></div>
+    <div class="art-tb-group">
+      <button id="artSizeDown" aria-label="Decrease font size">A−</button>
+      <input type="range" id="artSizeSlider" min="14" max="24" value="18" aria-label="Font size">
+      <button id="artSizeUp" aria-label="Increase font size">A+</button>
+    </div>
+    <div class="art-tb-sep"></div>
+    <div class="art-tb-group">
+      <button class="art-width-btn" data-width="580" title="Narrow">N</button>
+      <button class="art-width-btn" data-width="720" title="Medium">M</button>
+      <button class="art-width-btn" data-width="900" title="Wide">W</button>
+    </div>
+    <div class="art-tb-sep"></div>
+    <div class="art-tb-group">
+      <button class="art-font-btn" data-font="sans">Sans</button>
+      <button class="art-font-btn" data-font="serif">Serif</button>
+    </div>
+    <div class="art-tb-spacer"></div>
+    <div class="art-tb-group">
+      <button id="artSeoToggle" title="Toggle SEO inspector">SEO</button>
+    </div>
+    <div class="art-tb-sep"></div>
+    <div class="art-tb-group">
+      <button id="artEditToggle">Edit</button>
+    </div>
+  </div>
+
+  <!-- Shell -->
+  <div id="artShell">
+
+    <!-- Sidebar -->
+    <aside id="artSidebar" aria-label="Article list">
+      <div class="art-sidebar-head">
+        <span class="art-sidebar-label">Articles</span>
+        <button id="artNewBtn" title="New article" aria-label="New article">+</button>
+      </div>
+      <div id="artList" role="list"></div>
+    </aside>
+
+    <!-- Reading area -->
+    <main id="artMain">
+
+      <!-- Edit strip -->
+      <div id="artEditStrip" hidden>
+        <span class="art-edit-hint">Ctrl+B bold &nbsp;·&nbsp; Ctrl+I italic</span>
+        <span class="art-word-count" id="artWordCount"></span>
+        <button id="artDeleteBtn">Delete</button>
+        <button id="artSaveBtn">Save</button>
+      </div>
+
+      <!-- Cover — green band spans full width, image stays at column width -->
+      <div id="artCoverWrap">
+        <div id="artCover" data-seo="Cover image — hero visual shown as OG/Twitter card preview when shared"></div>
+      </div>
+
+      <div id="artContentWrapper">
+        <article id="artArticle" itemscope itemtype="https://schema.org/Article" data-seo="Schema.org Article — main content block with microdata (itemscope/itemprop)">
+          <header class="art-header">
+            <div id="artTags" class="art-tags" aria-label="Tags" data-seo="Article tags — signals topical relevance and keyword categories to search engines"></div>
+            <h1 id="artTitle" itemprop="headline" spellcheck="false" data-seo="h1 (itemprop=headline) — Primary headline; the single most important on-page SEO element"></h1>
+            <div class="art-byline" data-seo="Byline — author + date signals E-E-A-T (Experience, Expertise, Authoritativeness, Trustworthiness)">
+              <span>By <span id="artAuthor" itemprop="author" spellcheck="false" data-seo="itemprop=author — Author identity; E-E-A-T signal Google uses to assess content credibility"></span></span>
+              <time id="artDate" itemprop="datePublished" data-seo="time (itemprop=datePublished) — Machine-readable date; used by Google for article freshness signals"></time>
+              <span id="artReadTime"></span>
+            </div>
+          </header>
+          <!-- Share bar -->
+          <div class="art-share" aria-label="Share this article">
+            <span class="art-share-label">Share</span>
+            <a href="#" class="art-share-btn" onclick="return false" aria-label="Share on X" title="Share on X">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.742l7.73-8.835L1.254 2.25H8.08l4.259 5.631z"/></svg>
+              X / Twitter
+            </a>
+            <a href="#" class="art-share-btn" onclick="return false" aria-label="Share on LinkedIn" title="Share on LinkedIn">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              LinkedIn
+            </a>
+            <a href="#" class="art-share-btn" onclick="return false" aria-label="Share on Facebook" title="Share on Facebook">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+              Facebook
+            </a>
+            <button class="art-share-btn" onclick="return false" aria-label="Copy link" title="Copy link">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+              Copy Link
+            </button>
+          </div>
+
+          <div id="artBody" class="art-body" itemprop="articleBody" spellcheck="false" data-seo="itemprop=articleBody — All headings, images, and links inside are indexed by search engines"></div>
+        </article>
+
+        <!-- Popular Reads — absolutely positioned beside first h2, scrolls with article -->
+        <aside id="artPopular" class="art-popular-hidden" aria-label="Popular reads">
+          <div class="art-popular-header">
+            <h2 class="art-popular-title">Popular Reads</h2>
+            <span class="art-popular-eyebrow">Trending</span>
+          </div>
+          <div class="art-popular-divider"></div>
+          <div id="artPopularList" role="list"></div>
+        </aside>
+      </div>
+
+      </main>
+
+  </div>
+
+  <!-- SEO hover tooltip -->
+  <div id="artSeoTooltip" role="tooltip" hidden></div>
+
+  <!-- SEO inspector panel -->
+  <div id="artSeoPanel" role="complementary" aria-label="SEO Inspector" hidden>
+    <div class="seo-panel-header">
+      <span>SEO Inspector</span>
+      <button id="artSeoPanelClose" aria-label="Close SEO inspector">✕</button>
+    </div>
+    <div id="artSeoPanelContent"></div>
+  </div>
+
+  <script define:vars={{ SEED }}>
+    const PREFS_KEY   = 'artPrefs_v1';
+    const STORAGE_KEY = 'artArticles_v2';
+
+    const THEMES = {
+      light: { '--art-bg':'#ffffff', '--art-text':'#1a1a1a', '--art-muted':'#999999', '--art-accent':'#2d5016', '--art-border':'#ebebeb' },
+      dark:  { '--art-bg':'#141414', '--art-text':'#e8e4dc', '--art-muted':'#666666', '--art-accent':'#6b8f47', '--art-border':'#282828' },
+      sepia: { '--art-bg':'#f4ecd8', '--art-text':'#3d2b1f', '--art-muted':'#9b7e65', '--art-accent':'#6b4226', '--art-border':'#ddd0bb' }
+    };
+
+    const FONTS = {
+      sans:  "'Space Grotesk', sans-serif",
+      serif: "Georgia, 'Times New Roman', serif"
+    };
+
+    const DEFAULTS = { theme: 'light', size: 18, width: 720, font: 'sans' };
+
+    let articles  = [];
+    let currentId = null;
+    let editMode  = false;
+    let seoMode   = false;
+    let prefs     = { ...DEFAULTS };
+
+    // ── Storage ───────────────────────────────────────────────────────────────
+
+    function loadPrefs() {
+      try { return { ...DEFAULTS, ...JSON.parse(localStorage.getItem(PREFS_KEY) || '{}') }; }
+      catch { return { ...DEFAULTS }; }
+    }
+
+    function savePrefs() { localStorage.setItem(PREFS_KEY, JSON.stringify(prefs)); }
+
+    function loadArticles() {
+      try {
+        const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+        return (stored && stored.length) ? stored : JSON.parse(JSON.stringify(SEED));
+      } catch { return JSON.parse(JSON.stringify(SEED)); }
+    }
+
+    function saveArticles() { localStorage.setItem(STORAGE_KEY, JSON.stringify(articles)); }
+
+    // ── Prefs ────────────────────────────────────────────────────────────────
+
+    function applyPrefs() {
+      const main  = document.getElementById('artMain');
+      const strip = document.getElementById('artEditStrip');
+      const theme = THEMES[prefs.theme] || THEMES.light;
+
+      Object.entries(theme).forEach(([k, v]) => main.style.setProperty(k, v));
+      if (strip) { strip.style.background = theme['--art-bg']; strip.style.borderBottomColor = theme['--art-border']; }
+
+      main.style.setProperty('--art-size',  prefs.size + 'px');
+      main.style.setProperty('--art-width', prefs.width + 'px');
+      main.style.setProperty('--art-font',  FONTS[prefs.font] || FONTS.sans);
+
+      document.querySelectorAll('.art-theme-btn').forEach(b => b.classList.toggle('art-active', b.dataset.theme === prefs.theme));
+      document.querySelectorAll('.art-width-btn').forEach(b => b.classList.toggle('art-active', String(b.dataset.width) === String(prefs.width)));
+      document.querySelectorAll('.art-font-btn').forEach(b => b.classList.toggle('art-active', b.dataset.font === prefs.font));
+      document.getElementById('artSizeSlider').value = prefs.size;
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
+
+    function calcReadTime(html) {
+      const words = html.replace(/<[^>]+>/g, ' ').trim().split(/\s+/).filter(Boolean).length;
+      return Math.max(1, Math.round(words / 200)) + ' min read';
+    }
+
+    function fmtDate(dateStr) {
+      return new Date(dateStr + 'T12:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    }
+
+    function fmtDateShort(dateStr) {
+      return new Date(dateStr + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    // ── Lead bolding ──────────────────────────────────────────────────────────
+
+    function boldLeadWords() {
+      const body = document.getElementById('artBody');
+      if (!body) return;
+      const firstP = body.querySelector('p');
+      if (!firstP) return;
+      let html = firstP.innerHTML;
+      let count = 0, idx = 0;
+      while (idx < html.length && count < 6) {
+        if (html[idx] === '<') { while (idx < html.length && html[idx] !== '>') idx++; idx++; continue; }
+        if (/\s/.test(html[idx])) { idx++; continue; }
+        while (idx < html.length && !/[\s<]/.test(html[idx])) idx++;
+        count++;
+      }
+      if (count > 0) firstP.innerHTML = `<strong class="art-lead">${html.slice(0, idx)}</strong>${html.slice(idx)}`;
+    }
+
+    // ── Cover image ───────────────────────────────────────────────────────────
+
+    function coverPlaceholder() {
+      return `<div class="art-cover-placeholder"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg><span>Cover Image</span></div>`;
+    }
+
+    function renderCover(art) {
+      const el = document.getElementById('artCover');
+      if (!el) return;
+      if (art.coverSeed) {
+        const img = new Image();
+        img.alt = `Cover image for "${art.title}"`;
+        img.setAttribute('itemprop', 'image');
+        img.loading = 'eager';
+        img.onerror = () => { el.innerHTML = coverPlaceholder(); };
+        img.src = `https://picsum.photos/seed/${art.coverSeed}/1200/400`;
+        el.innerHTML = '';
+        el.appendChild(img);
+      } else {
+        el.innerHTML = coverPlaceholder();
+      }
+    }
+
+    // ── Render article ────────────────────────────────────────────────────────
+
+    function renderArticle(id) {
+      const art = articles.find(a => a.id === id);
+      if (!art) return;
+      currentId = id;
+
+      document.getElementById('artTitle').innerHTML = art.title;
+      document.getElementById('artAuthor').innerHTML = art.author;
+
+      const dateEl = document.getElementById('artDate');
+      dateEl.textContent = fmtDate(art.date);
+      dateEl.setAttribute('datetime', art.date);
+
+      document.getElementById('artReadTime').textContent = calcReadTime(art.body);
+      document.getElementById('artBody').innerHTML = art.body;
+      boldLeadWords();
+      annotateSeoTags();
+      document.getElementById('artTags').innerHTML = (art.tags || []).map(t => `<span class="art-tag">${t}</span>`).join('');
+
+      renderCover(art);
+      renderPopular();
+
+      document.querySelectorAll('.art-list-item').forEach(el =>
+        el.classList.toggle('art-list-active', el.dataset.id === id));
+
+      updateMetaTags(art);
+      updateJsonLd(art);
+      if (seoMode) refreshSeoPanel();
+      window.scrollTo(0, 0);
+    }
+
+    // ── Popular Reads (right rail, absolute beside first h2) ─────────────────
+
+    // NOTE: ranking is by date desc since there's no view-count data.
+    // Swap this comparator if you wire up real popularity metrics.
+    function renderPopular() {
+      const panel = document.getElementById('artPopular');
+      const list  = document.getElementById('artPopularList');
+      if (!panel || !list) return;
+
+      const others = articles
+        .filter(a => a.id !== currentId)
+        .sort((a, b) => (b.date || '').localeCompare(a.date || ''))
+        .slice(0, 3);
+
+      if (others.length === 0) { panel.classList.add('art-popular-hidden'); return; }
+
+      list.innerHTML = others.map(a => {
+        const thumb = a.coverSeed
+          ? `<img class="art-popular-thumb" src="https://picsum.photos/seed/${a.coverSeed}/400/175" alt="" loading="lazy" onerror="this.outerHTML='&lt;div class=\\'art-popular-thumb-ph\\'&gt;&lt;/div&gt;'">`
+          : `<div class="art-popular-thumb-ph"></div>`;
+        const tags = (a.tags || []).slice(0, 2)
+          .map(t => `<span class="art-popular-tag">${t}</span>`).join('');
+        const excerpt = (a.body || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 110) + '…';
+        const readTime = calcReadTime(a.body || '');
+        return `
+          <button class="art-popular-item" data-id="${a.id}" role="listitem">
+            <div class="art-popular-thumb-wrap">${thumb}</div>
+            ${tags ? `<div class="art-popular-tags">${tags}</div>` : ''}
+            <span class="art-popular-item-title">${a.title}</span>
+            <span class="art-popular-excerpt">${excerpt}</span>
+            <span class="art-popular-foot">
+              <span>${fmtDateShort(a.date)}</span>
+              <span class="art-popular-foot-dot"></span>
+              <span>${readTime}</span>
+            </span>
+          </button>`;
+      }).join('');
+
+      list.querySelectorAll('.art-popular-item').forEach(btn =>
+        btn.addEventListener('click', () => {
+          if (editMode) saveCurrentArticle();
+          renderArticle(btn.dataset.id);
+        }));
+
+      panel.classList.remove('art-popular-hidden');
+      // Wait a frame so the body's freshly-rendered first h2 has a measurable position
+      requestAnimationFrame(positionPopular);
+    }
+
+    // Anchor the panel beside the first h2, in document flow (scrolls with article).
+    // Computes top relative to #artContentWrapper, and left so the panel sits just
+    // outside the article column with a small gap.
+    function positionPopular() {
+      const panel = document.getElementById('artPopular');
+      if (!panel || panel.classList.contains('art-popular-hidden')) return;
+      const wrapper = document.getElementById('artContentWrapper');
+      const firstH2 = document.querySelector('#artBody h2');
+      if (!wrapper) return;
+
+      const wrapperRect = wrapper.getBoundingClientRect();
+      const top = firstH2
+        ? firstH2.getBoundingClientRect().top - wrapperRect.top
+        : 200;
+
+      // Sit just outside the article column (left edge of right gutter), with 2rem gap.
+      const left = wrapperRect.width + 32;
+
+      wrapper.style.setProperty('--art-popular-top',  top  + 'px');
+      wrapper.style.setProperty('--art-popular-left', left + 'px');
+    }
+
+    function updateJsonLd(art) {
+      let el = document.getElementById('artArticleJsonLd');
+      if (!el) { el = document.createElement('script'); el.type = 'application/ld+json'; el.id = 'artArticleJsonLd'; document.head.appendChild(el); }
+      const desc = document.getElementById('artBody').textContent.slice(0, 160).trim() + '…';
+      const imageUrl = art.coverSeed
+        ? `https://picsum.photos/seed/${art.coverSeed}/1200/400`
+        : 'https://rafaelasolis.work/headshot.jpg';
+      el.textContent = JSON.stringify({
+        '@context': 'https://schema.org', '@type': 'Article',
+        'headline': art.title,
+        'description': desc,
+        'image': { '@type': 'ImageObject', 'url': imageUrl, 'width': 1200, 'height': 400 },
+        'author': { '@type': 'Person', 'name': art.author, 'url': 'https://rafaelasolis.work/' },
+        'publisher': { '@type': 'Person', 'name': 'Rafaela Solis', 'url': 'https://rafaelasolis.work/' },
+        'datePublished': art.date,
+        'dateModified': art.date,
+        'url': 'https://rafaelasolis.work/article/',
+        'mainEntityOfPage': { '@type': 'WebPage', '@id': 'https://rafaelasolis.work/article/' }
+      });
+    }
+
+    // ── Meta tag updates ──────────────────────────────────────────────────────
+
+    function updateMetaTags(art) {
+      const desc = art.body.replace(/<[^>]+>/g, ' ').trim().slice(0, 155) + '…';
+      const keywords = (art.tags || []).join(', ');
+      const imageUrl = art.coverSeed
+        ? `https://picsum.photos/seed/${art.coverSeed}/1200/400`
+        : 'https://rafaelasolis.work/headshot.jpg';
+      const setMeta = (sel, val) => { const el = document.querySelector(sel); if (el) el.setAttribute('content', val); };
+      const ensureMeta = (prop, propType, val) => {
+        let el = document.querySelector(`meta[${propType}="${prop}"]`);
+        if (!el) { el = document.createElement('meta'); el.setAttribute(propType, prop); document.head.appendChild(el); }
+        el.setAttribute('content', val);
+      };
+      document.title = art.title + ' — Studio Journal';
+      setMeta('meta[name="description"]', desc);
+      setMeta('meta[name="keywords"]', keywords);
+      setMeta('meta[name="author"]', art.author);
+      setMeta('meta[property="og:title"]', art.title);
+      setMeta('meta[property="og:description"]', desc);
+      setMeta('meta[property="og:image"]', imageUrl);
+      setMeta('meta[name="twitter:title"]', art.title);
+      setMeta('meta[name="twitter:description"]', desc);
+      setMeta('meta[name="twitter:image"]', imageUrl);
+      ensureMeta('article:published_time', 'property', art.date);
+      ensureMeta('article:modified_time', 'property', art.date);
+      ensureMeta('article:tag', 'property', (art.tags || []).join(', '));
+    }
+
+    // ── SEO inspector ─────────────────────────────────────────────────────────
+
+    function annotateSeoTags() {
+      const body = document.getElementById('artBody');
+      if (!body) return;
+      body.querySelectorAll('h2').forEach(el => { el.dataset.seo = 'h2 — Section heading; keyword targeting and semantic content structure'; });
+      body.querySelectorAll('h3').forEach(el => { el.dataset.seo = 'h3 — Subsection heading; supports nested topic hierarchy'; });
+      body.querySelectorAll('figure').forEach(el => { el.dataset.seo = 'figure — Semantic figure element; helps Google understand visual context'; });
+      body.querySelectorAll('figcaption').forEach(el => { el.dataset.seo = 'figcaption — Image caption; supplements alt text and aids image indexing'; });
+      body.querySelectorAll('img').forEach(img => {
+        img.dataset.seo = img.alt
+          ? `img — alt="${img.alt}" ✓ descriptive alt text present`
+          : 'img — MISSING alt text ✗ (accessibility and SEO issue)';
+      });
+      // Ensure inline article links are crawlable by Googlebot
+      body.querySelectorAll('a[data-art-id]').forEach(a => {
+        if (!a.hasAttribute('href')) a.setAttribute('href', '/article/');
+        a.dataset.seo = `a — Internal link → /article/ (navigates to article: ${a.dataset.artId})`;
+      });
+      body.querySelectorAll('a[href]:not([data-art-id])').forEach(a => {
+        try {
+          const isExternal = new URL(a.href, location.href).hostname !== location.hostname;
+          if (isExternal) a.setAttribute('rel', 'noopener noreferrer');
+          a.dataset.seo = isExternal
+            ? `a — External link (rel="noopener noreferrer") → ${a.getAttribute('href')}`
+            : `a — Internal link → ${a.getAttribute('href')}`;
+        } catch {}
+      });
+    }
+
+    function refreshSeoPanel() {
+      const art = articles.find(a => a.id === currentId);
+      if (!art) return;
+      const body = document.getElementById('artBody');
+      const text = body ? body.textContent : '';
+      const words = text.trim().split(/\s+/).filter(Boolean).length;
+      const h2s = body ? body.querySelectorAll('h2').length : 0;
+      const h3s = body ? body.querySelectorAll('h3').length : 0;
+      const allImgs = body ? body.querySelectorAll('img') : [];
+      const altOk = body ? body.querySelectorAll('img[alt]').length : 0;
+      const altPct = allImgs.length ? Math.round((altOk / allImgs.length) * 100) : 100;
+      const desc = text.trim().slice(0, 155) + '…';
+      const keywords = (art.tags || []).join(', ');
+      const row = (lbl, val, ok) =>
+        `<div class="seo-panel-row"><span class="seo-panel-label">${lbl}</span><span class="seo-panel-value${ok === true ? ' seo-good' : ok === false ? ' seo-warn' : ''}">${val}</span></div>`;
+      document.getElementById('artSeoPanelContent').innerHTML = [
+        row('Schema type', 'Article (JSON-LD + microdata)', true),
+        row('OG type', 'article', true),
+        row('Twitter card', 'summary_large_image', true),
+        row('Breadcrumb', 'BreadcrumbList JSON-LD ✓', true),
+        row('Robots', 'index, follow', true),
+        row('Canonical', '/article/', true),
+        row('Title', art.title, art.title.length > 0 && art.title.length <= 60),
+        row('Title length', art.title.length + ' chars (≤60 ideal)', art.title.length <= 60),
+        row('Meta description', desc.slice(0, 90) + '…', true),
+        row('Keywords', keywords || '(none)', !!keywords),
+        row('Author', art.author, !!art.author),
+        row('Date published', art.date, !!art.date),
+        row('h2 headings', h2s + ' found', h2s > 0),
+        row('h3 headings', h3s + ' found', true),
+        row('Image alt coverage', altPct + '%', altPct === 100, altPct < 100 ? false : true),
+        row('Word count', words + ' words', words >= 300),
+        row('Internal links', body ? body.querySelectorAll('a[data-art-id]').length + ' inline article links ✓' : '0', body && body.querySelectorAll('a[data-art-id]').length > 0),
+        row('rel=noopener', 'Auto-applied to external links ✓', true),
+      ].join('');
+    }
+
+    function toggleSeoMode() {
+      seoMode = !seoMode;
+      document.body.classList.toggle('seo-active', seoMode);
+      document.getElementById('artSeoToggle').classList.toggle('art-active', seoMode);
+      const panel = document.getElementById('artSeoPanel');
+      panel.hidden = !seoMode;
+      if (seoMode) refreshSeoPanel();
+    }
+
+    // ── Sidebar ───────────────────────────────────────────────────────────────
+
+    function renderSidebar() {
+      const list = document.getElementById('artList');
+      list.innerHTML = articles.map(a => `
+        <button class="art-list-item${a.id === currentId ? ' art-list-active' : ''}" data-id="${a.id}" role="listitem">
+          <span class="art-list-title">${a.title}</span>
+          <span class="art-list-date">${fmtDateShort(a.date)}</span>
+        </button>`).join('');
+
+      list.querySelectorAll('.art-list-item').forEach(btn =>
+        btn.addEventListener('click', () => {
+          if (editMode) saveCurrentArticle();
+          renderArticle(btn.dataset.id);
+          if (window.innerWidth <= 768) document.getElementById('artSidebar').classList.remove('art-sidebar-open');
+        }));
+    }
+
+    // ── Edit mode ─────────────────────────────────────────────────────────────
+
+    function enterEditMode() {
+      editMode = true;
+      ['artTitle', 'artAuthor', 'artBody'].forEach(id => { document.getElementById(id).contentEditable = 'true'; });
+      document.getElementById('artEditStrip').hidden = false;
+      document.getElementById('artEditToggle').textContent = 'View';
+      document.getElementById('artEditToggle').classList.add('art-active');
+      document.getElementById('artArticle').classList.add('art-editing');
+      updateWordCount();
+    }
+
+    function exitEditMode() {
+      editMode = false;
+      ['artTitle', 'artAuthor', 'artBody'].forEach(id => { document.getElementById(id).contentEditable = 'false'; });
+      document.getElementById('artEditStrip').hidden = true;
+      document.getElementById('artEditToggle').textContent = 'Edit';
+      document.getElementById('artEditToggle').classList.remove('art-active');
+      document.getElementById('artArticle').classList.remove('art-editing');
+    }
+
+    function saveCurrentArticle() {
+      const art = articles.find(a => a.id === currentId);
+      if (!art) return;
+      art.title  = document.getElementById('artTitle').textContent.trim()  || art.title;
+      art.author = document.getElementById('artAuthor').textContent.trim() || art.author;
+      art.body   = document.getElementById('artBody').innerHTML;
+      saveArticles();
+      renderSidebar();
+      document.getElementById('artReadTime').textContent = calcReadTime(art.body);
+    }
+
+    function updateWordCount() {
+      const wc = document.getElementById('artWordCount');
+      if (wc) wc.textContent = document.getElementById('artBody').innerHTML.replace(/<[^>]+>/g, ' ').trim().split(/\s+/).filter(Boolean).length + ' words';
+    }
+
+    function newArticle() {
+      const id  = 'art-' + Date.now();
+      articles.unshift({ id, tags: [], coverSeed: '', title: 'Untitled Article', author: 'Rafaela Solis', date: new Date().toISOString().slice(0, 10), body: '<p>Start writing here. Use <strong>Ctrl+B</strong> for bold and <em>Ctrl+I</em> for italic.</p>' });
+      saveArticles(); renderSidebar(); renderArticle(id); enterEditMode();
+    }
+
+    function deleteArticle(id) {
+      if (articles.length <= 1) { alert('You need at least one article.'); return; }
+      articles = articles.filter(a => a.id !== id);
+      saveArticles(); renderSidebar(); renderArticle(articles[0].id);
+      if (editMode) exitEditMode();
+    }
+
+    function toggleSidebar() {
+      if (window.innerWidth <= 768) document.getElementById('artSidebar').classList.toggle('art-sidebar-open');
+      else document.getElementById('artShell').classList.toggle('sidebar-hidden');
+    }
+
+    // ── Init ──────────────────────────────────────────────────────────────────
+
+    document.addEventListener('DOMContentLoaded', () => {
+      articles = loadArticles();
+      prefs    = loadPrefs();
+      renderSidebar();
+      renderArticle(articles[0].id);
+      applyPrefs();
+
+      document.querySelectorAll('.art-theme-btn').forEach(btn =>
+        btn.addEventListener('click', () => { prefs.theme = btn.dataset.theme; applyPrefs(); savePrefs(); }));
+
+      const slider = document.getElementById('artSizeSlider');
+      slider.addEventListener('input', () => { prefs.size = +slider.value; applyPrefs(); savePrefs(); });
+      document.getElementById('artSizeDown').addEventListener('click', () => { prefs.size = Math.max(14, prefs.size - 1); applyPrefs(); savePrefs(); });
+      document.getElementById('artSizeUp').addEventListener('click',   () => { prefs.size = Math.min(24, prefs.size + 1); applyPrefs(); savePrefs(); });
+
+      document.querySelectorAll('.art-width-btn').forEach(btn =>
+        btn.addEventListener('click', () => { prefs.width = +btn.dataset.width; applyPrefs(); savePrefs(); }));
+
+      document.querySelectorAll('.art-font-btn').forEach(btn =>
+        btn.addEventListener('click', () => { prefs.font = btn.dataset.font; applyPrefs(); savePrefs(); }));
+
+      document.getElementById('artEditToggle').addEventListener('click', () => {
+        if (editMode) { saveCurrentArticle(); exitEditMode(); } else { enterEditMode(); }
+      });
+      document.getElementById('artSaveBtn').addEventListener('click',   () => { saveCurrentArticle(); exitEditMode(); });
+      document.getElementById('artDeleteBtn').addEventListener('click', () => {
+        const art = articles.find(a => a.id === currentId);
+        if (art && confirm(`Delete "${art.title}"?`)) deleteArticle(currentId);
+      });
+      document.getElementById('artNewBtn').addEventListener('click', newArticle);
+      document.getElementById('artSidebarToggle').addEventListener('click', toggleSidebar);
+      document.getElementById('artBody').addEventListener('input', updateWordCount);
+      document.getElementById('artBody').addEventListener('click', e => {
+        const link = e.target.closest('[data-art-id]');
+        if (!link) return;
+        e.preventDefault();
+        if (editMode) saveCurrentArticle();
+        renderArticle(link.dataset.artId);
+      });
+      document.getElementById('artSeoToggle').addEventListener('click', toggleSeoMode);
+      document.getElementById('artSeoPanelClose').addEventListener('click', toggleSeoMode);
+
+      window.addEventListener('resize', positionPopular);
+
+      const seoTip = document.getElementById('artSeoTooltip');
+      document.addEventListener('mouseover', e => {
+        if (!seoMode) return;
+        const target = e.target.closest('[data-seo]');
+        if (!target) { seoTip.hidden = true; return; }
+        seoTip.hidden = false;
+        seoTip.textContent = target.dataset.seo;
+        requestAnimationFrame(() => {
+          const r = target.getBoundingClientRect();
+          const tipH = seoTip.offsetHeight;
+          const tipW = seoTip.offsetWidth;
+          const top = r.top - tipH - 8 > 0 ? r.top - tipH - 8 : r.bottom + 8;
+          seoTip.style.top = Math.max(4, top) + 'px';
+          seoTip.style.left = Math.max(8, Math.min(r.left, window.innerWidth - tipW - 8)) + 'px';
+        });
+      });
+      document.addEventListener('mouseover', e => {
+        if (!seoMode || e.target.closest('[data-seo]')) return;
+        seoTip.hidden = true;
+      });
+    });
+  </script>
+</ArticleLayout>
