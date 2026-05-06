@@ -244,7 +244,7 @@ const SEED = [
     }
     #artNewBtn:hover { background: #3d6a20; }
 
-    #artList { flex: 1; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #333 #1a1a1a; }
+    #artList { flex: 1; min-height: 0; overflow: hidden; scrollbar-width: thin; scrollbar-color: #333 #1a1a1a; }
 
     .art-list-item {
       width: 100%;
@@ -445,7 +445,7 @@ const SEED = [
       letter-spacing: 0.12em; opacity: 0.45;
     }
 
-    .art-body { outline: none; caret-color: var(--art-accent, #2d5016); margin-top: 2.5rem; }
+    .art-body { outline: none; caret-color: var(--art-accent, #2d5016); margin-top: 2.5rem; min-height: 80vh; }
     .art-body h2 { font-size: 1.4em; font-weight: 700; line-height: 1.25; margin: 2.5em 0 0.75em; color: var(--art-text, #1a1a1a); letter-spacing: -0.01em; }
     .art-body h3 { font-size: 1.15em; font-weight: 600; margin: 2em 0 0.5em; color: var(--art-text, #1a1a1a); }
     .art-body p { margin: 0 0 1.5em; }
@@ -1036,18 +1036,27 @@ const SEED = [
     // outside the article column with a small gap.
     function positionPopular() {
       const panel = document.getElementById('artPopular');
-      if (!panel || panel.classList.contains('art-popular-hidden')) return;
+      if (!panel) return;
       const wrapper = document.getElementById('artContentWrapper');
       const firstH2 = document.querySelector('#artBody h2');
       if (!wrapper) return;
 
       const wrapperRect = wrapper.getBoundingClientRect();
-      const top = firstH2
-        ? firstH2.getBoundingClientRect().top - wrapperRect.top
-        : 200;
+      const panelW = panel.offsetWidth || 340;
+      const gap = 32;
 
-      // Sit just outside the article column (left edge of right gutter), with 2rem gap.
-      const left = wrapperRect.width + 32;
+      // Hide if the panel would overflow the viewport
+      if (wrapperRect.right + gap + panelW > window.innerWidth - 8) {
+        panel.classList.add('art-popular-hidden');
+        return;
+      }
+
+      panel.classList.remove('art-popular-hidden');
+
+      const top = firstH2
+        ? firstH2.getBoundingClientRect().top - wrapperRect.top + wrapper.scrollTop
+        : 200;
+      const left = wrapperRect.width + gap;
 
       wrapper.style.setProperty('--art-popular-top',  top  + 'px');
       wrapper.style.setProperty('--art-popular-left', left + 'px');
@@ -1195,6 +1204,16 @@ const SEED = [
           renderArticle(btn.dataset.id);
           if (window.innerWidth <= 768) document.getElementById('artSidebar').classList.remove('art-sidebar-open');
         }));
+
+      // Remove items that overflow the available sidebar height
+      requestAnimationFrame(() => {
+        const available = list.offsetHeight;
+        let used = 0;
+        list.querySelectorAll('.art-list-item').forEach(item => {
+          used += item.offsetHeight;
+          if (used > available) item.remove();
+        });
+      });
     }
 
     // ── Edit mode ─────────────────────────────────────────────────────────────
@@ -1270,7 +1289,7 @@ const SEED = [
       document.getElementById('artSizeUp').addEventListener('click',   () => { prefs.size = Math.min(24, prefs.size + 1); applyPrefs(); savePrefs(); });
 
       document.querySelectorAll('.art-width-btn').forEach(btn =>
-        btn.addEventListener('click', () => { prefs.width = +btn.dataset.width; applyPrefs(); savePrefs(); }));
+        btn.addEventListener('click', () => { prefs.width = +btn.dataset.width; applyPrefs(); savePrefs(); requestAnimationFrame(positionPopular); }));
 
       document.querySelectorAll('.art-font-btn').forEach(btn =>
         btn.addEventListener('click', () => { prefs.font = btn.dataset.font; applyPrefs(); savePrefs(); }));
