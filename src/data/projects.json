@@ -41,6 +41,44 @@
       "gradient": ""
     },
     {
+      "title": "Web Development",
+      "shortDescription": "Various work across multiple genres of work showcasing my web dev & design skills!",
+      "fullDescription": "My primary web development projects are this portfolio site, and my personal tool and website Internship-hunter. Both have taught me a massive amount about good practice, literal design & implementation, and the importance of being open to new libraries and methods. Through developing these two sites, I have become skilled in implementing databases, using JavaScript features, following good SEO practices, developing with Astro & Next.js, and more.\n\nKey Features:\n• Well presented databases\n• Dynamic Creation and Update Tools\n• Clean SEO & Performance Practices\n• User Centered Design\n• Strong Future-proofing",
+      "tags": [
+        "HTML",
+        "CSS",
+        "Astro",
+        "JavaScript",
+        "Web",
+        "Design"
+      ],
+      "developmentTime": "",
+      "teamSize": "Solo Project",
+      "tools": [
+        "Astro",
+        "HTML",
+        "JavaScript"
+      ],
+      "challenges": "A specific and ongoing challenge is presenting a large assortment of portfolio projects in a concise and discernible manner. This has brought in design, implementation, and backed considerations that require significant and constant thought into how it is made.",
+      "learnings": "Building these websites has connected the bridge between design & implementation, and has given me a large amount of familiarity with current & useful tools in web development like Astro, JavaScript, Lighthouse, Screaming Frog, and more.",
+      "image": "images/Screenshot 2026-05-04 at 19-22-20 InternHunter _ Sign In.webp",
+      "screenshots": [
+        "screenshots/Screenshot 2026-05-06 at 17-36-49 Deep Work _ Studio Journal.webp",
+        "screenshots/Screenshot 2026-05-04 at 19-31-56 InternHunter _ Rafaela Sol_s.webp",
+        "screenshots/Shortened InternshipHunter Sidebar.webp",
+        "screenshots/Screenshot 2026-05-04 at 19-34-34 Rafaela Solis - Game Developer Portfolio.webp",
+        "screenshots/Screenshot 2026-05-04 at 19-34-56 Projects - Rafaela Solis.webp",
+        "screenshots/Screenshot 2026-05-04 at 19-35-07 About - Rafaela Solis.webp",
+        "screenshots/Screenshot 2026-05-04 at 19-35-18 Resume - Rafaela Solis.webp"
+      ],
+      "playLink": "/article/",
+      "linkText": "View a Demo Clean SEO Site I Made Here!",
+      "hasEmbed": false,
+      "embedType": "game",
+      "embedUrl": "",
+      "gradient": ""
+    },
+    {
       "title": "Mega Market Mayhem",
       "shortDescription": "A fast-paced multiplayer 1v1 fighting game where players compete to see who's on top with quirky and fun food based characters.",
       "fullDescription": "Mega Market Mayhem is an intense multiplayer fighting game that combines fast-paced combat with quirky food-themed characters in a chaotic supermarket setting. Players engage in 1v1 battles using unique food-based fighters, each with their own special abilities and combat styles.\n\nKey Features:\n• Multiplayer 1v1 fighting mechanics\n• Unique food-based character roster\n• Dynamic supermarket environments\n• Special abilities and combo systems\n• Chaotic and fun gameplay designed for competitive play\n\nThe game focuses on accessible yet deep fighting mechanics, making it easy for newcomers to jump in while providing enough complexity for competitive players to master.",
@@ -156,45 +194,6 @@
       ],
       "challenges": "Designing levels that balanced maze complexity with color puzzle difficulty without overwhelming players, as well as using colors that players could differentiate",
       "learnings": "This project taught me about puzzle design principles and creating intuitive yet challenging gameplay."
-    },
-    {
-      "title": "Falsehoods",
-      "shortDescription": "Falsehoods is a 2D-top down stealth-based game, expose the cult, save the town.",
-      "fullDescription": "Falsehoods is a 2D-top down stealth-based game where you, a grungy detective ready to retire, investigates a mysterious cult that’s been linked to hundreds of kidnappings over the last century. You must navigate through their elaborate estate just outside of town, carefully avoiding detection, while gathering enough evidence to put them away for good. \n\n  •  Producer: Rafaela Solis     (+ Programming & Design support)\n  •  Programmer: Luke Hinojosa\n  •  Designer: Nicholas Funk\n  •  Artist: Rhiannon Haut\n  •  Sound: Heather Deruyck",
-      "tags": [
-        "Unity",
-        "C#",
-        "Agile",
-        "Academic",
-        "Team",
-        "2D",
-        "Scary",
-        "Top-Down",
-        "Game Architecture"
-      ],
-      "developmentTime": "5 weeks",
-      "teamSize": "Team of 5",
-      "tools": [
-        "Unity",
-        "C#",
-        "Git",
-        "Confluence",
-        "Jira",
-        "Mattermost",
-        "Google Calender"
-      ],
-      "challenges": "This project was by far the largest and most important where I've taken on a producer role. While I still did design and game architecture, my daily work was organizing the team and making sure communication and the Agile workflow all came together seamlessly.",
-      "learnings": "I learned a massive amount about the intricacies of working on an unfamiliar team. I realized how important it is for a creative team to get comfortable with each other, and the critical need for everyone's voice to be heard in the design process for both product quality and scope's sake.",
-      "image": "images/Screenshot 2026-03-14 160608.webp",
-      "screenshots": [
-        "screenshots/FalsehoodsDemo.mp4"
-      ],
-      "playLink": "https://lukarbonite.itch.io/falsehoods",
-      "linkText": "View on Itch.io",
-      "hasEmbed": true,
-      "embedType": "game",
-      "embedUrl": "https://itch.io/embed-upload/16663003",
-      "gradient": ""
     },
     {
       "title": "Valentine Bash",
