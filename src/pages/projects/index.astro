@@ -143,10 +143,41 @@ const projects = projectsData.projects;
 
         .strip-hint {
             font-size: 0.6rem; color: var(--text-muted);
-            flex-shrink: 0; margin-left: auto; line-height: 1;
+            flex-shrink: 0; line-height: 1;
         }
 
         .section-strip.strip-active .strip-hint { opacity: 0; }
+
+        /* ===== HEADER TAGS (compact, inactive only) ===== */
+        .strip-header-tags {
+            display: flex;
+            gap: 0.3rem;
+            flex-shrink: 0;
+            align-self: stretch;
+            align-items: stretch;
+            margin-left: auto;
+            margin-right: 0.5rem;
+            overflow: hidden;
+            max-width: 50%;
+            padding: 4px 0;
+        }
+
+        .strip-header-tag {
+            font-size: 0.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.09em;
+            background: var(--border);
+            border: 1.5px solid var(--border);
+            padding: 0 0.5rem;
+            color: var(--bg);
+            white-space: nowrap;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-strip.strip-active .strip-header-tags { opacity: 0; }
 
         /* ===== OVERVIEW ROW ===== */
         .strip-overview-row {
@@ -475,6 +506,7 @@ const projects = projectsData.projects;
         }
         body.edit-mode .strip-edit-btn { display: block; }
         body.edit-mode .strip-hint { display: none; }
+        body.edit-mode .strip-header-tags { display: none; }
         /* Pull short-desc away from reorder+edit buttons so text stays centered */
         body.edit-mode .strip-short-desc { right: 14rem; left: 54px; }
 
@@ -927,6 +959,7 @@ const projects = projectsData.projects;
                 const bgStyle    = bgSrc ? `background-image: url('${bgSrc}')` : `background: ${bgFallback}`;
 
                 const fullTags   = project.tags.map(t => `<span class="tag">${t}</span>`).join('');
+                const headerTags = project.tags.slice(0, 3).map(t => `<span class="strip-header-tag">${t}</span>`).join('');
 
                 const metaItems = [
                     project.developmentTime && `<div class="strip-meta-item"><span class="strip-meta-label">Dev Time</span><span class="strip-meta-value">${project.developmentTime}</span></div>`,
@@ -975,6 +1008,7 @@ const projects = projectsData.projects;
                         <div class="strip-title-group">
                             <span class="strip-title">${project.title}</span>
                         </div>
+                        ${headerTags ? `<div class="strip-header-tags">${headerTags}</div>` : ''}
                         <span class="strip-hint">&#8597;</span>
                     </div>
                     <div class="strip-overview-row">
