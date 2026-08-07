@@ -186,13 +186,29 @@ const contactData = (siteData as any).contact;
         .node-discord   { top: 58.7%; left: 12%;   animation: node-appear 0.35s ease-out 0.85s forwards; }
         .node-github    { top: 25.7%; left: 19.5%; animation: node-appear 0.35s ease-out 0.95s forwards; }
 
-        /* ===== MOBILE ===== */
-        @media (max-width: 600px) {
+        /* ===== MOBILE =====
+           .mobile-list is a <nav> element, which picks up global.css's
+           `nav { position: fixed; top: 0; height: var(--nav-h); z-index: 1000;
+           background: ...; backdrop-filter: ... }` (that rule targets the
+           site nav bar, but tag selectors don't care which <nav> they're
+           attached to). Since this rule declares none of those properties
+           itself, they need to be explicitly neutralized here or the list
+           renders fixed/clipped to 60px over the top of the page instead of
+           flowing normally — which is what was pushing it over the header
+           and collapsing the footer up against it (no in-flow content left
+           to push the footer down). */
+        @media (max-width: 768px) {
             .contact-page { height: auto; overflow: visible; padding-bottom: 2rem; }
             .wheel-container { display: none; }
-            .mobile-list { display: flex; flex-direction: column; gap: 0.65rem; width: 100%; max-width: 400px; padding: 0 1.5rem; }
+            .mobile-list {
+                display: flex; flex-direction: column; align-items: stretch;
+                gap: 0.65rem; width: 100%; max-width: 400px; padding: 0 1.5rem;
+                position: static; top: auto; height: auto; z-index: auto;
+                background: none; backdrop-filter: none; -webkit-backdrop-filter: none;
+                border-bottom: none;
+            }
         }
-        @media (min-width: 601px) {
+        @media (min-width: 769px) {
             .mobile-list { display: none; }
         }
 
