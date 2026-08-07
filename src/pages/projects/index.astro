@@ -428,7 +428,13 @@ const projects = projectsData.projects;
             /* ── Detail view — one project open ── */
             body.mobile-project-open .section-strip:not(.mobile-open) { display: none; }
 
-            .section-strip.mobile-open { cursor: default; border-bottom: 3px solid var(--border); }
+            /* Base .section-strip/.strip-content both have overflow:hidden
+               for the desktop accordion, where it's needed to clip a strip
+               to its scroll-computed height. On mobile there's no such
+               height budget — content should grow the page and let it
+               scroll normally, not get clipped to whatever min-height
+               happened to be guessed. */
+            .section-strip.mobile-open { cursor: default; border-bottom: 3px solid var(--border); overflow: visible; }
             .section-strip.mobile-open .strip-overview-row { display: none !important; }
 
             .section-strip.mobile-open .strip-thumbnail {
@@ -443,6 +449,7 @@ const projects = projectsData.projects;
             }
             .section-strip.mobile-open .strip-content {
                 display: flex;
+                overflow: visible;
                 margin-left: 0;
                 min-height: calc(100svh - 300px);
                 pointer-events: auto !important;

@@ -16,13 +16,28 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+/* Sticky footer: body is a full-viewport-tall column so the footer sits at
+   the bottom even when a page's content is shorter than the viewport
+   (rather than floating wherever the content happens to end), while still
+   scrolling normally underneath it when content is taller. */
 body {
     font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
     line-height: 1.6;
     color: var(--text-primary);
     background: var(--bg);
     overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 100svh;
 }
+
+.page-body {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+footer { flex-shrink: 0; }
 
 /* ===== NAV ===== */
 nav {
