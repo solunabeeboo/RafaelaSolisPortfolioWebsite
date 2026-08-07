@@ -432,8 +432,8 @@ const about = (siteData as any).about;
                 onerror="this.style.display='none'"
             >
             <span class="headshot-hint">Click to change photo</span>
-            <p class="left-name">Rafaela Solis</p>
-            <p class="left-title">Game Developer &amp; Designer</p>
+            <p class="left-name" data-editable="about.name" spellcheck="false">{about.name}</p>
+            <p class="left-title" data-editable="about.title" spellcheck="false">{about.title}</p>
             <div class="left-divider"></div>
             <div class="left-stats">
                 {about.stats.map((s: { label: string; value: string }, i: number) => (
