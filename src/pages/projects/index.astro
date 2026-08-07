@@ -449,6 +449,13 @@ const projects = projectsData.projects;
             }
             .section-strip.mobile-open .strip-content {
                 display: flex;
+                /* Desktop's flex-basis:0 stays in the cascade otherwise —
+                   with overflow:visible that doesn't clip content, it just
+                   lets it paint past this box without growing it, which is
+                   what was pushing the footer up into the middle of the
+                   text below. Force it to size to its own content instead,
+                   same as the header/overview-row overrides above. */
+                flex: 0 0 auto !important;
                 overflow: visible;
                 margin-left: 0;
                 min-height: calc(100svh - 300px);

@@ -20,12 +20,24 @@
    the bottom even when a page's content is shorter than the viewport
    (rather than floating wherever the content happens to end), while still
    scrolling normally underneath it when content is taller. */
+/* overflow-x:hidden on body (its previous home) computes overflow-y to
+   "auto" no matter what overflow-y is explicitly set to — CSS forces
+   whichever axis is "visible" to become "auto" the moment the other axis
+   isn't visible too, and there's no way to opt out short of matching them.
+   That's harmless when body's height is plain auto (an auto-height auto
+   overflow container just grows to fit its content, so nothing visibly
+   clips) — but body now has min-height, giving it a real size to clip
+   *to*, which turned it into its own inner scroll container instead of
+   letting the page scroll normally. html doesn't have this problem: it's
+   the root element, so its scrolling directly *is* the page's scrolling —
+   there's no separate box for content to get clipped inside. */
+html { overflow-x: hidden; }
+
 body {
     font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
     line-height: 1.6;
     color: var(--text-primary);
     background: var(--bg);
-    overflow-x: hidden;
     display: flex;
     flex-direction: column;
     min-height: 100svh;
