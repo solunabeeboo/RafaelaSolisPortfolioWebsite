@@ -6,7 +6,15 @@ const projects = projectsData.projects;
 ---
 <Layout title="Projects - Rafaela Solis">
     <style is:global>
-        :root { --compact-h: 36px; --compact-h-max: 48px; }
+        :root {
+            --compact-h: 36px; --compact-h-max: 48px;
+            /* Lower-lip divider notch: left third drops to half the lip's
+               height, then rises via a 45deg run back to the normal line —
+               run == drop keeps the angle exactly 45deg regardless of the
+               strip's actual (fluid) width. */
+            --lip-drop: calc(var(--compact-h) / 2);
+            --lip-line-thick: 1.5px;
+        }
 
         .sections-stage {
             position: sticky;
@@ -133,7 +141,6 @@ const projects = projectsData.projects;
             position: relative;
             z-index: 2;
             background: var(--bg);
-            border-bottom: 1px solid rgba(26, 26, 26, 0.1);
             transition: background 0.3s, backdrop-filter 0.3s;
         }
 
@@ -152,7 +159,6 @@ const projects = projectsData.projects;
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(26, 26, 26, 0.15);
         }
 
         .strip-title {
@@ -221,7 +227,18 @@ const projects = projectsData.projects;
 
         .section-strip.strip-active .strip-header-tags { opacity: 0; }
 
-        /* ===== OVERVIEW ROW — bottom bun, mirrors the header (see note above) ===== */
+        /* ===== OVERVIEW ROW — bottom bun, mirrors the header (see note above) =====
+           Own top-left corner is cut away (not just topped with a matching
+           dip) so the ever-present .strip-thumbnail underneath shows through
+           as a real recess — the socket the header's tab (which actually
+           does add material, via .strip-notch-header) sits into. Without
+           this cut, the row's own opaque fill would paint straight over that
+           territory and no amount of stuff layered on top of it could ever
+           reveal anything underneath.
+           Permanent, same as the header's tab — open or resting, the recess
+           stays cut. It's meant to read as a real socket the tab sits into,
+           not a resting-only decoration, so it can't disappear the instant
+           a strip grows. */
         .strip-overview-row {
             flex: 1 1 var(--compact-h);
             max-height: var(--compact-h-max);
@@ -232,8 +249,15 @@ const projects = projectsData.projects;
             position: relative;
             z-index: 2;
             background: var(--bg);
-            border-top: 1px solid rgba(26, 26, 26, 0.1);
             overflow: hidden;
+            clip-path: polygon(
+                0 var(--lip-drop),
+                0 100%,
+                100% 100%,
+                100% 0,
+                calc(33.33% + var(--lip-drop)) 0,
+                33.33% var(--lip-drop)
+            );
             transition: background 0.3s, backdrop-filter 0.3s;
         }
 
@@ -241,7 +265,121 @@ const projects = projectsData.projects;
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border-top: 1px solid rgba(26, 26, 26, 0.15);
+        }
+
+        /* ===== BUN NOTCH — makes each bun's own silhouette follow the
+           shared divider shape instead of stopping in a flat rectangle at
+           the seam =====
+           Solid-filled wedge (left third dips a full var(--lip-drop), 45deg
+           rise, zero-height for the rest) using the bun's own background —
+           toggling with .strip-active exactly like the real header/
+           overview-row — so it reads as that bun's own edge bulging past
+           the seam, not a decal drawn on top of a flat one. Always anchored
+           top:0 of its own box and dipping DOWNWARD from there — never
+           mirrored between the two seams — so when the strip is closed
+           (content height 0) the two seams land on the same y and the two
+           wedges coincide as one edge.
+           A plain child of .section-strip (not of the header/content/
+           overview-row themselves) so it isn't clipped by any of their own
+           overflow:hidden when it dips past a seam into the neighboring
+           bun's territory. Positioned via JS every frame (top = headerH, or
+           headerH+contentH) since the bun heights are computed there, not
+           in CSS. */
+        .strip-notch {
+            position: absolute;
+            left: 0; right: 0;
+            height: var(--lip-drop);
+            background: var(--bg);
+            border-bottom: var(--lip-line-thick) solid rgba(26, 26, 26, 0.1);
+            clip-path: polygon(
+                0 0,
+                100% 0,
+                calc(33.33% + var(--lip-drop)) 0,
+                33.33% var(--lip-drop),
+                0 var(--lip-drop)
+            );
+            pointer-events: none;
+            z-index: 3;
+            transition: background 0.3s, backdrop-filter 0.3s, border-color 0.3s;
+        }
+
+        .section-strip.strip-active .strip-notch {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom-color: rgba(26, 26, 26, 0.15);
+        }
+
+        /* Lip notch: at rest (contentH ~0) it fully coincides with
+           notch-header — the tab isn't just next to the socket, it's
+           plugged into it, so there's nothing to see and this must render
+           IDENTICAL to notch-header (falls through to the shared
+           .strip-notch rules below, same opaque fill, same 0.14 wash) not
+           its own competing translucent layer stacked on top of it. Turning
+           it "cutout" (transparent, stronger wash, its own border) only
+           makes sense once .strip-open — content has actually grown and the
+           two notches have physically separated, so there's a real gap
+           behind the lip for the cutout to reveal. z-index stays above
+           notch-header unconditionally: harmless at rest since both look
+           identical there, and needed while open so the (still positionally
+           coincident-adjacent) elements never accidentally swap which one
+           paints on top. */
+        .strip-notch-lip {
+            z-index: 4;
+        }
+
+        .section-strip.strip-open .strip-notch-lip,
+        .section-strip.strip-active.strip-open .strip-notch-lip {
+            background: transparent;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+        }
+
+        /* The notch's diagonal run isn't a rectangle edge, so plain `border`
+           can't trace it — a separate hairline rotated to match the exact
+           45deg/lip-drop geometry of the clip-path polygon above, sitting on
+           the same seam so it reads as that shape's own outline rather than
+           a decal. Anchored at the polygon's own corner (33.33%, 0) so it
+           tracks the notch's fluid width automatically. */
+        .strip-notch::after {
+            content: '';
+            position: absolute;
+            left: 33.33%; top: 0;
+            width: calc(var(--lip-drop) * 1.41421356);
+            height: var(--lip-line-thick);
+            background: rgba(26, 26, 26, 0.1);
+            transform-origin: left center;
+            transform: rotate(45deg);
+            pointer-events: none;
+            transition: background 0.3s;
+        }
+
+        .section-strip.strip-active .strip-notch::after {
+            background: rgba(26, 26, 26, 0.15);
+        }
+
+        /* The seam's flush run (everywhere right of the wedge, where the bun
+           truly does end) — a plain child rather than a 3rd pseudo-element
+           (::before is already the wash), kept off the notch's own box so
+           the wedge itself stays seamless with the bun above/below it: no
+           line should appear where the bun's own material is simply
+           continuing down through the dip, only where it actually ends. */
+        .strip-notch-flush {
+            position: absolute;
+            left: calc(33.33% + var(--lip-drop));
+            right: 0; top: 0;
+            height: var(--lip-line-thick);
+            background: rgba(26, 26, 26, 0.1);
+            pointer-events: none;
+            transition: background 0.3s;
+        }
+
+        .section-strip.strip-active .strip-notch-flush {
+            background: rgba(26, 26, 26, 0.15);
+        }
+
+        @media (max-width: 768px) {
+            .strip-notch { display: none; }
         }
 
         /* ===== FOLDER TAB — bump on the strip's top edge, staggered per row =====
@@ -294,7 +432,8 @@ const projects = projectsData.projects;
            Start opacity low — this is meant to be a hint, not a photo. */
         .strip-header::before,
         .strip-overview-row::before,
-        .strip-tab::before {
+        .strip-tab::before,
+        .strip-notch::before {
             content: '';
             position: absolute;
             inset: -16px;
@@ -305,6 +444,21 @@ const projects = projectsData.projects;
             filter: blur(18px);
             opacity: 0.14;
             pointer-events: none;
+        }
+
+        /* Bottom lip carries more of the project photo's color than the
+           header/tab — it's the larger, carved-into shape now, so it reads
+           better with a stronger wash than the thin top bun gets. */
+        .strip-overview-row::before {
+            opacity: 0.32;
+        }
+
+        /* notch-lip's own wash only boosts to that same 0.32 once
+           .strip-open — at rest it must fall through to the shared 0.14
+           (.strip-notch::before above) to stay identical to notch-header,
+           for the same coincidence reason as the background rule above. */
+        .section-strip.strip-open .strip-notch-lip::before {
+            opacity: 0.32;
         }
 
         /* Flat, non-blurred color (not a backdrop-filter blur like the header
@@ -350,7 +504,7 @@ const projects = projectsData.projects;
             font-size: 1.0625rem; color: var(--text-secondary);
             white-space: nowrap;
             pointer-events: none;
-            z-index: 3; /* above .strip-hero-image so long text overlays it instead of hiding behind it */
+            z-index: 4; /* above .strip-hero-image and .strip-notch */
             transition: opacity 0.15s ease-out;
         }
 
@@ -366,6 +520,7 @@ const projects = projectsData.projects;
             overflow: hidden;
             font-size: 0.92rem; color: var(--text-secondary);
             pointer-events: none;
+            z-index: 4; /* above .strip-notch */
             transition: opacity 0.15s ease-out;
         }
         .strip-short-desc > span {
@@ -1294,6 +1449,7 @@ const projects = projectsData.projects;
                         ${headerTags ? `<div class="strip-header-tags">${headerTags}</div>` : ''}
                         <span class="strip-hint">&#8597;</span>
                     </div>
+                    <div class="strip-notch strip-notch-header"><span class="strip-notch-flush"></span></div>
                     <div class="strip-content">
                         <div class="strip-info">
                             <span class="strip-label">About</span>
@@ -1308,6 +1464,7 @@ const projects = projectsData.projects;
                             </div>
                         </div>
                     </div>
+                    <div class="strip-notch strip-notch-lip"><span class="strip-notch-flush"></span></div>
                     <div class="strip-overview-row">
                         <span class="strip-short-desc"><span>${project.shortDescription || ''}</span></span>
                     </div>
@@ -1367,6 +1524,8 @@ const projects = projectsData.projects;
                     content:     strip.querySelector('.strip-content'),
                     shortDesc:   strip.querySelector('.strip-short-desc'),
                     lipSubtitle: strip.querySelector('.strip-lip-subtitle'),
+                    notchHeader: strip.querySelector('.strip-notch-header'),
+                    notchLip:    strip.querySelector('.strip-notch-lip'),
                 };
 
                 stage.appendChild(strip);
@@ -1515,6 +1674,21 @@ const projects = projectsData.projects;
                         bun.footer.style.flex     = `0 0 ${footerH}px`;
                         bun.footer.style.maxHeight = footerCap + 'px'; // overrides the CSS 48px cap
                         bun.content.style.flex    = `0 0 ${contentH}px`;
+
+                        // Gate for notch-lip's distinct "cutout" treatment
+                        // (.strip-open, checked in CSS): below ~1px of real
+                        // content, notch-header and notch-lip fully coincide
+                        // — the tab is plugged straight into the socket, so
+                        // the lip must render identical to the header, not
+                        // its own competing translucent layer on top of it.
+                        s.classList.toggle('strip-open', contentH >= 1);
+
+                        // Both notches use the same shape and always dip
+                        // downward from their own seam (never mirrored) —
+                        // when contentH is 0 the two seams land on the same
+                        // y and the notches sit exactly on top of each other.
+                        if (bun.notchHeader) bun.notchHeader.style.top = headerH + 'px';
+                        if (bun.notchLip)    bun.notchLip.style.top    = (headerH + contentH) + 'px';
 
                         // Squished strips (many of them, all at once, while a
                         // neighbor is open) don't have room to show the subtitle
