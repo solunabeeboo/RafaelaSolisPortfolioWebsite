@@ -110,6 +110,9 @@ const projects = projectsData.projects;
             letter-spacing: 0.03em;
             line-height: 1;
             text-shadow: 0 2px 16px rgba(0,0,0,0.5);
+            /* Lifted up so the bottom bun (overview-row lip), which sits above this
+               overlay at full strip height, doesn't clip into it. */
+            margin-bottom: 1.5em;
         }
 
         /* ===== STRIP HEADER — top bun =====
@@ -153,10 +156,29 @@ const projects = projectsData.projects;
         }
 
         .strip-title {
+            display: none; /* EXPERIMENT: title lives in .strip-tab on desktop now */
             font-size: 2rem; font-weight: 700; color: var(--text-primary);
             text-transform: uppercase; letter-spacing: 0.04em;
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
             line-height: 1;
+        }
+
+        /* EXPERIMENT: fills the header's title spot instead of text — roughly
+           a third of the viewport wide, full header height, with an inset
+           shadow on all sides for a recessed/sunken look. */
+        .strip-hero-image {
+            display: none; /* temporarily disabled */
+            width: 33vw;
+            max-width: 420px;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-color: var(--accent-sage);
+            box-shadow:
+                inset 0 4px 10px rgba(0, 0, 0, 0.45),
+                inset 0 -3px 8px rgba(0, 0, 0, 0.3),
+                inset 4px 0 8px rgba(0, 0, 0, 0.25),
+                inset -4px 0 8px rgba(0, 0, 0, 0.25);
         }
 
         .strip-hint {
@@ -185,14 +207,16 @@ const projects = projectsData.projects;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.09em;
-            background: var(--border);
+            background: var(--bg);
             border: 1.5px solid var(--border);
             padding: 0 0.5rem;
-            color: var(--bg);
+            color: var(--border);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.3), inset 0 -1px 2px rgba(0,0,0,0.15);
             white-space: nowrap;
             flex-shrink: 0;
             display: flex;
             align-items: center;
+            justify-content: center;
         }
 
         .section-strip.strip-active .strip-header-tags { opacity: 0; }
@@ -223,45 +247,84 @@ const projects = projectsData.projects;
         /* ===== FOLDER TAB — bump on the strip's top edge, staggered per row =====
            Positioned by JS every frame (top tracks each strip's live cumulative
            offset, left cycles through TAB_STAGGER). Same fill/border as the card
-           so it reads as a flap of the strip itself, not a separate chip. */
+           so it reads as a flap of the strip itself, not a separate chip.
+           EXPERIMENT: holds the project title instead of the photo cutout —
+           width hugs the text and grows rightward to fit it in full; capped
+           at 90vw only as a safety net against overflowing the viewport. */
         .strip-tab {
             position: fixed;
             top: 0;
-            width: 150px;
+            width: fit-content;
+            min-width: 90px;
+            max-width: 90vw;
             height: 38px;
             background: var(--bg);
             border: 2px solid var(--border);
             border-bottom: none;
             border-radius: 10px 10px 0 0;
             z-index: 1050; /* above nav (1000), below play-overlay (1100) / lightbox (1200) */
-            pointer-events: none;
+            pointer-events: auto;
+            cursor: pointer;
             transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 0 14px;
         }
 
-        .strip-tab.tab-active {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-
-        /* The project photo, cropped to the stacked-photo cutout mask, nested
-           inside the tab with a gutter on the left/right/top edges — height is
-           set by aspect-ratio (matching cutout.png's own ratio) rather than a
-           fixed px value, so it naturally spills past the tab's open bottom
-           edge instead of being clipped to it. */
-        .strip-tab-photo {
+        /* Project-image wash — same --wash-img (set per-strip and mirrored onto
+           its tab from JS) blurred and washed out behind header, footer bun,
+           and tab alike, so the whole collapsed row (tab included) reads as
+           one tinted card instead of the tab looking like a separate flat
+           chip. Sits behind each element's own text via normal paint order
+           (::before content paints before its element's other children), on
+           top of the plain --bg color underneath. Overscanned inset + the
+           parent's own overflow:hidden keeps the blur from bleeding past the
+           card's edges.
+           background-attachment: fixed is the trick that makes the tab and
+           the lip read as ONE irregular shape rather than two separate
+           windows onto the same photo: with fixed attachment, size/position
+           are computed against the viewport, not each box — so the header
+           (in the sticky stage, viewport-pinned once stuck) and the tab
+           (position: fixed, always viewport-pinned) are really just two
+           differently-shaped holes cut into the exact same static image.
+           Wherever they touch, the picture behind them lines up seamlessly,
+           because it was never two pictures to begin with.
+           Start opacity low — this is meant to be a hint, not a photo. */
+        .strip-header::before,
+        .strip-overview-row::before,
+        .strip-tab::before {
+            content: '';
             position: absolute;
-            top: 3px; left: 6px; right: 6px;
-            aspect-ratio: 744 / 300;
+            inset: -16px;
+            background-image: var(--wash-img);
             background-size: cover;
-            background-position: center center;
-            background-color: var(--accent-sage);
-            -webkit-mask-image: url('/projects/cutout.png');
-            mask-image: url('/projects/cutout.png');
-            -webkit-mask-size: 100% 100%;
-            mask-size: 100% 100%;
-            -webkit-mask-repeat: no-repeat;
-            mask-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+            filter: blur(18px);
+            opacity: 0.14;
+            pointer-events: none;
+        }
+
+        /* Flat, non-blurred color (not a backdrop-filter blur like the header
+           uses) — the tab sits over whatever happens to be behind it (nav bar,
+           a neighboring row), so a blur there would sample different content
+           than the header's own blur and drift out of visual sync depending on
+           position. A solid near-opaque match stays consistent everywhere. */
+        .strip-tab.tab-active {
+            background: rgba(255, 255, 255, 0.97);
+        }
+
+        .strip-tab-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            line-height: 1;
+            white-space: nowrap;
+            overflow: hidden;
         }
 
         @media (max-width: 768px) {
@@ -270,10 +333,36 @@ const projects = projectsData.projects;
 
         .strip-sep { width: 1px; height: 12px; background: rgba(26,26,26,0.2); flex-shrink: 0; }
 
+        /* Subtitle moved up to the header bun's own top edge — the "lip" the
+           folder tab pokes up from — left-aligned to the very first tab's
+           stagger position rather than each strip's own cycling offset, so
+           subtitles line up in one consistent column instead of jumping
+           around with the tab stagger. The 34px offset (not 18px) accounts
+           for the tab's own border + padding, landing under the first
+           letter of the tab title itself rather than the tab box edge.
+           Superseded by .strip-short-desc below on mobile, where there's no
+           tab/lip and the old bottom placement is kept as part of the
+           tappable bar. */
+        .strip-lip-subtitle {
+            position: absolute;
+            left: 34px; top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.0625rem; color: var(--text-secondary);
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 3; /* above .strip-hero-image so long text overlays it instead of hiding behind it */
+            transition: opacity 0.15s ease-out;
+        }
+
+        @media (max-width: 768px) {
+            .strip-lip-subtitle { display: none; }
+        }
+
         .strip-short-desc {
+            display: none;
             position: absolute;
             left: 0.85rem; right: 0.85rem; top: 0; bottom: 0;
-            display: flex; align-items: center; justify-content: center;
+            align-items: center; justify-content: center;
             overflow: hidden;
             font-size: 0.92rem; color: var(--text-secondary);
             pointer-events: none;
@@ -460,7 +549,8 @@ const projects = projectsData.projects;
                 text-align: left;
                 width: 100%;
             }
-            .strip-title { font-size: 1.3rem; white-space: normal; }
+            .strip-title { display: block; font-size: 1.3rem; white-space: normal; }
+            .strip-hero-image { display: none; } /* mobile keeps the plain text title */
             .strip-hint { display: none; } /* "scroll to expand" hint doesn't apply to a tap UI */
             .strip-header-tags { max-width: 100%; }
 
@@ -1093,6 +1183,12 @@ const projects = projectsData.projects;
         const BUN_MAX   = 48; // header/footer bun cap in px — must match --compact-h-max
         const SUBTITLE_FADE_HI = BUN_MAX * 0.75; // bun height at/above which the subtitle is fully shown
         const SUBTITLE_FADE_LO = BUN_MAX * 0.35; // bun height at/below which the subtitle is fully hidden
+        function subtitleFadeOpacity(bunH) {
+            const range = SUBTITLE_FADE_HI - SUBTITLE_FADE_LO;
+            return range > 0
+                ? Math.max(0, Math.min(1, (bunH - SUBTITLE_FADE_LO) / range))
+                : (bunH >= SUBTITLE_FADE_HI ? 1 : 0);
+        }
         const BUF_VH    = 0.25;
         const SEC_VH    = 0.80;
         const HERO_HOLD = 0.25;
@@ -1145,7 +1241,8 @@ const projects = projectsData.projects;
 
                 const bgSrc      = project.image || (project.screenshots && project.screenshots[0]) || '';
                 const bgFallback = project.gradient || 'linear-gradient(135deg, #2d5016, #6b8f47)';
-                const bgStyle    = bgSrc ? `background-image: url('${bgSrc}')` : `background: ${bgFallback}`;
+                const washImg    = bgSrc ? `url('${bgSrc}')` : bgFallback;
+                strip.style.setProperty('--wash-img', washImg);
 
                 const fullTags   = project.tags.map(t => `<span class="tag">${t}</span>`).join('');
                 const headerTags = project.tags.slice(0, 3).map(t => `<span class="strip-header-tag">${t}</span>`).join('');
@@ -1189,8 +1286,10 @@ const projects = projectsData.projects;
                         ` : ''}
                     </div>
                     <div class="strip-header">
+                        <span class="strip-lip-subtitle">${project.shortDescription || ''}</span>
                         <div class="strip-title-group">
                             <span class="strip-title">${project.title}</span>
+                            <div class="strip-hero-image" style="${bgSrc ? `background-image: url('${bgSrc}')` : ''}"></div>
                         </div>
                         ${headerTags ? `<div class="strip-header-tags">${headerTags}</div>` : ''}
                         <span class="strip-hint">&#8597;</span>
@@ -1242,7 +1341,7 @@ const projects = projectsData.projects;
                     thumb.querySelector('.gallery-btn-next').addEventListener('click', e => { e.stopPropagation(); goTo(cur + 1); });
                 }
 
-                strip.addEventListener('click', e => {
+                const jumpOrOpen = e => {
                     if (isMobile) {
                         if (mobileOpenIdx === i || e.target.closest('.strip-edit-btn, .strip-reorder-btns')) return;
                         openMobileProject(i);
@@ -1251,7 +1350,8 @@ const projects = projectsData.projects;
                     if (strip.classList.contains('strip-active')) return;
                     const slotSize = 1 + HERO_HOLD;
                     window.scrollTo({ top: BUF_VH * window.innerHeight + i * slotSize * SEC_VH * window.innerHeight, behavior: 'smooth' });
-                });
+                };
+                strip.addEventListener('click', jumpOrOpen);
 
                 const playBtn = strip.querySelector('.strip-play-btn');
                 if (playBtn) {
@@ -1262,10 +1362,11 @@ const projects = projectsData.projects;
                 }
 
                 strip._bun = {
-                    header:    strip.querySelector('.strip-header'),
-                    footer:    strip.querySelector('.strip-overview-row'),
-                    content:   strip.querySelector('.strip-content'),
-                    shortDesc: strip.querySelector('.strip-short-desc'),
+                    header:      strip.querySelector('.strip-header'),
+                    footer:      strip.querySelector('.strip-overview-row'),
+                    content:     strip.querySelector('.strip-content'),
+                    shortDesc:   strip.querySelector('.strip-short-desc'),
+                    lipSubtitle: strip.querySelector('.strip-lip-subtitle'),
                 };
 
                 stage.appendChild(strip);
@@ -1273,11 +1374,13 @@ const projects = projectsData.projects;
                 const tab = document.createElement('div');
                 tab.className = 'strip-tab';
                 tab.style.left = TAB_STAGGER[i % TAB_STAGGER.length] + 'px';
+                tab.style.setProperty('--wash-img', washImg);
+                tab.addEventListener('click', jumpOrOpen);
 
-                const tabPhoto = document.createElement('div');
-                tabPhoto.className = 'strip-tab-photo';
-                if (project.image) tabPhoto.style.backgroundImage = `url('${project.image}')`;
-                tab.appendChild(tabPhoto);
+                const tabTitle = document.createElement('span');
+                tabTitle.className = 'strip-tab-title';
+                tabTitle.textContent = project.title;
+                tab.appendChild(tabTitle);
 
                 document.body.appendChild(tab);
             });
@@ -1370,6 +1473,15 @@ const projects = projectsData.projects;
                 const tabs = document.querySelectorAll('.strip-tab');
                 const stageTop = stage.getBoundingClientRect().top;
                 let cumTop = 0;
+                // Whatever height the CLOSED strips share this frame (equalH in
+                // the overview, hRest mid-buffer, otherH once the accordion is
+                // running — the hero/transitioning strip is always >= this).
+                // Tall viewports inflate that shared height past BUN_MAX*2 —
+                // without this, the excess would spill into the content patty
+                // and pull the header/footer buns apart on a strip that's just
+                // sitting closed in the list.
+                const restBaseline = Math.min(...heights);
+                const footerCap = Math.max(BUN_MAX, restBaseline);
 
                 strips.forEach((s, i) => {
                     const h = Math.max(0, heights[i]);
@@ -1387,32 +1499,31 @@ const projects = projectsData.projects;
                     s.style.height = h + 'px';
                     s.classList.toggle('strip-active', i === activeIdx);
 
-                    // Hamburger-bun split: the header/footer buns claim up to
-                    // BUN_MAX px each and never more — any height beyond their
-                    // combined cap goes entirely to the content "patty" in the
-                    // middle, so the buns hold still while it unfurls. Below the
-                    // cap (e.g. the roomy at-rest list) they share the strip
-                    // 50/50 and content stays at exactly 0 — no premature peek.
+                    // Hamburger-bun split: the header bun claims up to BUN_MAX px
+                    // and never more. The footer bun is the one that grows to
+                    // cover the rest of the resting-state height (up to
+                    // footerCap, which tracks otherH so a tall viewport's roomy
+                    // at-rest row is always fully absorbed by the two buns) —
+                    // only genuine growth beyond that (the hero/expanding strip)
+                    // pushes past footerCap and reaches the content "patty".
                     const bun = s._bun;
                     if (bun) {
-                        const bunH = Math.max(0, Math.min(BUN_MAX, h / 2));
-                        const contentH = Math.max(0, h - bunH * 2);
-                        bun.header.style.flex  = `0 0 ${bunH}px`;
-                        bun.footer.style.flex  = `0 0 ${bunH}px`;
-                        bun.content.style.flex = `0 0 ${contentH}px`;
+                        const headerH = Math.max(0, Math.min(BUN_MAX, h / 2));
+                        const footerH = Math.max(0, Math.min(footerCap, h - headerH));
+                        const contentH = Math.max(0, h - headerH - footerH);
+                        bun.header.style.flex     = `0 0 ${headerH}px`;
+                        bun.footer.style.flex     = `0 0 ${footerH}px`;
+                        bun.footer.style.maxHeight = footerCap + 'px'; // overrides the CSS 48px cap
+                        bun.content.style.flex    = `0 0 ${contentH}px`;
 
                         // Squished strips (many of them, all at once, while a
                         // neighbor is open) don't have room to show the subtitle
-                        // without looking cluttered — fade it out as the bun
-                        // shrinks and back in once there's room again, in sync
-                        // with the same scroll-driven value that sizes the bun.
-                        if (bun.shortDesc) {
-                            const range = SUBTITLE_FADE_HI - SUBTITLE_FADE_LO;
-                            const subOpacity = range > 0
-                                ? Math.max(0, Math.min(1, (bunH - SUBTITLE_FADE_LO) / range))
-                                : (bunH >= SUBTITLE_FADE_HI ? 1 : 0);
-                            bun.shortDesc.style.opacity = subOpacity;
-                        }
+                        // without looking cluttered — fade it out as the footer
+                        // bun (which holds the subtitle) shrinks and back in once
+                        // there's room again, in sync with the same scroll-driven
+                        // value that sizes the bun.
+                        if (bun.shortDesc)   bun.shortDesc.style.opacity   = subtitleFadeOpacity(footerH);
+                        if (bun.lipSubtitle) bun.lipSubtitle.style.opacity = subtitleFadeOpacity(headerH);
                     }
                 });
 
