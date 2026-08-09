@@ -378,6 +378,35 @@ const projects = projectsData.projects;
             background: rgba(26, 26, 26, 0.15);
         }
 
+        /* At rest, notch-lip coincides exactly with notch-header, and
+           notch-header already draws all of border-bottom + ::after
+           (diagonal) + .strip-notch-flush at that same position — so
+           without this, the lip was drawing its own identical copy of all
+           three stacked directly on top of the header's. Two coincident
+           rgba(26,26,26,0.1) layers composite to ~0.19 alpha, not 0.1 — a
+           border/diagonal/flush line that reads darker and more prominent
+           than the same line anywhere else on the page for no visible
+           reason. Silenced here (source order after every rule above wins
+           the specificity ties) and only let through once .strip-open,
+           when the two notches have actually separated and each genuinely
+           needs its own outline. */
+        .section-strip:not(.strip-open) .strip-notch-lip {
+            /* border-COLOR only, never the border-bottom shorthand: style
+               ("solid" -> "none") can't be transitioned, so it would pop
+               on/off in one frame instead of fading — right around the
+               contentH crossing this class flips on, i.e. exactly while a
+               strip is opening/closing, which is when a hard pop reads as a
+               flickering stray line. border-bottom-color fades smoothly
+               through the existing `transition: border-color` above. */
+            border-bottom-color: transparent;
+        }
+        .section-strip:not(.strip-open) .strip-notch-lip::after {
+            background: transparent;
+        }
+        .section-strip:not(.strip-open) .strip-notch-lip .strip-notch-flush {
+            background: transparent;
+        }
+
         @media (max-width: 768px) {
             .strip-notch { display: none; }
         }
@@ -1681,7 +1710,16 @@ const projects = projectsData.projects;
                         // — the tab is plugged straight into the socket, so
                         // the lip must render identical to the header, not
                         // its own competing translucent layer on top of it.
-                        s.classList.toggle('strip-open', contentH >= 1);
+                        // Threshold is BUN_MAX/2, not ~0: strips near the
+                        // scrolled area can pick up a few px of contentH just
+                        // from idle-slack redistribution / float rounding
+                        // while still visually at rest (header/footer bun
+                        // growth absorbs slack well before real content
+                        // does, see the comment above headerH/footerH) — a
+                        // low threshold flipped .strip-open on for those,
+                        // landing the lip's own border a couple px from the
+                        // header's and reading as a stray duplicate line.
+                        s.classList.toggle('strip-open', contentH >= BUN_MAX / 2);
 
                         // Both notches use the same shape and always dip
                         // downward from their own seam (never mirrored) —
