@@ -198,7 +198,20 @@ const contactData = (siteData as any).contact;
            and collapsing the footer up against it (no in-flow content left
            to push the footer down). */
         @media (max-width: 768px) {
-            .contact-page { height: auto; overflow: visible; padding-bottom: 2rem; }
+            /* .page-body (global.css) is flex:1 0 auto in a column body so the
+               footer sticks to the bottom on short pages, but .contact-page
+               itself only ever sizes to its own content — it doesn't stretch
+               to fill that leftover space, so it sat at the top of it with
+               the gap landing between the link list and the footer. flex:1
+               claims that space and justify-content centers the header +
+               link list inside it. */
+            .contact-page {
+                height: auto;
+                overflow: visible;
+                padding-bottom: 2rem;
+                flex: 1;
+                justify-content: center;
+            }
             .wheel-container { display: none; }
             .mobile-list {
                 display: flex; flex-direction: column; align-items: stretch;
