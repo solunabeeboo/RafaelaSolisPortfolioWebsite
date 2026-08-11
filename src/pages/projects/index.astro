@@ -1425,7 +1425,16 @@ const projects = projectsData.projects;
 
                 const bgSrc      = project.image || (project.screenshots && project.screenshots[0]) || '';
                 const bgFallback = project.gradient || 'linear-gradient(135deg, #2d5016, #6b8f47)';
-                const washImg    = bgSrc ? `url('${bgSrc}')` : bgFallback;
+                // Resolved to an absolute URL up front: --wash-img is consumed by
+                // `background-image: var(--wash-img)` in this component's compiled
+                // <style> block, and browsers resolve a relative url() inside a
+                // custom property against the stylesheet that declares the var()
+                // reference — not the document. In dev that stylesheet is served
+                // virtually off the page's own URL so a relative path happens to
+                // work, but in the production build it's a real file under
+                // /_astro/, so the same relative path 404s there and the wash
+                // silently renders as nothing.
+                const washImg    = bgSrc ? `url('${new URL(bgSrc, document.baseURI).href}')` : bgFallback;
                 strip.style.setProperty('--wash-img', washImg);
 
                 const fullTags   = project.tags.map(t => `<span class="tag">${t}</span>`).join('');
