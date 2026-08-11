@@ -711,6 +711,15 @@ const projects = projectsData.projects;
                 min-height: 0;
                 cursor: pointer;
                 border-bottom: 2px solid var(--border);
+                /* Desktop's z-index: 1060 (see base rule) only stays safely
+                   below the nav/burger/mobile-menu stack (1000/1001) because
+                   .sections-stage clips everything to its own box there. That
+                   clipping is turned off for mobile's auto-height list just
+                   above (overflow: visible), so the same 1060 would otherwise
+                   paint every strip over the burger icon and the open
+                   mobile-menu overlay the instant they occupy the same screen
+                   space. Reset to the normal stacking order here. */
+                z-index: auto;
             }
             .strip-header {
                 background: var(--bg) !important;
