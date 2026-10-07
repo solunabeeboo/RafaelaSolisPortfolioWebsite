@@ -3,7 +3,10 @@ import Layout from '../../layouts/Layout.astro';
 import siteData from '../../data/site.json';
 const about = (siteData as any).about;
 ---
-<Layout title="About - Rafaela Solis">
+<Layout
+    title="About | Rafaela Solís, Game Designer"
+    description="About Rafaela Solís: game designer studying Game Design and Game Programming at Champlain College, with skills in C++, Lua, C#, Unreal Engine 5, and Unity 6."
+>
     <style>
         /* ===== LAYOUT ===== */
         .about-page {
@@ -424,7 +427,7 @@ const about = (siteData as any).about;
             <img
                 id="aboutHeadshot"
                 src={about.headshotUrl}
-                alt="Rafaela Solis"
+                alt="Rafaela Solís"
                 class="headshot-circle"
                 width="240"
                 height="240"
