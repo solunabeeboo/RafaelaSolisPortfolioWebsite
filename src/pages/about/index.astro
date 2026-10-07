@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import siteData from '../../data/site.json';
-import { getExperience, getCourses, getSkills, RESUMES } from '../../lib/content';
+import { getExperience, getCourses, getSkills, resumeFor } from '../../lib/content';
 import { personJsonLd } from '../../lib/person';
 
 const about = (siteData as any).about;
@@ -444,7 +444,7 @@ const [experience, courses, skills] = await Promise.all([getExperience(), getCou
             <div class="looking-for-card">{about.lookingFor}</div>
 
             <div class="resume-buttons">
-                <a href={RESUMES.design.href} class="resume-button" download>Download Resume</a>
+                <a href={resumeFor("design").file} class="resume-button" download>Download Resume</a>
                 <a href="/resume/" class="resume-button secondary">View Resume</a>
             </div>
         </main>

@@ -1,5 +1,8 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { DISCIPLINES } from '../content.config';
+import resumeData from '../data/resumes.json';
+import fs from 'node:fs';
+import path from 'node:path';
 
 export type Discipline = (typeof DISCIPLINES)[number];
 export type Project = CollectionEntry<'projects'>;
@@ -51,8 +54,17 @@ export function projectMedia(p: Project) {
     ];
 }
 
-export const RESUMES: Record<Discipline, { label: string; href: string }> = {
-    design:      { label: 'Design resume (PDF)',      href: '/resume/rafaela-solis-resume-design.pdf' },
-    programming: { label: 'Programming resume (PDF)', href: '/resume/rafaela-solis-resume-programming.pdf' },
-    production:  { label: 'Production resume (PDF)',  href: '/resume/rafaela-solis-resume-production.pdf' },
-};
+type Resume = { id: string; label: string; file: string; enabled: boolean; discipline?: Discipline };
+
+/** Enabled resumes from src/data/resumes.json, in file order (first = default). */
+export const RESUMES: Resume[] = (resumeData.resumes as Resume[]).filter(r => r.enabled);
+if (!RESUMES.length) throw new Error("resumes.json: enable at least one resume");
+for (const r of RESUMES) {
+    // Fail the build rather than ship a viewer pointing at a missing PDF
+    if (!fs.existsSync(path.join("public", r.file))) throw new Error(`resumes.json: ${r.file} not found in public/`);
+}
+
+/** The resume for a recruiter lens, falling back to the default. */
+export function resumeFor(lens?: Discipline): Resume {
+    return RESUMES.find(r => lens && r.discipline === lens) ?? RESUMES[0];
+}

@@ -118,31 +118,6 @@
       }
     ]
   },
-  "resume": {
-    "summary": "Game designer pursuing dual B.S. degrees in Game Design and Game Programming with a Project Management minor. Leads design across three studio titles at Pentad Games, prototyping features directly in Unity and Unreal Engine 5 with C++, Lua, and C#, and directing the team that builds them. Placed 2nd internationally in the CurseForge Subnautica 2 Modding Contest, with 6,500+ mod downloads on CurseForge. Programming makes it possible to prototype designs firsthand and work fluently with engineers; production training means leading a team or supporting one.",
-    "projects": [
-      {
-        "title": "Subnautica 2 Modding Contest: 2nd Place Internationally",
-        "org": "CurseForge",
-        "dates": "June 2026",
-        "href": "/projects/easy-third-person/",
-        "bullets": [
-          "Designed and built Easy Third Person, a third-person camera mod in C++ and Lua for Unreal Engine 5, winning 2nd place internationally and $650",
-          "Reverse-engineered UE4SS to implement custom systems; featured on CurseForge’s main page banner for multiple weeks",
-          "Released Easy Third Person and The Gold Mod with 6,000+ combined downloads, plus 3 Minecraft modpacks with 560+ downloads"
-        ]
-      },
-      {
-        "title": "Indie Game Development",
-        "org": "solunabeeboo.itch.io",
-        "dates": "March 2020 – Present",
-        "bullets": [
-          "Designed and developed 12+ original games solo, owning concept, systems design, art, build, and release",
-          "Created all original art, including hand-drawn sprites, 3D models, and textures"
-        ]
-      }
-    ]
-  },
   "lenses": {
     "design": {
       "title": "Game Designer",
