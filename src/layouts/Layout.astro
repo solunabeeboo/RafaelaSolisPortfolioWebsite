@@ -4,14 +4,19 @@ import '../styles/global.css';
 interface Props {
     title: string;
     description?: string;
-    ogUrl?: string;
+    /** Absolute or site-relative path; defaults to the headshot */
+    image?: string;
 }
 
 const {
     title,
-    description = 'Passionate game developer creating engaging and immersive experiences.',
-    ogUrl = 'https://rafaelasolis.work/',
+    description = 'Rafaela Solís is a game designer who builds the systems behind her designs and leads the teams that ship them.',
+    image = '/headshot.jpg',
 } = Astro.props;
+
+// Canonical/og:url come from the page's own path so every page self-identifies
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage   = new URL(image, Astro.site).href;
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -20,12 +25,16 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
     <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="canonical" href={canonical}>
 
     <meta name="description" content={description}>
     <meta property="og:type" content="website">
-    <meta property="og:url" content={ogUrl}>
+    <meta property="og:site_name" content="Rafaela Solís">
+    <meta property="og:url" content={canonical}>
     <meta property="og:title" content={title}>
     <meta property="og:description" content={description}>
+    <meta property="og:image" content={ogImage}>
+    <meta name="twitter:card" content="summary_large_image">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -68,7 +77,7 @@ const {
     </div>
 
     <footer>
-        <p>&copy; {new Date().getFullYear()} Rafaela Solis. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Rafaela Solís. All rights reserved.</p>
     </footer>
 
     <script>
