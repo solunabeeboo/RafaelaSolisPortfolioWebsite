@@ -1,119 +1,74 @@
 import { defineConfig } from 'astro/config';
-import fs   from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { listVault, patchItem, publish, createProject } from './scripts/vault-lib.mjs';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-/** Vite plugin — adds /api/projects (GET/POST) and /api/upload (POST) in dev only */
-function devAdminPlugin() {
+/**
+ * Vault admin: /admin page + /api/vault/* endpoints, registered ONLY for
+ * `astro dev`. Nothing here exists in the production build, so there is no
+ * password to leak — the only way in is running the site on your machine.
+ */
+function vaultAdmin() {
     return {
-        name: 'dev-admin',
+        name: 'vault-admin',
+        hooks: {
+            'astro:config:setup': ({ command, injectRoute, updateConfig }) => {
+                if (command !== 'dev') return;
+                injectRoute({ pattern: '/admin', entrypoint: './src/admin/admin.astro' });
+                updateConfig({ vite: { plugins: [vaultApi()] } });
+            },
+        },
+    };
+}
+
+function vaultApi() {
+    const readBody = req => new Promise((resolve, reject) => {
+        let body = '';
+        req.on('data', chunk => { body += chunk; });
+        req.on('end', () => { try { resolve(body ? JSON.parse(body) : {}); } catch (e) { reject(e); } });
+    });
+
+    return {
+        name: 'vault-api',
         configureServer(server) {
-            const PROJECTS_PATH = path.join(__dirname, 'src/data/projects.json');
-            const UPLOADS_DIR   = path.join(__dirname, 'public/projects/uploads');
-
-            function readBody(req) {
-                return new Promise((resolve, reject) => {
-                    let body = '';
-                    req.on('data', chunk => { body += chunk; });
-                    req.on('end', () => {
-                        try { resolve(JSON.parse(body)); }
-                        catch (e) { reject(e); }
-                    });
-                });
-            }
-
-            server.middlewares.use('/api/projects', async (req, res, next) => {
+            server.middlewares.use('/api/vault', async (req, res) => {
                 res.setHeader('Content-Type', 'application/json');
-                res.setHeader('Access-Control-Allow-Origin', '*');
+                const send = (status, data) => { res.statusCode = status; res.end(JSON.stringify(data)); };
+
+                // Only the admin page itself may write (blocks other sites
+                // posting to localhost while the dev server is running)
+                const origin = req.headers.origin;
+                if (req.method !== 'GET' && origin && !/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+                    return send(403, { error: 'Forbidden origin' });
+                }
+
                 try {
-                    if (req.method === 'GET') {
-                        const data = fs.readFileSync(PROJECTS_PATH, 'utf-8');
-                        res.statusCode = 200;
-                        res.end(data);
-                    } else if (req.method === 'POST') {
-                        const body = await readBody(req);
-                        fs.writeFileSync(PROJECTS_PATH, JSON.stringify(body, null, 2));
-                        res.statusCode = 200;
-                        res.end(JSON.stringify({ ok: true }));
-                    } else {
-                        next();
+                    const route = req.url.split('?')[0];
+                    if (req.method === 'GET' && route === '/') {
+                        const vault = listVault();
+                        return vault ? send(200, vault) : send(404, { error: 'vault/ not found' });
                     }
-                } catch (e) {
-                    res.statusCode = 500;
-                    res.end(JSON.stringify({ error: String(e) }));
-                }
-            });
-
-            const SITE_PATH = path.join(__dirname, 'src/data/site.json');
-
-            server.middlewares.use('/api/site', async (req, res, next) => {
-                res.setHeader('Content-Type', 'application/json');
-                res.setHeader('Access-Control-Allow-Origin', '*');
-                try {
-                    if (req.method === 'GET') {
-                        res.statusCode = 200;
-                        res.end(fs.readFileSync(SITE_PATH, 'utf-8'));
-                    } else if (req.method === 'POST') {
-                        const body = await readBody(req);
-                        fs.writeFileSync(SITE_PATH, JSON.stringify(body, null, 2));
-                        res.statusCode = 200;
-                        res.end(JSON.stringify({ ok: true }));
-                    } else { next(); }
-                } catch (e) {
-                    res.statusCode = 500;
-                    res.end(JSON.stringify({ error: String(e) }));
-                }
-            });
-
-            server.middlewares.use('/api/upload-headshot', async (req, res, next) => {
-                res.setHeader('Content-Type', 'application/json');
-                if (req.method !== 'POST') { next(); return; }
-                try {
-                    const body = await readBody(req);
-                    const safe = path.basename(body.filename).replace(/[^a-z0-9._\-() ]/gi, '_');
-                    const base64 = body.data.replace(/^data:[^;]+;base64,/, '');
-                    fs.writeFileSync(path.join(__dirname, 'public', safe), Buffer.from(base64, 'base64'));
-                    res.statusCode = 200;
-                    res.end(JSON.stringify({ ok: true, path: '/' + safe }));
-                } catch(e) {
-                    res.statusCode = 500;
-                    res.end(JSON.stringify({ error: String(e) }));
-                }
-            });
-
-            server.middlewares.use('/api/upload', async (req, res, next) => {
-                res.setHeader('Content-Type', 'application/json');
-                res.setHeader('Access-Control-Allow-Origin', '*');
-                try {
-                    if (req.method === 'POST') {
-                        const body = await readBody(req);
-                        // body: { subfolder: 'images'|'screenshots'|'uploads', filename: 'xxx.png', data: 'data:...;base64,...' }
-                        const sub  = (body.subfolder || 'uploads').replace(/[^a-z0-9_-]/gi, '');
-                        const dir  = path.join(__dirname, 'public/projects', sub);
-                        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-                        const safe = path.basename(body.filename).replace(/[^a-z0-9._\-() ]/gi, '_');
-                        const base64 = body.data.replace(/^data:[^;]+;base64,/, '');
-                        fs.writeFileSync(path.join(dir, safe), Buffer.from(base64, 'base64'));
-                        res.statusCode = 200;
-                        res.end(JSON.stringify({ ok: true, path: `${sub}/${safe}` }));
-                    } else {
-                        next();
+                    if (req.method === 'POST' && route === '/patch') {
+                        // [{ collection, id, patch: { visibility?, featured?, order? } }]
+                        for (const p of await readBody(req)) patchItem(p.collection, p.id, p.patch);
+                        return send(200, { ok: true });
                     }
+                    if (req.method === 'POST' && route === '/publish') {
+                        return send(200, publish());
+                    }
+                    if (req.method === 'POST' && route === '/new') {
+                        const { title } = await readBody(req);
+                        return send(200, createProject(String(title || '')));
+                    }
+                    send(404, { error: 'Not found' });
                 } catch (e) {
-                    res.statusCode = 500;
-                    res.end(JSON.stringify({ error: String(e) }));
+                    send(500, { error: String(e.message || e) });
                 }
             });
-        }
+        },
     };
 }
 
 export default defineConfig({
     site: 'https://rafaelasolis.work',
     output: 'static',
-    vite: {
-        plugins: [devAdminPlugin()]
-    }
+    integrations: [vaultAdmin()],
 });
