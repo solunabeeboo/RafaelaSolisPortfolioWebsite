@@ -42,6 +42,21 @@ export function featuredFor(projects: Project[], lens?: Discipline) {
     return [...featured].sort((a, b) => rank(a) - rank(b));
 }
 
+/**
+ * Cards for Home and the /for/ pages: featured projects that have an image
+ * (a blank card looks broken), topped up from the rest of the public list in
+ * order so there are always `count` cards.
+ */
+export function cardProjects(projects: Project[], lens?: Discipline, count = 3) {
+    const hasImage = (p: Project) => !!(p.data.image || p.data.media.some(m => !isVideo(m)));
+    const picked = featuredFor(projects, lens).filter(hasImage);
+    for (const p of projects) {
+        if (picked.length >= count) break;
+        if (!picked.includes(p) && hasImage(p) && (!lens || p.data.disciplines.includes(lens))) picked.push(p);
+    }
+    return picked.slice(0, Math.max(count, picked.length));
+}
+
 export const isVideo = (src: string) => /\.(mp4|webm|ogg)$/i.test(src);
 
 /** Hero image first, then videos, then the remaining images (the carousel's order). */

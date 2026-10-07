@@ -2,11 +2,11 @@
 import Layout from '../layouts/Layout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import siteData from '../data/site.json';
-import { getProjects, featuredFor, isVideo } from '../lib/content';
+import { getProjects, cardProjects, isVideo } from '../lib/content';
 import { personJsonLd } from '../lib/person';
 
 const projects = await getProjects();
-const featured = featuredFor(projects);
+const featured = cardProjects(projects);
 const homeData = (siteData as any).home;
 
 // Static images only — exclude video and GIF formats (GIFs can be tens of MB each)
@@ -211,29 +211,11 @@ const PANEL_COUNT = 11;
             margin-top: 1.5rem; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
             letter-spacing: 0.12em; color: var(--text-muted);
         }
-        .proof {
-            list-style: none; display: grid; grid-template-columns: repeat(4, 1fr);
-            border: 2px solid var(--border); box-shadow: 4px 4px 0 var(--border); background: var(--card-bg);
-        }
-        .proof li { padding: 1.25rem 1.35rem; border-right: 2px solid var(--border); display: flex; flex-direction: column; gap: 0.2rem; }
-        .proof li:last-child { border-right: none; }
-        .proof strong { font-size: 1.6rem; line-height: 1.1; color: var(--accent); letter-spacing: -0.01em; }
-        .proof span { font-size: 0.85rem; color: var(--text-secondary); }
         .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
         .section-head h2 { font-size: clamp(1.6rem, 3vw, 2.3rem); text-transform: uppercase; letter-spacing: -0.01em; }
         .section-head a { color: var(--accent); font-weight: 700; text-decoration: none; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.08em; }
         .section-head a:hover { text-decoration: underline; }
         .featured-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
-        @media (max-width: 900px) {
-            .proof { grid-template-columns: 1fr 1fr; }
-            .proof li:nth-child(2) { border-right: none; }
-            .proof li:nth-child(-n+2) { border-bottom: 2px solid var(--border); }
-        }
-        @media (max-width: 480px) {
-            .proof { grid-template-columns: 1fr; }
-            .proof li { border-right: none; border-bottom: 2px solid var(--border); }
-            .proof li:last-child { border-bottom: none; }
-        }
     </style>
 
     <section class="hero">
@@ -267,15 +249,7 @@ const PANEL_COUNT = 11;
         </div>
     </section>
 
-    <section class="home-section" aria-label="Highlights">
-        <ul class="proof">
-            {homeData.proof.map((p: { stat: string; label: string }) => (
-                <li><strong>{p.stat}</strong><span>{p.label}</span></li>
-            ))}
-        </ul>
-    </section>
-
-    <section class="home-section" aria-labelledby="featured-heading" style="padding-top: 0">
+    <section class="home-section" aria-labelledby="featured-heading">
         <div class="section-head">
             <h2 id="featured-heading">Featured work</h2>
             <a href="/projects/">All projects &rarr;</a>

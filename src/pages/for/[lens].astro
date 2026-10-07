@@ -8,7 +8,7 @@
 import Layout from '../../layouts/Layout.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 import siteData from '../../data/site.json';
-import { getProjects, featuredFor, resumeFor, DISCIPLINE_LABELS, type Discipline } from '../../lib/content';
+import { getProjects, cardProjects, resumeFor, DISCIPLINE_LABELS, type Discipline } from '../../lib/content';
 import { DISCIPLINES } from '../../content.config';
 
 export function getStaticPaths() {
@@ -18,10 +18,10 @@ export function getStaticPaths() {
 const lens = Astro.params.lens as Discipline;
 const copy = (siteData as any).lenses[lens];
 const projects = await getProjects();
-const featured = featuredFor(projects, lens);
+const featured = cardProjects(projects, lens, 4);
 // Up to 3 more strong matches that aren't already featured
 const resume = resumeFor(lens);
-const more = projects.filter(p => !p.data.featured && p.data.disciplines[0] === lens).slice(0, 3);
+const more = projects.filter(p => !featured.includes(p) && p.data.disciplines[0] === lens).slice(0, 3);
 ---
 <Layout
     title={`Rafaela Solís | ${copy.title}`}
