@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "publish": "node scripts/vault.mjs publish",
+    "vault:new": "node scripts/vault.mjs new"
   },
   "dependencies": {
     "astro": "^5.0.0"
