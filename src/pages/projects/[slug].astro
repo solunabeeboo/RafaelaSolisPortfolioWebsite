@@ -1,0 +1,162 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getProjects, projectMedia, isVideo, DISCIPLINE_LABELS } from '../../lib/content';
+import { render } from 'astro:content';
+
+export async function getStaticPaths() {
+    const projects = await getProjects();
+    return projects.map((p, i) => ({
+        params: { slug: p.id },
+        props: { p, prev: projects[i - 1], next: projects[i + 1] },
+    }));
+}
+
+const { p, prev, next } = Astro.props;
+const d = p.data;
+const { Content } = await render(p);
+const media = projectMedia(p);
+const hero = media[0];
+const gallery = media.slice(1);
+const ogImage = d.image || media.find(m => !isVideo(m));
+
+const facts = [
+    ['Role', d.role], ['Studio', d.studio], ['Team', d.team], ['Engine', d.engine],
+    ['Duration', d.duration], ['Status', d.status],
+].filter(([, v]) => v);
+
+const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: d.title,
+    description: d.hook,
+    url: new URL(`/projects/${p.id}/`, Astro.site).href,
+    ...(ogImage && { image: new URL(ogImage, Astro.site).href }),
+    creator: { '@type': 'Person', name: 'Rafaela Solís', url: Astro.site?.href },
+    keywords: d.tags.join(', '),
+};
+---
+<Layout
+    title={`${d.title} | Rafaela Solís, Game Designer`}
+    description={`${d.hook}${d.role ? ` Role: ${d.role}.` : ''}`}
+    image={ogImage}
+    jsonLd={jsonLd}
+>
+    <style>
+        .case { max-width: 960px; margin: 0 auto; padding: calc(var(--nav-h) + 3rem) var(--section-padding) 4rem; width: 100%; }
+        .crumb { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+        .crumb a { color: var(--accent); text-decoration: none; }
+        .crumb a:hover { text-decoration: underline; }
+        h1 { font-size: clamp(2.2rem, 5vw, 3.75rem); line-height: 1.02; letter-spacing: -0.02em; margin: 0.75rem 0 0.9rem; text-transform: uppercase; }
+        .hook { font-size: 1.15rem; color: var(--text-secondary); max-width: 46rem; }
+        .chips { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 1.1rem; }
+        .chip { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; background: var(--accent); color: var(--bg); padding: 0.2rem 0.6rem; border: 2px solid var(--border); text-decoration: none; }
+        .chip:hover { background: var(--accent-sage); }
+
+        .hero { margin: 2rem 0; border: 3px solid var(--border); box-shadow: 8px 8px 0 var(--border); background: #000; aspect-ratio: 16 / 9; }
+        .hero img, .hero video { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        .facts {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            border: 2px solid var(--border); box-shadow: 4px 4px 0 var(--border); background: var(--card-bg);
+            margin: 2rem 0;
+        }
+        .fact { padding: 0.9rem 1.1rem; border-right: 2px solid var(--border); border-bottom: 2px solid var(--border); margin: 0; }
+        .fact dt { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--accent); }
+        .fact dd { margin: 0.2rem 0 0; font-weight: 500; }
+        .fact-links { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; }
+        .fact-links a {
+            display: inline-block; background: var(--accent); color: var(--bg); text-decoration: none;
+            padding: 0.5rem 1rem; border: 2px solid var(--border); box-shadow: 3px 3px 0 var(--border);
+            font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .fact-links a:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--border); }
+
+        .prose { font-size: 1.02rem; line-height: 1.8; color: var(--text-secondary); max-width: 46rem; }
+        .prose :global(h2), .section-title {
+            font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em;
+            color: var(--accent); border-left: 4px solid var(--accent); padding-left: 0.65rem;
+            margin: 2.5rem 0 0.9rem;
+        }
+        .prose :global(p), .prose :global(ul) { margin-bottom: 1rem; }
+        .prose :global(ul) { padding-left: 1.3rem; }
+        .prose :global(a) { color: var(--accent); }
+        .contribution li { margin-bottom: 0.35rem; }
+
+        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .gallery img, .gallery video { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border: 2px solid var(--border); box-shadow: 4px 4px 0 var(--border); display: block; background: #000; }
+
+        .embed { margin-top: 1rem; border: 2px solid var(--border); box-shadow: 4px 4px 0 var(--border); }
+        .embed iframe { width: 100%; height: 167px; border: 0; display: block; }
+        .embed-game iframe { aspect-ratio: 16 / 10; height: auto; }
+
+        .pager { display: flex; justify-content: space-between; gap: 1rem; margin-top: 4rem; padding-top: 1.5rem; border-top: 2px solid var(--border); }
+        .pager a { color: var(--text-primary); text-decoration: none; font-weight: 700; max-width: 45%; }
+        .pager a span { display: block; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--accent); }
+        .pager a:hover { color: var(--accent); }
+        .pager .next { text-align: right; margin-left: auto; }
+    </style>
+
+    <main class="case">
+        <p class="crumb"><a href="/projects/">&larr; All projects</a></p>
+        <h1>{d.title}</h1>
+        <p class="hook">{d.hook}</p>
+        {d.disciplines.length > 0 && (
+            <div class="chips">
+                {d.disciplines.map(x => <a class="chip" href={`/projects/?focus=${x}`}>{DISCIPLINE_LABELS[x]}</a>)}
+            </div>
+        )}
+
+        {hero && (
+            <figure class="hero">
+                {isVideo(hero)
+                    ? <video src={hero} controls muted playsinline loop preload="metadata"></video>
+                    : <img src={hero} alt={`${d.title} key art`} fetchpriority="high" />}
+            </figure>
+        )}
+
+        {(facts.length > 0 || d.links.length > 0) && (
+            <dl class="facts">
+                {facts.map(([k, v]) => <div class="fact"><dt>{k}</dt><dd>{v}</dd></div>)}
+                {d.links.length > 0 && (
+                    <div class="fact fact-links">
+                        <dt class="sr-only">Links</dt>
+                        {d.links.map(l => <dd><a href={l.url} target="_blank" rel="noopener noreferrer">{l.label} &#8599;</a></dd>)}
+                    </div>
+                )}
+            </dl>
+        )}
+
+        <div class="prose">
+            {d.contribution.length > 0 && (
+                <section>
+                    <h2 class="section-title">My contribution</h2>
+                    <ul class="contribution">{d.contribution.map(c => <li>{c}</li>)}</ul>
+                </section>
+            )}
+            <Content />
+        </div>
+
+        {d.embed && (
+            <div class:list={['embed', { 'embed-game': d.embed.type === 'game' }]}>
+                <iframe src={d.embed.url} title={`${d.title} on itch.io`} loading="lazy" allowfullscreen></iframe>
+            </div>
+        )}
+
+        {gallery.length > 0 && (
+            <section>
+                <h2 class="section-title">Gallery</h2>
+                <div class="gallery">
+                    {gallery.map((m, i) => isVideo(m)
+                        ? <video src={m} controls muted playsinline preload="none"></video>
+                        : <img src={m} alt={`${d.title} screenshot ${i + 2}`} loading="lazy" />)}
+                </div>
+            </section>
+        )}
+
+        <nav class="pager" aria-label="More projects">
+            {prev && <a href={`/projects/${prev.id}/`}><span>&larr; Previous</span>{prev.data.title}</a>}
+            {next && <a class="next" href={`/projects/${next.id}/`}><span>Next &rarr;</span>{next.data.title}</a>}
+        </nav>
+    </main>
+</Layout>
