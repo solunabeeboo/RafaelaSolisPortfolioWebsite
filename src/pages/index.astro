@@ -1,20 +1,18 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import projectsData from '../data/projects.json';
+import ProjectCard from '../components/ProjectCard.astro';
 import siteData from '../data/site.json';
+import { getProjects, featuredFor, isVideo } from '../lib/content';
+import { personJsonLd } from '../lib/person';
 
-const projects = (projectsData as any).projects as Array<{ screenshots?: string[] }>;
+const projects = await getProjects();
+const featured = featuredFor(projects);
 const homeData = (siteData as any).home;
 
 // Static images only — exclude video and GIF formats (GIFs can be tens of MB each)
 const allImages: string[] = projects
-    .flatMap(p =>
-        (p.screenshots ?? [])
-            .filter((s: string) =>
-                !s.endsWith('.mp4') && !s.endsWith('.webm') && !s.endsWith('.gif')
-            )
-    )
-    .map(s => `/projects/${s}`);
+    .flatMap(p => p.data.media)
+    .filter(s => !isVideo(s) && !s.endsWith('.gif'));
 
 // First image is set inline so the browser can discover and preload it without JS
 const heroImage = allImages[0] ?? '';
@@ -24,6 +22,7 @@ const PANEL_COUNT = 11;
 <Layout
     title="Rafaela Solís | Game Designer"
     description="Rafaela Solís is a game designer who builds the systems behind her designs and leads the teams that ship them. Unreal Engine 5, Unity 6, C++, Lua, C#."
+    jsonLd={personJsonLd}
 >
     {heroImage && <link slot="head" rel="preload" as="image" href={heroImage} fetchpriority="high">}
     <style>
@@ -112,7 +111,7 @@ const PANEL_COUNT = 11;
         .hero-role {
             font-size: 0.85rem;
             font-weight: 700;
-            color: var(--accent-sage);
+            color: var(--accent);
             text-transform: uppercase;
             letter-spacing: 0.22em;
             margin-bottom: 1.25rem;
@@ -206,66 +205,36 @@ const PANEL_COUNT = 11;
             .cta-button.secondary { box-shadow: 2px 2px 0 var(--accent); }
         }
 
-        /* ── EDIT MODE STYLES ── */
-        .page-edit-toolbar {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 2000;
-            background: var(--bg); border-bottom: 2px solid var(--border);
-            display: flex; align-items: center; gap: 1rem;
-            padding: 0.6rem 1.5rem; font-size: 0.75rem;
+        /* ── BELOW THE HERO ── */
+        .home-section { max-width: var(--max-content-width); margin: 0 auto; padding: 4rem var(--section-padding); width: 100%; }
+        .open-to {
+            margin-top: 1.5rem; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.12em; color: var(--text-muted);
         }
-        .page-edit-badge { font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); }
-        .page-edit-spacer { flex: 1; }
-        .page-edit-btn-primary {
-            background: var(--accent); color: var(--bg); border: 2px solid var(--border);
-            padding: 0.4rem 1.1rem; font-weight: 700; font-size: 0.72rem;
-            text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer; font-family: inherit;
+        .proof {
+            list-style: none; display: grid; grid-template-columns: repeat(4, 1fr);
+            border: 2px solid var(--border); box-shadow: 4px 4px 0 var(--border); background: var(--card-bg);
         }
-        .page-edit-btn-secondary {
-            background: transparent; color: var(--text-secondary); border: 2px solid var(--border);
-            padding: 0.4rem 1.1rem; font-weight: 700; font-size: 0.72rem;
-            text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer; font-family: inherit;
+        .proof li { padding: 1.25rem 1.35rem; border-right: 2px solid var(--border); display: flex; flex-direction: column; gap: 0.2rem; }
+        .proof li:last-child { border-right: none; }
+        .proof strong { font-size: 1.6rem; line-height: 1.1; color: var(--accent); letter-spacing: -0.01em; }
+        .proof span { font-size: 0.85rem; color: var(--text-secondary); }
+        .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .section-head h2 { font-size: clamp(1.6rem, 3vw, 2.3rem); text-transform: uppercase; letter-spacing: -0.01em; }
+        .section-head a { color: var(--accent); font-weight: 700; text-decoration: none; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.08em; }
+        .section-head a:hover { text-decoration: underline; }
+        .featured-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
+        @media (max-width: 900px) {
+            .proof { grid-template-columns: 1fr 1fr; }
+            .proof li:nth-child(2) { border-right: none; }
+            .proof li:nth-child(-n+2) { border-bottom: 2px solid var(--border); }
         }
-        body.page-edit-mode [data-editable] {
-            outline: 2px dashed var(--accent); outline-offset: 2px; cursor: text;
+        @media (max-width: 480px) {
+            .proof { grid-template-columns: 1fr; }
+            .proof li { border-right: none; border-bottom: 2px solid var(--border); }
+            .proof li:last-child { border-bottom: none; }
         }
-        body.page-edit-mode { padding-top: 2.5rem; }
-        .page-pw-overlay {
-            position: fixed; inset: 0; z-index: 3000; background: rgba(0,0,0,0.6);
-            display: flex; align-items: center; justify-content: center;
-        }
-        .page-pw-box {
-            background: var(--bg); border: 2px solid var(--border); box-shadow: 8px 8px 0 var(--border);
-            padding: 1.75rem; width: min(90vw, 340px); display: flex; flex-direction: column; gap: 0.75rem;
-        }
-        .page-pw-box h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin: 0; }
-        .page-pw-box input {
-            background: var(--card-bg); border: 1.5px solid var(--border); color: var(--text-primary);
-            padding: 0.5rem 0.65rem; font-size: 0.9rem; font-family: inherit; width: 100%; box-sizing: border-box;
-        }
-        .page-pw-error { color: #e55; font-size: 0.75rem; display: none; }
-        .page-pw-actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
     </style>
-
-    <!-- Edit toolbar (hidden until edit mode) -->
-    <div id="pageEditToolbar" class="page-edit-toolbar" style="display:none">
-        <span class="page-edit-badge">&#9998; Edit Mode</span>
-        <div class="page-edit-spacer"></div>
-        <button class="page-edit-btn-secondary" id="pageEditCancel">Cancel</button>
-        <button class="page-edit-btn-primary" id="pageEditSave">Save Changes</button>
-    </div>
-
-    <!-- Password modal -->
-    <div id="homePwOverlay" class="page-pw-overlay" style="display:none">
-        <div class="page-pw-box">
-            <h3>Edit Mode</h3>
-            <input type="password" id="homePwInput" placeholder="Password" autocomplete="off">
-            <span class="page-pw-error" id="homePwError">Incorrect password</span>
-            <div class="page-pw-actions">
-                <button class="page-edit-btn-secondary" id="homePwCancel">Cancel</button>
-                <button class="page-edit-btn-primary" id="homePwSubmit">Unlock</button>
-            </div>
-        </div>
-    </div>
 
     <section class="hero">
         <div class="panel-bg">
@@ -286,13 +255,33 @@ const PANEL_COUNT = 11;
             <div class="hero-box">
                 <h1 class="hero-name">Rafaela Solís</h1>
                 <div class="accent-rule"></div>
-                <p class="hero-role" data-editable="home.role" spellcheck="false">{homeData.role}</p>
-                <p class="hero-tagline" data-editable="home.tagline" spellcheck="false">{homeData.tagline}</p>
+                <p class="hero-role">{homeData.role}</p>
+                <p class="hero-tagline">{homeData.tagline}</p>
                 <div class="cta-group">
-                    <a href="/projects/" class="cta-button">View My Work</a>
-                    <a href="/contact/" class="cta-button secondary">Get In Touch</a>
+                    <a href="/projects/" class="cta-button">View Projects</a>
+                    <a href="/resume/" class="cta-button secondary">Resume</a>
+                    <a href="/contact/" class="cta-button secondary">Contact</a>
                 </div>
+                <p class="open-to">{homeData.openTo}</p>
             </div>
+        </div>
+    </section>
+
+    <section class="home-section" aria-label="Highlights">
+        <ul class="proof">
+            {homeData.proof.map((p: { stat: string; label: string }) => (
+                <li><strong>{p.stat}</strong><span>{p.label}</span></li>
+            ))}
+        </ul>
+    </section>
+
+    <section class="home-section" aria-labelledby="featured-heading" style="padding-top: 0">
+        <div class="section-head">
+            <h2 id="featured-heading">Featured work</h2>
+            <a href="/projects/">All projects &rarr;</a>
+        </div>
+        <div class="featured-grid">
+            {featured.map(p => <ProjectCard project={p} />)}
         </div>
     </section>
 
@@ -350,98 +339,4 @@ const PANEL_COUNT = 11;
         });
     </script>
 
-    <script define:vars={{ homeData }}>
-        // ── Edit mode ────────────────────────────────────────────────────────
-        const EDIT_PASSWORD = 'studio212';
-        let editMode = false;
-
-        function showPasswordModal() {
-            const overlay = document.getElementById('homePwOverlay');
-            const input   = document.getElementById('homePwInput');
-            const err     = document.getElementById('homePwError');
-            if (!overlay || !input) return;
-            err.style.display = 'none';
-            input.value = '';
-            overlay.style.display = 'flex';
-            setTimeout(() => input.focus(), 50);
-        }
-
-        function hidePasswordModal() {
-            const overlay = document.getElementById('homePwOverlay');
-            if (overlay) overlay.style.display = 'none';
-        }
-
-        function enterEditMode() {
-            editMode = true;
-            document.body.classList.add('page-edit-mode');
-            const toolbar = document.getElementById('pageEditToolbar');
-            if (toolbar) toolbar.style.display = 'flex';
-            document.querySelectorAll('[data-editable]').forEach(el => {
-                el.contentEditable = 'true';
-            });
-        }
-
-        function exitEditMode() {
-            editMode = false;
-            document.body.classList.remove('page-edit-mode');
-            const toolbar = document.getElementById('pageEditToolbar');
-            if (toolbar) toolbar.style.display = 'none';
-            document.querySelectorAll('[data-editable]').forEach(el => {
-                el.contentEditable = 'false';
-            });
-        }
-
-        async function saveChanges() {
-            try {
-                const siteResp = await fetch('/api/site');
-                const site = await siteResp.json();
-                const roleEl    = document.querySelector('[data-editable="home.role"]');
-                const taglineEl = document.querySelector('[data-editable="home.tagline"]');
-                if (roleEl)    site.home.role    = roleEl.textContent.trim() || site.home.role;
-                if (taglineEl) site.home.tagline = taglineEl.textContent.trim() || site.home.tagline;
-                await fetch('/api/site', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(site)
-                });
-                exitEditMode();
-                location.reload();
-            } catch (e) {
-                alert('Save failed: ' + e);
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            // Triple-click footer to activate
-            let clicks = 0, timer = null;
-            document.querySelector('footer')?.addEventListener('click', () => {
-                clicks++;
-                if (clicks === 1) timer = setTimeout(() => { clicks = 0; }, 700);
-                if (clicks >= 3) { clearTimeout(timer); clicks = 0; showPasswordModal(); }
-            });
-
-            // Password modal buttons
-            document.getElementById('homePwCancel')?.addEventListener('click', hidePasswordModal);
-            document.getElementById('homePwSubmit')?.addEventListener('click', () => {
-                const input = document.getElementById('homePwInput');
-                const err   = document.getElementById('homePwError');
-                if (input.value === EDIT_PASSWORD) {
-                    hidePasswordModal();
-                    enterEditMode();
-                } else {
-                    err.style.display = 'block';
-                    input.value = '';
-                    input.focus();
-                }
-            });
-            document.getElementById('homePwInput')?.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') document.getElementById('homePwSubmit')?.click();
-                if (e.key === 'Escape') hidePasswordModal();
-            });
-
-            // Toolbar buttons
-            document.getElementById('pageEditCancel')?.addEventListener('click', exitEditMode);
-            document.getElementById('pageEditSave')?.addEventListener('click', saveChanges);
-        });
-    </script>
 </Layout>
