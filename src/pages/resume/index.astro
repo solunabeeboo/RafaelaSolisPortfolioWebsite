@@ -7,7 +7,6 @@ import Layout from '../../layouts/Layout.astro';
 import { RESUMES } from '../../lib/content';
 
 const [first] = RESUMES;
-const viewerSrc = (file: string) => `${file}#view=FitH&navpanes=0`;
 ---
 <Layout
     title="Resume | Rafaela Solís, Game Designer"
@@ -102,37 +101,44 @@ const viewerSrc = (file: string) => `${file}#view=FitH&navpanes=0`;
 
         .action-btn.outline:hover { box-shadow: 5px 5px 0 var(--accent); }
 
-        .resume-embed-wrapper {
+        /* Page(s) drawn with PDF.js: no browser toolbar, sidebar, or zoom —
+           just the resume, fit to the screen like a sheet of paper. */
+        .resume-viewer {
             flex: 1;
+            overflow: auto;
+            background: rgba(26, 26, 26, 0.07);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem;
+        }
+
+        .resume-viewer :global(.resume-sheet) {
             position: relative;
-            overflow: hidden;
+            flex-shrink: 0;
+            background: #fff;
+            border: 2px solid var(--border);
+            box-shadow: 6px 6px 0 var(--border);
         }
 
-        .resume-iframe {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
+        .resume-viewer :global(.resume-sheet canvas) { display: block; }
+        .resume-viewer :global(.resume-sheet) { cursor: zoom-in; }
+        .resume-viewer.zoomed :global(.resume-sheet) { cursor: zoom-out; }
 
-        /* Phones don't render PDFs inside iframes reliably (Android shows a
-           blank box, iOS only the first page), so hand off to the device's
-           own PDF viewer instead. */
-        .resume-mobile { display: none; }
+        /* Invisible hit areas over the PDF's own links (email, site, LinkedIn) */
+        .resume-viewer :global(.resume-sheet a) { position: absolute; }
+
+        .resume-fallback { color: var(--text-secondary); margin: auto; text-align: center; }
+        .resume-fallback a { color: var(--accent); font-weight: 700; }
 
         @media (max-width: 768px) {
             .resume-page { height: auto; min-height: calc(100svh - var(--nav-h)); padding-top: 0; }
             .resume-header { flex-direction: column; align-items: flex-start; gap: 0.75rem; padding: 5rem 1.25rem 1rem; }
-            .resume-actions { display: none; } /* the card below has the same buttons */
-            .resume-embed-wrapper { display: none; }
-            .resume-mobile {
-                display: flex; flex-direction: column; gap: 0.85rem; align-items: stretch;
-                margin: 1.5rem 1.25rem; padding: 1.5rem;
-                border: 2px solid var(--border); box-shadow: 4px 4px 0 var(--border); background: var(--card-bg);
-            }
-            .resume-mobile p { color: var(--text-secondary); font-size: 0.95rem; }
-            .resume-mobile .action-btn { justify-content: center; }
+            .resume-actions { flex-wrap: wrap; }
+            /* Let the page grow instead of scrolling inside a box */
+            .resume-viewer { overflow: visible; padding: 1rem; }
+            .resume-viewer :global(.resume-sheet) { box-shadow: 4px 4px 0 var(--border); cursor: auto; }
         }
     </style>
 
@@ -155,30 +161,122 @@ const viewerSrc = (file: string) => `${file}#view=FitH&navpanes=0`;
             </div>
         </div>
 
-        <div class="resume-embed-wrapper">
-            <iframe class="resume-iframe" id="resumeFrame" src={viewerSrc(first.file)} title="Rafaela Solís — Resume"></iframe>
-        </div>
-
-        <div class="resume-mobile">
-            <p>View the resume full screen in your phone's PDF viewer, or save a copy.</p>
-            <a href={first.file} class="action-btn primary" data-resume-open target="_blank" rel="noopener">Open Resume ↗</a>
-            <a href={first.file} class="action-btn outline" data-resume-download download>Download PDF</a>
+        <div class="resume-viewer" id="resumeViewer" data-file={first.file} aria-label="Resume preview">
+            <p class="resume-fallback">
+                <a href={first.file} data-resume-open>Open the resume (PDF)</a>
+            </p>
         </div>
     </main>
 
     <script>
-        // Version tabs: swap the viewer and the open/download links in place
-        const frame = document.getElementById('resumeFrame') as HTMLIFrameElement | null;
+        import * as pdfjs from 'pdfjs-dist';
+        import workerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
+
+        pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
+
+        const viewer = document.getElementById('resumeViewer')!;
+        const mobile = window.matchMedia('(max-width: 768px)');
+        let doc: pdfjs.PDFDocumentProxy | null = null;
+        let renderToken = 0;
+
+        // Desktop: the whole page fits on screen (it's a one-pager); click
+        // the page to zoom in for reading, click again to fit. Mobile: fill
+        // the width and let the page scroll.
+        let zoomed = false;
+        function scaleFor(pageW: number, pageH: number) {
+            const pad = mobile.matches ? 32 : 48;
+            const fitWidth = (viewer.clientWidth - pad) / pageW;
+            if (mobile.matches) return fitWidth;
+            if (zoomed) return Math.min(fitWidth, 960 / pageW);
+            return Math.min(fitWidth, (viewer.clientHeight - pad) / pageH);
+        }
+
+        viewer.addEventListener('click', e => {
+            if (mobile.matches || !(e.target as Element).closest('.resume-sheet') || (e.target as Element).closest('a')) return;
+            zoomed = !zoomed;
+            viewer.classList.toggle('zoomed', zoomed);
+            render();
+        });
+
+        async function render() {
+            if (!doc) return;
+            const token = ++renderToken;
+            const first = await doc.getPage(1);
+            const base = first.getViewport({ scale: 1 });
+            const scale = scaleFor(base.width, base.height);
+            const dpr = window.devicePixelRatio || 1;
+
+            const sheets: HTMLElement[] = [];
+            for (let n = 1; n <= doc.numPages; n++) {
+                const page = n === 1 ? first : await doc.getPage(n);
+                const vp = page.getViewport({ scale });
+
+                const sheet = document.createElement('div');
+                sheet.className = 'resume-sheet';
+                sheet.style.width = vp.width + 'px';
+                sheet.style.height = vp.height + 'px';
+
+                const canvas = document.createElement('canvas');
+                canvas.width = Math.floor(vp.width * dpr);
+                canvas.height = Math.floor(vp.height * dpr);
+                canvas.style.width = vp.width + 'px';
+                canvas.style.height = vp.height + 'px';
+                sheet.appendChild(canvas);
+
+                await page.render({
+                    canvasContext: canvas.getContext('2d')!,
+                    viewport: vp,
+                    transform: dpr !== 1 ? [dpr, 0, 0, dpr, 0, 0] : undefined,
+                }).promise;
+
+                for (const a of await page.getAnnotations()) {
+                    if (a.subtype !== 'Link' || !a.url) continue;
+                    const [x1, y1, x2, y2] = vp.convertToViewportRectangle(a.rect);
+                    const link = document.createElement('a');
+                    link.href = a.url;
+                    link.target = '_blank';
+                    link.rel = 'noopener';
+                    link.setAttribute('aria-label', a.url);
+                    Object.assign(link.style, {
+                        left: Math.min(x1, x2) + 'px', top: Math.min(y1, y2) + 'px',
+                        width: Math.abs(x2 - x1) + 'px', height: Math.abs(y2 - y1) + 'px',
+                    });
+                    sheet.appendChild(link);
+                }
+                sheets.push(sheet);
+            }
+            // A newer render (resize / tab switch) started meanwhile: drop this one
+            if (token === renderToken) viewer.replaceChildren(...sheets);
+        }
+
+        async function load(file: string) {
+            try {
+                doc = await pdfjs.getDocument(file).promise;
+                await render();
+            } catch {
+                // Leave the plain "Open the resume" link in place
+            }
+        }
+
+        let resizeTimer: number | undefined;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = window.setTimeout(render, 150);
+        });
+
+        // Version tabs: swap the preview and the open/download links in place
         document.querySelectorAll<HTMLAnchorElement>('.resume-tab').forEach(tab => {
             tab.addEventListener('click', e => {
                 e.preventDefault();
                 const file = tab.dataset.file!;
-                if (frame) frame.src = `${file}#view=FitH&navpanes=0`;
                 document.querySelectorAll<HTMLAnchorElement>('[data-resume-open], [data-resume-download]')
                     .forEach(a => { a.href = file; });
                 document.querySelectorAll('.resume-tab')
                     .forEach(t => t.setAttribute('aria-current', String(t === tab)));
+                load(file);
             });
         });
+
+        load(viewer.dataset.file!);
     </script>
 </Layout>
