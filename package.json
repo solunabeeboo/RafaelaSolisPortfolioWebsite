@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "astro": "^5.0.0",
-    "pdfjs-dist": "4.10.38"
+    "pdfjs-dist": "4.10.38",
+    "yaml": "2.8.0"
   },
   "devDependencies": {
     "sharp": "^0.34.5"
