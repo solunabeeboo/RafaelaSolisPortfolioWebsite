@@ -1,0 +1,9 @@
+# dependencies & build output
+node_modules/
+dist/
+.astro/
+
+# editor / OS
+.DS_Store
+Thumbs.db
+*.bak
