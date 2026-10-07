@@ -2,12 +2,14 @@
 import Layout from '../../layouts/Layout.astro';
 import { getProjects, projectMedia, isVideo, DISCIPLINE_LABELS } from '../../lib/content';
 import { render } from 'astro:content';
+import { washFor } from '../../lib/wash';
 
 const projects = await getProjects();
 const strips = await Promise.all(projects.map(async p => {
     const { Content } = await render(p);
     const media = projectMedia(p);
-    return { p, Content, media, bgSrc: p.data.image || media.find(m => !isVideo(m)) || '' };
+    const bgSrc = p.data.image || media.find(m => !isVideo(m)) || '';
+    return { p, Content, media, bgSrc, wash: await washFor(bgSrc) };
 }));
 ---
 <Layout
@@ -487,7 +489,6 @@ const strips = await Promise.all(projects.map(async p => {
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            filter: blur(18px);
             opacity: 0.14;
             pointer-events: none;
         }
@@ -1023,14 +1024,14 @@ const strips = await Promise.all(projects.map(async p => {
             <span class="mobile-back-label">All Projects</span>
         </button>
         <div class="sections-stage" id="sectionsStage">
-            {strips.map(({ p, Content, media, bgSrc }, i) => (
+            {strips.map(({ p, Content, media, bgSrc, wash }, i) => (
                 <article
                     class:list={["section-strip", { "no-media": media.length === 0 }]}
                     id={`strip-${i}`}
                     data-slug={p.id}
                     data-title={p.data.title}
                     data-disciplines={p.data.disciplines.join(' ')}
-                    data-bg={bgSrc}
+                    data-wash={wash}
                     data-media={JSON.stringify(media)}
                     aria-labelledby={`strip-title-${i}`}
                 >
@@ -1183,20 +1184,10 @@ const strips = await Promise.all(projects.map(async p => {
 
             strips.forEach((strip, i) => {
                 const title = strip.dataset.title;
-                const bgSrc = strip.dataset.bg;
                 const media = JSON.parse(strip.dataset.media || '[]');
-                // Resolved to an absolute URL up front: --wash-img is consumed by
-                // `background-image: var(--wash-img)` in this component's compiled
-                // <style> block, and browsers resolve a relative url() inside a
-                // custom property against the stylesheet that declares the var()
-                // reference — not the document. In dev that stylesheet is served
-                // virtually off the page's own URL so a relative path happens to
-                // work, but in the production build it's a real file under
-                // /_astro/, so the same relative path 404s there and the wash
-                // silently renders as nothing.
-                const washImg = bgSrc
-                    ? `url('${new URL(bgSrc, document.baseURI).href}')`
-                    : 'linear-gradient(135deg, #2d5016, #6b8f47)';
+                // Pre-blurred at build time (src/lib/wash.ts) and inlined as a
+                // data URI, so no live CSS blur and no URL-resolution pitfalls
+                const washImg = strip.dataset.wash || 'linear-gradient(135deg, #2d5016, #6b8f47)';
                 strip.style.setProperty('--wash-img', washImg);
 
                 // Lightbox: click thumbnail to expand
