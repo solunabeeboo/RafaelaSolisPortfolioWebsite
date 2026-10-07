@@ -1,92 +1,110 @@
 {
   "home": {
-    "role": "Gameplay Systems EngineeR",
-    "tagline": "Engine-level code, high level design, and features that players touch."
+    "role": "Game Designer",
+    "tagline": "I design games, build the systems behind them, and lead the teams that ship them."
   },
   "about": {
-    "name": "Rafaela Solis",
-    "title": "Gameplay Systems EngineeR",
+    "name": "Rafaela Solís",
+    "title": "Game Designer",
     "headshotUrl": "/RafaelaSolisHeadshotPhoto.webp",
     "stats": [
       {
         "label": "School",
-        "value": "Champlain College '28"
+        "value": "Champlain College ’28"
       },
       {
-        "label": "MajorS",
-        "value": "Game Design & Computer Science"
+        "label": "Majors",
+        "value": "Game Design & Game Programming (dual B.S.), Project Management minor"
       },
       {
         "label": "Based in",
-        "value": "San Antonio, TX / Burlington, VT"
+        "value": "Burlington, VT / San Antonio, TX"
       },
       {
         "label": "Open to",
-        "value": "Internships & Projects — US / CA / EU"
+        "value": "Summer 2027 internships, US / CA / EU"
       }
     ],
     "bio": [
       "Hi! I'm Rafaela Solis, a passionate game developer dedicated to creating engaging, immersive, and emotional player-focused gaming experiences. My journey in game development started as a tiny baby. My father started a company during the tech boom, and performed IT services for the city of Austin, Texas. He always had every kind of computer, and quite often we would sit down together in front of a 4 inch thick laptop to play obscure cobbled together kids games that my tiny brain could understand. I've been hooked ever since.",
-      "I double major in Game Design and Computer Science at Champlain College (2028), with specific focus in gameplay programming, system design, level design, technical design, narrative design, rapid prototyping, and more. I have experience with Unity, Unreal Engine, Astro, Next.js, CSS, HTML, C#, C++, Python, Java, and Blueprints. I love the puzzle of making people happy. I've worked across a plethora of genres and projects: Maze-Puzzle, Action-Adventure, Educational, Drawing-Combat, Multiplayer Coop/Competitive, Website Portfolios, Web Tools, and more!",
-      "I've shipped two non-academic large-team project demos: Mega Market Mayhem and Scriptorium, both in demo stages with Scriptorium in active development. Beyond that, dozens of indie and jam games, and a plethora of academic prototypes and web centered projects, like the one your on right now! Each project has taught me invaluable lessons about teamwork, scope, design, and the importance of the user."
+      "I’m earning a dual B.S. in Game Design and Game Programming with a Project Management minor at Champlain College (2028), with a 3.90 GPA and Dean’s List every semester. Design is the core of what I do: systems, gameplay, level, technical, and narrative design, prototyped fast and tested on real players. Programming in C++, Lua, and C# across Unreal Engine 5 and Unity 6 lets me build and prove my own designs, and production lets me help teams ship them.",
+      "I've shipped two non-academic large-team project demos: Mega Market Mayhem and Scriptorium, both in demo stages with Scriptorium in active development. Beyond that, dozens of indie and jam games, and a plethora of academic prototypes and web centered projects, like the one you’re on right now! Each project has taught me invaluable lessons about teamwork, scope, design, and the importance of the user."
     ],
     "skillCategories": [
       {
-        "name": "Game Engines",
+        "name": "Languages",
         "wide": false,
         "skills": [
-          "Unity",
-          "Unreal Engine",
-          "UEFN"
-        ]
-      },
-      {
-        "name": "Programming Languages",
-        "wide": false,
-        "skills": [
-          "C#",
           "C++",
+          "Lua",
+          "C#",
           "Python",
           "Java",
-          "HTML",
-          "Astro",
-          "Next.js"
+          "HTML/CSS"
         ]
       },
       {
-        "name": "Game Development",
+        "name": "Engines",
+        "wide": false,
+        "skills": [
+          "Unreal Engine 5 (Lyra Framework)",
+          "UEFN",
+          "Unity 6",
+          "UE4SS",
+          "Blueprints",
+          "OpenGL",
+          "Shaders"
+        ]
+      },
+      {
+        "name": "Design",
         "wide": true,
         "skills": [
-          "Game Design",
-          "Game Programming",
-          "Level Design",
           "Systems Design",
+          "Gameplay Design",
+          "Level Design",
           "Technical Design",
-          "Implementation",
-          "Documentation",
-          "Scrum / Agile / Waterfall",
-          "UI/UX Design",
-          "Gameplay Programming",
-          "AI / Neural Model Development",
-          "Game Infrastructure Design"
+          "Narrative Design",
+          "Rapid Prototyping",
+          "Playtesting & Data Analysis",
+          "GDDs, VDDs & System Diagrams",
+          "UI/UX"
         ]
       },
       {
-        "name": "Tools & Software",
+        "name": "Production",
         "wide": true,
         "skills": [
+          "Agile / Scrum",
+          "Kanban",
+          "Waterfall",
+          "Jira",
+          "Confluence",
+          "Taiga",
+          "AFFiNE",
           "Git",
-          "Subversion",
+          "GitHub Actions",
+          "Subversion"
+        ]
+      },
+      {
+        "name": "Art",
+        "wide": false,
+        "skills": [
           "Blender",
           "Aseprite",
           "Photoshop",
           "Illustrator",
           "DaVinci Resolve",
-          "Audacity",
-          "Taiga",
-          "Jira + Confluence",
-          "Google Suite",
-          "CMake"
+          "Audacity"
+        ]
+      },
+      {
+        "name": "Web",
+        "wide": false,
+        "skills": [
+          "Astro",
+          "Next.js"
         ]
       }
     ],
@@ -107,8 +125,8 @@
         "id": "linkedin",
         "icon": "💼",
         "label": "LinkedIn",
-        "handle": "rafaela-solis",
-        "href": "https://linkedin.com/in/rafaela-solis-3463b2245/",
+        "handle": "rafaelasolis",
+        "href": "https://www.linkedin.com/in/rafaelasolis/",
         "cssClass": "node-linkedin"
       },
       {
@@ -133,7 +151,7 @@
         "label": "GitHub",
         "handle": "solunabeeboo",
         "href": "https://github.com/solunabeeboo",
-        "cssClass": "node-bluesky"
+        "cssClass": "node-github"
       }
     ]
   }
