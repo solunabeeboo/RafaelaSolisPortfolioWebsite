@@ -5,13 +5,10 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
-    "publish": "node scripts/vault.mjs publish",
-    "vault:new": "node scripts/vault.mjs new"
+    "preview": "astro preview"
   },
   "dependencies": {
-    "astro": "^5.0.0",
-    "pdfjs-dist": "4.10.38"
+    "astro": "^5.0.0"
   },
   "devDependencies": {
     "sharp": "^0.34.5"

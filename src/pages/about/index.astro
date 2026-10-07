@@ -1,17 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import siteData from '../../data/site.json';
-import { getExperience, getCourses, getSkills, resumeFor } from '../../lib/content';
-import { personJsonLd } from '../../lib/person';
-
 const about = (siteData as any).about;
-const [experience, courses, skills] = await Promise.all([getExperience(), getCourses(), getSkills()]);
 ---
-<Layout
-    title="About | Rafaela Solís, Game Designer"
-    description="About Rafaela Solís: game designer studying Game Design and Game Programming at Champlain College, with skills in C++, Lua, C#, Unreal Engine 5, and Unity 6."
-    jsonLd={personJsonLd}
->
+<Layout title="About - Rafaela Solis">
     <style>
         /* ===== LAYOUT ===== */
         .about-page {
@@ -315,58 +307,142 @@ const [experience, courses, skills] = await Promise.all([getExperience(), getCou
             .skills-category.wide { grid-column: span 1; }
         }
 
-        /* ===== HOW I WORK ===== */
-        .how-grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 0.85rem; }
-        .how-card {
-            background: var(--card-bg); border: 2px solid var(--border); box-shadow: 4px 4px 0 var(--border);
-            padding: 1.2rem 1.35rem;
+        /* ===== EDIT MODE ===== */
+        .page-edit-toolbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 2000;
+            background: var(--bg); border-bottom: 2px solid var(--border);
+            display: flex; align-items: center; gap: 1rem;
+            padding: 0.6rem 1.5rem; font-size: 0.75rem;
         }
-        .how-card.core { background: var(--accent); color: var(--bg); }
-        .how-card h3 { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 0.15rem; }
-        .how-card .how-role { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.6rem; }
-        .how-card.core .how-role { color: rgba(245, 242, 235, 0.8); }
-        .how-card p { font-size: 0.88rem; line-height: 1.7; }
-
-        /* ===== EXPERIENCE / EDUCATION ===== */
-        .timeline { display: flex; flex-direction: column; gap: 1.6rem; }
-        .job-head { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; align-items: baseline; }
-        .job-title { font-size: 1rem; font-weight: 700; }
-        .job-dates { font-size: 0.75rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; white-space: nowrap; }
-        .job-org { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.45rem; }
-        .job ul { padding-left: 1.2rem; font-size: 0.9rem; line-height: 1.7; color: var(--text-secondary); }
-        .edu-detail { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7; }
-        .course-list { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.85rem; list-style: none; padding: 0; }
-        .course-list li { font-size: 0.75rem; border: 1.5px solid var(--border); padding: 0.15rem 0.55rem; background: var(--card-bg); }
-        .left-stats dd { margin: 0; }
-
-        @media (max-width: 1100px) {
-            .how-grid { grid-template-columns: 1fr; }
+        .page-edit-badge { font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); }
+        .page-edit-spacer { flex: 1; }
+        .page-edit-btn-primary {
+            background: var(--accent); color: var(--bg); border: 2px solid var(--border);
+            padding: 0.4rem 1.1rem; font-weight: 700; font-size: 0.72rem;
+            text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer; font-family: inherit;
+        }
+        .page-edit-btn-secondary {
+            background: transparent; color: var(--text-secondary); border: 2px solid var(--border);
+            padding: 0.4rem 1.1rem; font-weight: 700; font-size: 0.72rem;
+            text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer; font-family: inherit;
+        }
+        body.page-edit-mode [data-editable] {
+            outline: 2px dashed var(--accent); outline-offset: 2px; cursor: text;
+        }
+        body.page-edit-mode { padding-top: 2.5rem; }
+        .page-edit-overlay {
+            position: fixed; inset: 0; z-index: 2100; background: rgba(0,0,0,0.7);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .page-edit-modal {
+            background: var(--bg); border: 2px solid var(--border); box-shadow: 8px 8px 0 var(--border);
+            padding: 1.5rem 1.75rem; width: min(90vw, 420px);
+            display: flex; flex-direction: column; gap: 0.75rem;
+        }
+        .page-edit-modal h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin: 0; }
+        .page-edit-modal label { font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); display: flex; flex-direction: column; gap: 0.3rem; }
+        .page-edit-modal input {
+            background: var(--card-bg); border: 1.5px solid var(--border); color: var(--text-primary);
+            padding: 0.45rem 0.65rem; font-size: 0.85rem; font-family: inherit; width: 100%; box-sizing: border-box;
+        }
+        .page-pw-overlay {
+            position: fixed; inset: 0; z-index: 3000; background: rgba(0,0,0,0.6);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .page-pw-box {
+            background: var(--bg); border: 2px solid var(--border); box-shadow: 8px 8px 0 var(--border);
+            padding: 1.75rem; width: min(90vw, 340px); display: flex; flex-direction: column; gap: 0.75rem;
+        }
+        .page-pw-box h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin: 0; }
+        .page-pw-box input {
+            background: var(--card-bg); border: 1.5px solid var(--border); color: var(--text-primary);
+            padding: 0.5rem 0.65rem; font-size: 0.9rem; font-family: inherit; width: 100%; box-sizing: border-box;
+        }
+        .page-pw-error { color: #e55; font-size: 0.75rem; display: none; }
+        .page-pw-actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
+        /* Skill editing */
+        .skill-badge-wrap { position: relative; display: inline-flex; align-items: center; }
+        body.page-edit-mode .skill-remove-btn { display: inline-flex; }
+        .skill-remove-btn {
+            display: none; position: absolute; top: -6px; right: -6px;
+            background: var(--border); color: var(--bg); border: none;
+            border-radius: 50%; width: 14px; height: 14px; font-size: 9px;
+            cursor: pointer; align-items: center; justify-content: center; padding: 0; line-height: 1;
+        }
+        .skill-add-btn {
+            display: none; background: transparent; border: 1.5px dashed var(--accent);
+            color: var(--accent); padding: 0.25rem 0.55rem; font-size: 0.72rem;
+            cursor: pointer; font-family: inherit;
+        }
+        body.page-edit-mode .skill-add-btn { display: inline-flex; }
+        /* Headshot edit affordance */
+        body.page-edit-mode .headshot-circle {
+            cursor: pointer;
+            box-shadow: 10px 10px 0 var(--border), 0 0 0 3px var(--bg), 0 0 0 5px var(--accent);
+        }
+        body.page-edit-mode .headshot-circle:hover { opacity: 0.85; }
+        body.page-edit-mode .headshot-hint { display: block; }
+        .headshot-hint {
+            display: none;
+            font-size: 0.65rem;
+            color: rgba(245,242,235,0.6);
+            margin-top: -1.25rem;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
     </style>
+
+    <!-- Edit toolbar -->
+    <div id="pageEditToolbar" class="page-edit-toolbar" style="display:none">
+        <span class="page-edit-badge">&#9998; Edit Mode</span>
+        <div class="page-edit-spacer"></div>
+        <button class="page-edit-btn-secondary" id="pageEditCancel">Cancel</button>
+        <button class="page-edit-btn-primary" id="pageEditSave">Save Changes</button>
+    </div>
+
+    <!-- Password modal -->
+    <div id="aboutPwOverlay" class="page-pw-overlay" style="display:none">
+        <div class="page-pw-box">
+            <h3>Edit Mode</h3>
+            <input type="password" id="aboutPwInput" placeholder="Password" autocomplete="off">
+            <span class="page-pw-error" id="aboutPwError">Incorrect password</span>
+            <div class="page-pw-actions">
+                <button class="page-edit-btn-secondary" id="aboutPwCancel">Cancel</button>
+                <button class="page-edit-btn-primary" id="aboutPwSubmit">Unlock</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden file input for headshot upload -->
+    <input type="file" id="headshotFileInput" accept="image/*" style="display:none">
 
     <div class="about-page">
 
         <!-- ── LEFT: sticky photo panel ── -->
         <aside class="about-left">
             <img
+                id="aboutHeadshot"
                 src={about.headshotUrl}
-                alt="Rafaela Solís"
+                alt="Rafaela Solis"
                 class="headshot-circle"
                 width="240"
                 height="240"
                 fetchpriority="high"
+                onerror="this.style.display='none'"
             >
-            <p class="left-name">{about.name}</p>
-            <p class="left-title">{about.title}</p>
+            <span class="headshot-hint">Click to change photo</span>
+            <p class="left-name" data-editable="about.name" spellcheck="false">{about.name}</p>
+            <p class="left-title" data-editable="about.title" spellcheck="false">{about.title}</p>
             <div class="left-divider"></div>
-            <dl class="left-stats">
-                {about.stats.map((s: { label: string; value: string }) => (
+            <div class="left-stats">
+                {about.stats.map((s: { label: string; value: string }, i: number) => (
                     <div class="stat-item">
-                        <dt class="stat-label">{s.label}</dt>
-                        <dd class="stat-value">{s.value}</dd>
+                        <span class="stat-label" data-editable={`about.stats.${i}.label`} spellcheck="false">{s.label}</span>
+                        <span class="stat-value" data-editable={`about.stats.${i}.value`} spellcheck="false">{s.value}</span>
                     </div>
                 ))}
-            </dl>
+            </div>
             <a href="/resume/" class="left-resume-btn">View Resume &#8599;</a>
         </aside>
 
@@ -377,62 +453,26 @@ const [experience, courses, skills] = await Promise.all([getExperience(), getCou
             <div class="accent-rule"></div>
 
             <div class="bio">
-                {about.bio.map((para: string) => <p>{para}</p>)}
-            </div>
-
-            <div class="content-divider"></div>
-
-            <h2>How I Work</h2>
-            <div class="how-grid">
-                {about.howIWork.map((h: { name: string; role: string; text: string }, i: number) => (
-                    <div class:list={['how-card', { core: i === 0 }]}>
-                        <h3>{h.name}</h3>
-                        <p class="how-role">{h.role}</p>
-                        <p>{h.text}</p>
-                    </div>
+                {about.bio.map((para: string, i: number) => (
+                    <p data-editable={`about.bio.${i}`} spellcheck="false">{para}</p>
                 ))}
             </div>
-
-            <div class="content-divider"></div>
-
-            <h2>Experience</h2>
-            <div class="timeline">
-                {experience.map(e => (
-                    <article class="job">
-                        <div class="job-head">
-                            <h3 class="job-title">{e.data.title}</h3>
-                            <span class="job-dates">{e.data.start} – {e.data.end}</span>
-                        </div>
-                        <p class="job-org">{e.data.org}{e.data.location && ` · ${e.data.location}`}</p>
-                        <ul>{e.data.bullets.map(b => <li>{b}</li>)}</ul>
-                    </article>
-                ))}
-            </div>
-
-            <div class="content-divider"></div>
-
-            <h2>Education</h2>
-            <article class="job">
-                <div class="job-head">
-                    <h3 class="job-title">{about.education.school}</h3>
-                    <span class="job-dates">{about.education.dates}</span>
-                </div>
-                <p class="edu-detail">{about.education.degrees}</p>
-                <p class="edu-detail">{about.education.honors}</p>
-                <ul class="course-list" aria-label="Relevant coursework">
-                    {courses.map(c => <li>{c.data.name}</li>)}
-                </ul>
-            </article>
 
             <div class="content-divider"></div>
 
             <h2>Skills &amp; Expertise</h2>
             <div class="skills-grid">
-                {skills.map(cat => (
-                    <div class:list={['skills-category', { wide: cat.data.wide }]}>
-                        <h3>{cat.data.name}</h3>
+                {about.skillCategories.map((cat: { name: string; wide: boolean; skills: string[] }, ci: number) => (
+                    <div class={`skills-category${cat.wide ? ' wide' : ''}`} data-cat-index={ci}>
+                        <h3 data-editable={`about.skillCategories.${ci}.name`} spellcheck="false">{cat.name}</h3>
                         <div class="skills">
-                            {cat.data.items.map(skill => <span class="skill-badge">{skill}</span>)}
+                            {cat.skills.map((skill: string, si: number) => (
+                                <span class="skill-badge-wrap" data-cat={ci} data-skill={si}>
+                                    <span class="skill-badge" spellcheck="false">{skill}</span>
+                                    <button class="skill-remove-btn" title="Remove skill">&#10005;</button>
+                                </span>
+                            ))}
+                            <button class="skill-add-btn" data-cat-add={ci} title="Add skill">+ Add</button>
                         </div>
                     </div>
                 ))}
@@ -441,13 +481,269 @@ const [experience, courses, skills] = await Promise.all([getExperience(), getCou
             <div class="content-divider"></div>
 
             <h2>What I'm Looking For</h2>
-            <div class="looking-for-card">{about.lookingFor}</div>
+            <div class="looking-for-card" data-editable="about.lookingFor" spellcheck="false">
+                {about.lookingFor}
+            </div>
 
             <div class="resume-buttons">
-                <a href={resumeFor("design").file} class="resume-button" download>Download Resume</a>
+                <a href={about.resumeDownloadUrl} class="resume-button" download="Rafaela_Solis_Resume.pdf" target="_blank">Download Resume</a>
                 <a href="/resume/" class="resume-button secondary">View Resume</a>
             </div>
         </main>
 
     </div>
+
+    <script define:vars={{ about }}>
+        const EDIT_PASSWORD = 'studio212';
+        let editMode = false;
+
+        function setNestedPath(obj, pathStr, value) {
+            const parts = pathStr.split('.');
+            let cur = obj;
+            for (let i = 0; i < parts.length - 1; i++) {
+                const key = isNaN(parts[i]) ? parts[i] : parseInt(parts[i]);
+                cur = cur[key];
+            }
+            const last = parts[parts.length - 1];
+            cur[isNaN(last) ? last : parseInt(last)] = value;
+        }
+
+        function showPasswordModal() {
+            const overlay = document.getElementById('aboutPwOverlay');
+            const input   = document.getElementById('aboutPwInput');
+            const err     = document.getElementById('aboutPwError');
+            if (!overlay || !input) return;
+            err.style.display = 'none';
+            input.value = '';
+            overlay.style.display = 'flex';
+            setTimeout(() => input.focus(), 50);
+        }
+
+        function hidePasswordModal() {
+            const overlay = document.getElementById('aboutPwOverlay');
+            if (overlay) overlay.style.display = 'none';
+        }
+
+        function enterEditMode() {
+            editMode = true;
+            document.body.classList.add('page-edit-mode');
+            const toolbar = document.getElementById('pageEditToolbar');
+            if (toolbar) toolbar.style.display = 'flex';
+
+            // Make simple text fields contenteditable
+            document.querySelectorAll('[data-editable]').forEach(el => {
+                el.contentEditable = 'true';
+            });
+
+            // Wrap skill badges for remove buttons
+            document.querySelectorAll('.skill-badge-wrap').forEach(wrap => {
+                const badge = wrap.querySelector('.skill-badge');
+                if (badge) badge.contentEditable = 'true';
+                const btn = wrap.querySelector('.skill-remove-btn');
+                if (btn) btn.style.display = 'inline-flex';
+            });
+        }
+
+        function exitEditMode() {
+            editMode = false;
+            document.body.classList.remove('page-edit-mode');
+            const toolbar = document.getElementById('pageEditToolbar');
+            if (toolbar) toolbar.style.display = 'none';
+
+            document.querySelectorAll('[data-editable]').forEach(el => {
+                el.contentEditable = 'false';
+            });
+            document.querySelectorAll('.skill-badge-wrap .skill-badge').forEach(b => {
+                b.contentEditable = 'false';
+            });
+            document.querySelectorAll('.skill-remove-btn').forEach(btn => {
+                btn.style.display = 'none';
+            });
+        }
+
+        async function saveChanges() {
+            try {
+                const siteResp = await fetch('/api/site');
+                const site = await siteResp.json();
+
+                // Read all simple contenteditable fields
+                document.querySelectorAll('[data-editable]').forEach(el => {
+                    const pathStr = el.dataset.editable;
+                    setNestedPath(site, pathStr, el.textContent.trim());
+                });
+
+                // Rebuild skill categories from DOM
+                site.about.skillCategories = Array.from(document.querySelectorAll('.skills-category')).map(cat => {
+                    const nameEl = cat.querySelector('h3');
+                    return {
+                        name: nameEl ? nameEl.textContent.trim() : '',
+                        wide: cat.classList.contains('wide'),
+                        skills: Array.from(cat.querySelectorAll('.skill-badge')).map(b => b.textContent.trim())
+                    };
+                });
+
+                await fetch('/api/site', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(site)
+                });
+                exitEditMode();
+                location.reload();
+            } catch (e) {
+                alert('Save failed: ' + e);
+            }
+        }
+
+        function addSkillToCategory(catIndex) {
+            const skillName = prompt('Enter new skill name:');
+            if (!skillName || !skillName.trim()) return;
+            const catEl = document.querySelector(`.skills-category[data-cat-index="${catIndex}"]`);
+            if (!catEl) return;
+            const skillsEl = catEl.querySelector('.skills');
+            if (!skillsEl) return;
+
+            const wrap = document.createElement('span');
+            wrap.className = 'skill-badge-wrap';
+
+            const badge = document.createElement('span');
+            badge.className = 'skill-badge';
+            badge.textContent = skillName.trim();
+            badge.spellcheck = false;
+            if (editMode) badge.contentEditable = 'true';
+
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'skill-remove-btn';
+            removeBtn.title = 'Remove skill';
+            removeBtn.innerHTML = '&#10005;';
+            removeBtn.style.display = editMode ? 'inline-flex' : 'none';
+            removeBtn.addEventListener('click', () => wrap.remove());
+
+            wrap.appendChild(badge);
+            wrap.appendChild(removeBtn);
+
+            // Insert before the add button
+            const addBtn = skillsEl.querySelector('.skill-add-btn');
+            skillsEl.insertBefore(wrap, addBtn);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Triple-click footer to activate
+            let clicks = 0, timer = null;
+            document.querySelector('footer')?.addEventListener('click', () => {
+                clicks++;
+                if (clicks === 1) timer = setTimeout(() => { clicks = 0; }, 700);
+                if (clicks >= 3) { clearTimeout(timer); clicks = 0; showPasswordModal(); }
+            });
+
+            // Password modal buttons
+            document.getElementById('aboutPwCancel')?.addEventListener('click', hidePasswordModal);
+            document.getElementById('aboutPwSubmit')?.addEventListener('click', () => {
+                const input = document.getElementById('aboutPwInput');
+                const err   = document.getElementById('aboutPwError');
+                if (input.value === EDIT_PASSWORD) {
+                    hidePasswordModal();
+                    enterEditMode();
+                } else {
+                    err.style.display = 'block';
+                    input.value = '';
+                    input.focus();
+                }
+            });
+            document.getElementById('aboutPwInput')?.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') document.getElementById('aboutPwSubmit')?.click();
+                if (e.key === 'Escape') hidePasswordModal();
+            });
+
+            // Toolbar buttons
+            document.getElementById('pageEditCancel')?.addEventListener('click', exitEditMode);
+            document.getElementById('pageEditSave')?.addEventListener('click', saveChangesWithHeadshot);
+
+            // Skill remove buttons (existing from SSR)
+            document.querySelectorAll('.skill-remove-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btn.closest('.skill-badge-wrap')?.remove();
+                });
+            });
+
+            // Skill add buttons
+            document.querySelectorAll('.skill-add-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const catIndex = btn.dataset.catAdd;
+                    addSkillToCategory(catIndex);
+                });
+            });
+
+            // Headshot upload
+            const headshotImg = document.getElementById('aboutHeadshot');
+            const fileInput   = document.getElementById('headshotFileInput');
+
+            headshotImg?.addEventListener('click', () => {
+                if (!editMode) return;
+                fileInput?.click();
+            });
+
+            fileInput?.addEventListener('change', async (e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = async (ev) => {
+                    try {
+                        const dataUrl = ev.target.result;
+                        const resp = await fetch('/api/upload-headshot', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ filename: file.name, data: dataUrl })
+                        });
+                        const result = await resp.json();
+                        if (result.ok) {
+                            headshotImg.src = result.path + '?t=' + Date.now();
+                            // Store new path so saveChanges can read it
+                            headshotImg.dataset.newPath = result.path;
+                        } else {
+                            alert('Upload failed: ' + (result.error || 'unknown'));
+                        }
+                    } catch (err) {
+                        alert('Upload error: ' + err);
+                    }
+                };
+                reader.readAsDataURL(file);
+                // Reset input so same file can be re-selected
+                fileInput.value = '';
+            });
+        });
+
+        async function saveChangesWithHeadshot() {
+            // Patch headshot URL into site before saving
+            const newPath = document.getElementById('aboutHeadshot')?.dataset.newPath;
+            if (newPath) {
+                try {
+                    const siteResp = await fetch('/api/site');
+                    const site = await siteResp.json();
+                    // Read simple fields
+                    document.querySelectorAll('[data-editable]').forEach(el => {
+                        setNestedPath(site, el.dataset.editable, el.textContent.trim());
+                    });
+                    site.about.headshotUrl = newPath;
+                    // Rebuild skills
+                    site.about.skillCategories = Array.from(document.querySelectorAll('.skills-category')).map(cat => ({
+                        name: cat.querySelector('h3')?.textContent.trim() || '',
+                        wide: cat.classList.contains('wide'),
+                        skills: Array.from(cat.querySelectorAll('.skill-badge')).map(b => b.textContent.trim())
+                    }));
+                    await fetch('/api/site', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(site)
+                    });
+                    exitEditMode();
+                    location.reload();
+                } catch (e) {
+                    alert('Save failed: ' + e);
+                }
+            } else {
+                await saveChanges();
+            }
+        }
+
+    </script>
 </Layout>

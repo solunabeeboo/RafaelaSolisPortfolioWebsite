@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects - Rafaela Solis</title>
+    <link rel="icon" type="image/png" href="../favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f5f2eb;
+            --accent: #2d5016;
+            --accent-sage: #6b8f47;
+            --border: #1a1a1a;
+            --text-primary: #1a1a1a;
+            --text-secondary: #3a3a3a;
+            --text-muted: #6a6a6a;
+            --card-bg: rgba(255, 255, 255, 0.7);
+            --nav-bg: rgba(255, 255, 255, 0.75);
+            --nav-h: 60px;
+            --compact-h: 24px; /* strip height when another is active */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg);
+        }
+
+        /* ===== NAV ===== */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: var(--nav-h);
+            background: var(--nav-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 2px solid var(--border);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 0 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-primary);
+            padding: 0.5rem 1.5rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            transition: color 0.2s;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 50%;
+            width: 0; height: 2px;
+            background: var(--accent);
+            transform: translateX(-50%);
+            transition: width 0.25s;
+        }
+
+        nav a:hover { color: var(--accent); }
+        nav a:hover::after { width: 80%; }
+
+        /* ===== BURGER ===== */
+        .burger-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 1rem;
+            position: fixed;
+            top: 1rem; right: 1rem;
+            z-index: 1001;
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            box-shadow: 3px 3px 0 var(--border);
+            backdrop-filter: blur(16px);
+        }
+
+        .burger-line {
+            width: 25px; height: 3px;
+            background: var(--border);
+            margin: 3px 0;
+            transition: all 0.3s;
+        }
+
+        .burger-menu.active .burger-line:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .burger-menu.active .burger-line:nth-child(2) { opacity: 0; }
+        .burger-menu.active .burger-line:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(245, 242, 235, 0.97);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-menu.active { display: flex; }
+
+        .mobile-menu ul {
+            list-style: none;
+            width: 100%;
+            max-width: 360px;
+            border: 2px solid var(--border);
+        }
+
+        .mobile-menu li { border-bottom: 2px solid var(--border); }
+        .mobile-menu li:last-child { border-bottom: none; }
+
+        .mobile-menu a {
+            display: block;
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 1.5rem 2rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .mobile-menu a:hover { background: var(--accent); color: var(--bg); }
+
+        @media (max-width: 768px) {
+            nav { display: none; }
+            .burger-menu { display: flex; }
+        }
+
+
+        .sections-stage {
+            position: sticky;
+            top: var(--nav-h);
+            /* height set by JS to match viewport minus nav */
+            overflow: hidden;
+        }
+
+        /* ===== STRIP ===== */
+        .section-strip {
+            /* height: set by JS every frame */
+            width: 100%;
+            overflow: hidden;
+            border-bottom: 2px solid var(--border);
+            position: relative;
+            background: var(--bg);
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        /* ===== STRIP BACKGROUND (parallax image) ===== */
+        /* Hidden by default — JS sets opacity when strip is expanding */
+        .strip-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center 50%;
+            opacity: 0;
+            transition: opacity 0.4s;
+            pointer-events: none;
+            filter: brightness(0.14) saturate(0.35);
+        }
+
+        /* ===== STRIP HEADER (always visible row — 24px tall) ===== */
+        .strip-header {
+            height: var(--compact-h);
+            min-height: var(--compact-h);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0 0.85rem;
+            position: relative;
+            z-index: 2;
+            background: var(--bg);
+            border-bottom: 1px solid rgba(26, 26, 26, 0.1);
+            transition: background 0.3s, backdrop-filter 0.3s;
+        }
+
+        /* Frosted header when strip is active */
+        .section-strip.strip-active .strip-header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(26, 26, 26, 0.15);
+        }
+
+        /* ===== STRIP OVERVIEW ROW (visible in overview, clipped when compact=24px) ===== */
+        .strip-overview-row {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.35rem 0.85rem 0.4rem;
+            position: relative;
+            z-index: 2;
+            background: var(--bg);
+            overflow: hidden;
+        }
+
+        /* Hide overview row when strip is fully active (full content takes over) */
+        .section-strip.strip-active .strip-overview-row {
+            display: none;
+        }
+
+        .strip-num {
+            font-size: 0.58rem;
+            font-weight: 700;
+            color: var(--accent-sage);
+            letter-spacing: 0.1em;
+            flex-shrink: 0;
+            font-variant-numeric: tabular-nums;
+            min-width: 1.6rem;
+            line-height: 1;
+        }
+
+        .strip-title {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+
+        .strip-sep {
+            width: 1px;
+            height: 12px;
+            background: rgba(26, 26, 26, 0.2);
+            flex-shrink: 0;
+        }
+
+        /* Short description — in overview row, not in header */
+        .strip-short-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .strip-header-tags {
+            display: flex;
+            gap: 0.3rem;
+            flex-shrink: 0;
+            margin-left: auto;
+        }
+
+        .strip-tag {
+            font-size: 0.64rem;
+            font-weight: 600;
+            border: 1.5px solid rgba(26, 26, 26, 0.35);
+            padding: 0.1rem 0.38rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .strip-hint {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            flex-shrink: 0;
+            margin-left: auto;
+            line-height: 1;
+        }
+
+        .section-strip.strip-active .strip-hint { opacity: 0; }
+
+        /* ===== STRIP EXPANDED CONTENT ===== */
+        .strip-content {
+            flex: 1;
+            position: relative;
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 0.35s;
+            overflow: hidden;
+            display: flex;
+        }
+
+        .section-strip.strip-active .strip-content {
+            opacity: 1;
+        }
+
+        .strip-content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Left: text */
+        .strip-info {
+            padding: 1.5rem 1.75rem;
+            background: rgba(245, 242, 235, 0.93);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            overflow-y: auto;
+            border-right: 2px solid var(--border);
+        }
+
+        .strip-label {
+            font-size: 0.64rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--accent);
+            padding-left: 0.5rem;
+            border-left: 3px solid var(--accent);
+        }
+
+        .strip-description {
+            font-size: 0.87rem;
+            color: var(--text-secondary);
+            line-height: 1.75;
+            white-space: pre-line;
+        }
+
+        .strip-meta-row {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .strip-meta-item { display: flex; flex-direction: column; gap: 0.1rem; }
+
+        .strip-meta-label {
+            font-size: 0.59rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.13em;
+            color: var(--accent);
+        }
+
+        .strip-meta-value {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .strip-tags-full { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+
+        .tag {
+            font-size: 0.72rem;
+            font-weight: 600;
+            border: 2px solid var(--border);
+            padding: 0.2rem 0.55rem;
+            color: var(--text-primary);
+            transition: background 0.15s, color 0.15s, border-color 0.15s;
+        }
+
+        .tag:hover { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+        .strip-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--accent);
+            color: var(--bg);
+            text-decoration: none;
+            padding: 0.65rem 1.4rem;
+            border: 2px solid var(--border);
+            box-shadow: 3px 3px 0 var(--border);
+            font-weight: 700;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: transform 0.15s, box-shadow 0.15s;
+            align-self: flex-start;
+            margin-top: auto;
+            flex-shrink: 0;
+        }
+
+        .strip-link:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--border); }
+
+        /* ===== RIGHT PANEL: click-through carousel ===== */
+        .strip-gallery {
+            position: relative;
+            height: 100%;
+            overflow: hidden;
+            background: #0d0d0d;
+            border-left: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Each slide fills the panel; only active one is shown */
+        .gallery-slide {
+            position: absolute;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gallery-slide.active { display: flex; }
+
+        .gallery-slide img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            display: block;
+        }
+
+        .gallery-slide video {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            display: block;
+        }
+
+        /* Prev / Next buttons */
+        .gallery-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #fff;
+            font-size: 0.9rem;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: background 0.15s;
+            user-select: none;
+        }
+
+        .gallery-btn:hover { background: rgba(255, 255, 255, 0.28); }
+        .gallery-btn-prev { left: 0.4rem; }
+        .gallery-btn-next { right: 0.4rem; }
+
+        /* Slide counter e.g. "2 / 5" */
+        .gallery-counter {
+            position: absolute;
+            bottom: 0.45rem;
+            right: 0.6rem;
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.5);
+            pointer-events: none;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.04em;
+        }
+
+        /* ===== LOADING / ERROR ===== */
+        .loading-state {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--accent);
+            text-align: center;
+            padding: 2rem;
+            color: rgba(245, 242, 235, 0.8);
+            border-top: 3px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        /* ===== MOBILE FALLBACK ===== */
+        @media (max-width: 768px) {
+            #scrollDriver { height: auto !important; }
+
+            .sections-stage {
+                position: static;
+                height: auto !important;
+                overflow: visible;
+            }
+
+            .section-strip {
+                height: auto !important;
+                min-height: 100svh;
+                cursor: default;
+                border-bottom: 3px solid var(--border);
+            }
+
+            .strip-bg { opacity: 1 !important; filter: brightness(0.12) saturate(0.3); }
+            .strip-header { background: rgba(255,255,255,0.92) !important; backdrop-filter: blur(12px); flex-wrap: wrap; height: auto !important; min-height: 36px; padding: 0.5rem 1rem; gap: 0.5rem; }
+            .strip-overview-row { padding: 0.5rem 1rem; }
+            .strip-content { opacity: 1 !important; min-height: calc(100svh - 36px); }
+            .strip-content-grid { grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
+            .strip-info { border-right: none; border-bottom: 2px solid var(--border); overflow-y: visible; }
+            .strip-gallery { min-height: 240px; height: 240px; border-left: none; border-top: 2px solid var(--border); }
+        }
+    </style>
+</head>
+<body>
+    <div class="burger-menu" id="burgerMenu">
+        <div class="burger-line"></div>
+        <div class="burger-line"></div>
+        <div class="burger-line"></div>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="../">Home</a></li>
+            <li><a href="/projects/">Projects</a></li>
+            <li><a href="/about/">About</a></li>
+            <li><a href="/contact/">Contact</a></li>
+        </ul>
+    </div>
+
+    <nav>
+        <ul>
+            <li><a href="../">Home</a></li>
+            <li><a href="/projects/">Projects</a></li>
+            <li><a href="/about/">About</a></li>
+            <li><a href="/contact/">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div id="scrollDriver">
+        <div class="sections-stage" id="sectionsStage">
+            <div class="loading-state">Loading projects...</div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Rafaela Solis. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const NAV_H    = 60;
+        const COMPACT  = 24;  // px: inactive strip min-height
+        const BUF_VH   = 0.25; // fraction of viewport: initial overview before expansion starts
+        const SEC_VH   = 0.80; // fraction of viewport: scroll budget per section
+
+        let isMobile = false;
+
+        function checkMobile() {
+            isMobile = window.matchMedia('(max-width: 768px)').matches;
+        }
+
+        function isVideo(src) {
+            return /\.(mp4|webm|ogg)$/i.test(src);
+        }
+
+        function buildSlidesHTML(media) {
+            return media.map((src, idx) => {
+                const inner = isVideo(src)
+                    ? `<video src="${src}" controls muted playsinline loop></video>`
+                    : `<img src="${src}" alt="" loading="lazy" onerror="this.style.display='none'">`;
+                return `<div class="gallery-slide${idx === 0 ? ' active' : ''}">${inner}</div>`;
+            }).join('');
+        }
+
+        // ===== BUILD STRIPS =====
+        function buildStrips(projects) {
+            const stage  = document.getElementById('sectionsStage');
+            const driver = document.getElementById('scrollDriver');
+            const N = projects.length;
+            const stageH = window.innerHeight - NAV_H;
+
+            stage.style.height = stageH + 'px';
+            driver.style.height = ((BUF_VH + N * SEC_VH) * window.innerHeight) + 'px';
+
+            stage.innerHTML = '';
+
+            projects.forEach((project, i) => {
+                const strip = document.createElement('div');
+                strip.className = 'section-strip';
+                strip.id = `strip-${i}`;
+
+                // Images
+                const bgSrc = project.image || (project.screenshots && project.screenshots[0]) || '';
+                const bgFallback = project.gradient || 'linear-gradient(135deg, #2d5016, #6b8f47)';
+                const bgStyle = bgSrc ? `background-image: url('${bgSrc}')` : `background: ${bgFallback}`;
+
+                // Tags
+                const headerTags = project.tags.slice(0, 3)
+                    .map(t => `<span class="strip-tag">${t}</span>`).join('');
+                const fullTags = project.tags
+                    .map(t => `<span class="tag">${t}</span>`).join('');
+
+                // Meta
+                const metaItems = [
+                    project.developmentTime && `<div class="strip-meta-item"><span class="strip-meta-label">Dev Time</span><span class="strip-meta-value">${project.developmentTime}</span></div>`,
+                    project.teamSize        && `<div class="strip-meta-item"><span class="strip-meta-label">Team</span><span class="strip-meta-value">${project.teamSize}</span></div>`,
+                    project.tools && project.tools.length && `<div class="strip-meta-item"><span class="strip-meta-label">Tools</span><span class="strip-meta-value">${project.tools.slice(0, 4).join(', ')}</span></div>`,
+                ].filter(Boolean).join('');
+
+                const desc = project.fullDescription || project.shortDescription || '';
+                const linkHref = project.playLink || '#';
+                const linkText = project.linkText || 'View Project';
+
+                // Carousel: use screenshots array; fall back to main image
+                const media = (project.screenshots && project.screenshots.length)
+                    ? project.screenshots
+                    : (bgSrc ? [bgSrc] : []);
+                const hasMultiple = media.length > 1;
+                const slidesHTML = buildSlidesHTML(media);
+
+                strip.innerHTML = `
+                    <div class="strip-bg" style="${bgStyle}"></div>
+
+                    <div class="strip-header">
+                        <span class="strip-num">${String(i + 1).padStart(2, '0')}</span>
+                        <span class="strip-title">${project.title}</span>
+                        <span class="strip-hint">&#8597;</span>
+                    </div>
+
+                    <div class="strip-overview-row">
+                        <span class="strip-sep"></span>
+                        <span class="strip-short-desc">${project.shortDescription || ''}</span>
+                        <div class="strip-header-tags">${headerTags}</div>
+                    </div>
+
+                    <div class="strip-content">
+                        <div class="strip-content-grid">
+                            <div class="strip-info">
+                                <span class="strip-label">About</span>
+                                <div class="strip-description">${desc}</div>
+                                ${metaItems ? `<div class="strip-meta-row">${metaItems}</div>` : ''}
+                                <div class="strip-tags-full">${fullTags}</div>
+                                <a href="${linkHref}" class="strip-link" target="_blank" rel="noopener noreferrer">
+                                    ${linkText} &rarr;
+                                </a>
+                            </div>
+                            <div class="strip-gallery">
+                                ${slidesHTML}
+                                ${hasMultiple ? `
+                                <button class="gallery-btn gallery-btn-prev" aria-label="Previous">&#8592;</button>
+                                <button class="gallery-btn gallery-btn-next" aria-label="Next">&#8594;</button>
+                                <span class="gallery-counter"><span class="gallery-cur">1</span> / ${media.length}</span>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Carousel init (only if multiple slides)
+                if (hasMultiple) {
+                    const gallery  = strip.querySelector('.strip-gallery');
+                    const slides   = Array.from(gallery.querySelectorAll('.gallery-slide'));
+                    const curEl    = gallery.querySelector('.gallery-cur');
+                    const btnPrev  = gallery.querySelector('.gallery-btn-prev');
+                    const btnNext  = gallery.querySelector('.gallery-btn-next');
+                    let cur = 0;
+
+                    function goTo(idx) {
+                        slides[cur].classList.remove('active');
+                        cur = (idx + slides.length) % slides.length;
+                        slides[cur].classList.add('active');
+                        if (curEl) curEl.textContent = cur + 1;
+                    }
+
+                    btnPrev.addEventListener('click', e => { e.stopPropagation(); goTo(cur - 1); });
+                    btnNext.addEventListener('click', e => { e.stopPropagation(); goTo(cur + 1); });
+                }
+
+                // Click inactive header → jump to that section
+                strip.querySelector('.strip-header').addEventListener('click', () => {
+                    if (strip.classList.contains('strip-active') || isMobile) return;
+                    const bufPx  = BUF_VH  * window.innerHeight;
+                    const secPx  = SEC_VH  * window.innerHeight;
+                    window.scrollTo({ top: bufPx + i * secPx, behavior: 'smooth' });
+                });
+
+                stage.appendChild(strip);
+            });
+        }
+
+        // ===== SCROLL ENGINE =====
+        // Heights are driven DIRECTLY by scroll position every rAF frame.
+        // No CSS transitions on height — the scroll itself provides smoothness.
+        function initScrollEngine() {
+            const stage = document.getElementById('sectionsStage');
+            let ticking = false;
+            let lastActiveIdx = -99;
+
+            function update() {
+                if (isMobile) { ticking = false; return; }
+
+                const strips = Array.from(stage.querySelectorAll('.section-strip'));
+                const N = strips.length;
+                if (!N) { ticking = false; return; }
+
+                const stageH = window.innerHeight - NAV_H;
+                const maxH   = stageH - (N - 1) * COMPACT; // max possible expanded height
+                const bufPx  = BUF_VH * window.innerHeight;
+                const secPx  = SEC_VH * window.innerHeight;
+                const scrollY = window.scrollY;
+
+                // --- compute progress for each strip (0 = compact, 1 = fully expanded) ---
+                let progresses;
+
+                if (scrollY <= bufPx) {
+                    // Overview phase: blend from all-equal → section 0 expanded
+                    const t = scrollY / bufPx; // 0 → 1
+                    const equalH_progress = (stageH / N - COMPACT) / (maxH - COMPACT); // equal-state progress
+                    progresses = strips.map((_, i) =>
+                        i === 0
+                            ? equalH_progress + (1 - equalH_progress) * t
+                            : equalH_progress * (1 - t)
+                    );
+                } else {
+                    // Active phase: continuously blend between adjacent sections
+                    const scrolledIn = scrollY - bufPx;
+                    const frac = scrolledIn / secPx;          // fractional section index
+                    const lo   = Math.max(0, Math.min(N - 1, Math.floor(frac)));
+                    const hi   = Math.min(N - 1, lo + 1);
+                    const t    = frac - Math.floor(frac);     // blend fraction 0→1
+
+                    progresses = strips.map((_, i) => {
+                        if (lo === hi) return i === lo ? 1 : 0; // last section: stays at 1
+                        if (i === lo)  return 1 - t;
+                        if (i === hi)  return t;
+                        return 0;
+                    });
+                }
+
+                // --- apply heights and classes ---
+                let activeIdx = -1;
+                let maxP = 0;
+
+                progresses.forEach((p, i) => {
+                    const h = COMPACT + (maxH - COMPACT) * p;
+                    strips[i].style.height = h + 'px';
+
+                    // Background fades in as strip expands past 20% progress
+                    const bg = strips[i].querySelector('.strip-bg');
+                    if (bg) bg.style.opacity = Math.max(0, (p - 0.2) / 0.8);
+
+                    if (p > maxP) { maxP = p; activeIdx = i; }
+                });
+
+                // Toggle strip-active on the strip with highest progress (> 50%)
+                strips.forEach((s, i) => s.classList.toggle('strip-active', i === activeIdx && maxP > 0.5));
+
+
+                ticking = false;
+            }
+
+            window.addEventListener('scroll', () => {
+                if (!ticking) { requestAnimationFrame(update); ticking = true; }
+            }, { passive: true });
+
+            window.addEventListener('resize', () => {
+                checkMobile();
+                if (!isMobile) {
+                    // Recompute stage + driver height on resize
+                    const stage  = document.getElementById('sectionsStage');
+                    const driver = document.getElementById('scrollDriver');
+                    const N = stage.querySelectorAll('.section-strip').length;
+                    stage.style.height  = (window.innerHeight - NAV_H) + 'px';
+                    driver.style.height = ((BUF_VH + N * SEC_VH) * window.innerHeight) + 'px';
+                    requestAnimationFrame(update);
+                }
+            });
+
+            update(); // initial paint
+        }
+
+        // ===== BURGER =====
+        function initBurgerMenu() {
+            const burger = document.getElementById('burgerMenu');
+            const menu   = document.getElementById('mobileMenu');
+            burger.addEventListener('click', () => { burger.classList.toggle('active'); menu.classList.toggle('active'); });
+            menu.querySelectorAll('a').forEach(l => l.addEventListener('click', () => { burger.classList.remove('active'); menu.classList.remove('active'); }));
+            menu.addEventListener('click', e => { if (e.target === menu) { burger.classList.remove('active'); menu.classList.remove('active'); } });
+        }
+
+        // ===== LOAD =====
+        async function loadProjects() {
+            try {
+                const res  = await fetch('projects.json');
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const data = await res.json();
+                buildStrips(data.projects);
+                initScrollEngine();
+            } catch (e) {
+                console.error(e);
+                document.getElementById('sectionsStage').innerHTML =
+                    '<div class="loading-state" style="color:#9b2226">Failed to load projects.</div>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            checkMobile();
+            loadProjects();
+            initBurgerMenu();
+        });
+    </script>
+</body>
+</html>
