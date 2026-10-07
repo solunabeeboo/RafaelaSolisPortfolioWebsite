@@ -1,11 +1,11 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import siteData from '../../data/site.json';
-import { getExperience, getCourses, getSkills, resumeFor } from '../../lib/content';
+import { getSkills, resumeFor } from '../../lib/content';
 import { personJsonLd } from '../../lib/person';
 
 const about = (siteData as any).about;
-const [experience, courses, skills] = await Promise.all([getExperience(), getCourses(), getSkills()]);
+const skills = await getSkills();
 ---
 <Layout
     title="About | Rafaela Solís, Game Designer"
@@ -315,33 +315,8 @@ const [experience, courses, skills] = await Promise.all([getExperience(), getCou
             .skills-category.wide { grid-column: span 1; }
         }
 
-        /* ===== HOW I WORK ===== */
-        .how-grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 0.85rem; }
-        .how-card {
-            background: var(--card-bg); border: 2px solid var(--border); box-shadow: 4px 4px 0 var(--border);
-            padding: 1.2rem 1.35rem;
-        }
-        .how-card.core { background: var(--accent); color: var(--bg); }
-        .how-card h3 { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 0.15rem; }
-        .how-card .how-role { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.6rem; }
-        .how-card.core .how-role { color: rgba(245, 242, 235, 0.8); }
-        .how-card p { font-size: 0.88rem; line-height: 1.7; }
-
-        /* ===== EXPERIENCE / EDUCATION ===== */
-        .timeline { display: flex; flex-direction: column; gap: 1.6rem; }
-        .job-head { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; align-items: baseline; }
-        .job-title { font-size: 1rem; font-weight: 700; }
-        .job-dates { font-size: 0.75rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; white-space: nowrap; }
-        .job-org { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.45rem; }
-        .job ul { padding-left: 1.2rem; font-size: 0.9rem; line-height: 1.7; color: var(--text-secondary); }
-        .edu-detail { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7; }
-        .course-list { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.85rem; list-style: none; padding: 0; }
-        .course-list li { font-size: 0.75rem; border: 1.5px solid var(--border); padding: 0.15rem 0.55rem; background: var(--card-bg); }
         .left-stats dd { margin: 0; }
 
-        @media (max-width: 1100px) {
-            .how-grid { grid-template-columns: 1fr; }
-        }
     </style>
 
     <div class="about-page">
@@ -379,50 +354,6 @@ const [experience, courses, skills] = await Promise.all([getExperience(), getCou
             <div class="bio">
                 {about.bio.map((para: string) => <p>{para}</p>)}
             </div>
-
-            <div class="content-divider"></div>
-
-            <h2>How I Work</h2>
-            <div class="how-grid">
-                {about.howIWork.map((h: { name: string; role: string; text: string }, i: number) => (
-                    <div class:list={['how-card', { core: i === 0 }]}>
-                        <h3>{h.name}</h3>
-                        <p class="how-role">{h.role}</p>
-                        <p>{h.text}</p>
-                    </div>
-                ))}
-            </div>
-
-            <div class="content-divider"></div>
-
-            <h2>Experience</h2>
-            <div class="timeline">
-                {experience.map(e => (
-                    <article class="job">
-                        <div class="job-head">
-                            <h3 class="job-title">{e.data.title}</h3>
-                            <span class="job-dates">{e.data.start} – {e.data.end}</span>
-                        </div>
-                        <p class="job-org">{e.data.org}{e.data.location && ` · ${e.data.location}`}</p>
-                        <ul>{e.data.bullets.map(b => <li>{b}</li>)}</ul>
-                    </article>
-                ))}
-            </div>
-
-            <div class="content-divider"></div>
-
-            <h2>Education</h2>
-            <article class="job">
-                <div class="job-head">
-                    <h3 class="job-title">{about.education.school}</h3>
-                    <span class="job-dates">{about.education.dates}</span>
-                </div>
-                <p class="edu-detail">{about.education.degrees}</p>
-                <p class="edu-detail">{about.education.honors}</p>
-                <ul class="course-list" aria-label="Relevant coursework">
-                    {courses.map(c => <li>{c.data.name}</li>)}
-                </ul>
-            </article>
 
             <div class="content-divider"></div>
 

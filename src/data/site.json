@@ -2,25 +2,7 @@
   "home": {
     "role": "Game Designer",
     "tagline": "I design games, build the systems behind them, and lead the teams that ship them.",
-    "openTo": "Open to summer 2027 internships · US / CA / EU",
-    "proof": [
-      {
-        "stat": "2nd place",
-        "label": "Internationally, CurseForge Subnautica 2 Modding Contest"
-      },
-      {
-        "stat": "6,500+",
-        "label": "Mod downloads"
-      },
-      {
-        "stat": "Lead Developer",
-        "label": "Pentad Games: design, programming, product"
-      },
-      {
-        "stat": "3.90 GPA",
-        "label": "Dean’s List, every semester"
-      }
-    ]
+    "openTo": "Open to summer 2027 internships · US / CA / EU"
   },
   "about": {
     "name": "Rafaela Solís",
@@ -45,28 +27,11 @@
       }
     ],
     "bio": [
-      "My journey in game development started as a tiny baby. My father started a company during the tech boom doing IT for the city of Austin, Texas, and he always had every kind of computer around. We’d sit down in front of a 4-inch-thick laptop to play obscure, cobbled-together kids’ games my tiny brain could understand. I’ve been hooked ever since.",
-      "I’m earning a dual B.S. in Game Design and Game Programming with a Project Management minor at Champlain College (2028), with a 3.90 GPA and Dean’s List every semester. Design is the core of what I do: systems, gameplay, level, technical, and narrative design, prototyped fast and tested on real players. Programming in C++, Lua, and C# across Unreal Engine 5 and Unity 6 lets me build and prove my own designs, and production lets me help teams ship them.",
-      "Today I’m Lead Developer at Pentad Games, leading design on Open Shift and Scriptorium, and my Subnautica 2 mod Easy Third Person placed 2nd internationally in the CurseForge modding contest. Beyond that: 12+ indie and jam games on itch.io with all original art, plenty of academic prototypes, and web projects like the one you’re on right now. I love the puzzle of making people happy, and every project has taught me something about teamwork, scope, design, and the player."
+      "Hi! I'm Rafaela Solís, a passionate game designer dedicated to creating engaging, immersive, and emotional player-focused gaming experiences. My journey in game development started as a tiny baby. My father started a company during the tech boom, and performed IT services for the city of Austin, Texas. He always had every kind of computer, and quite often we would sit down together in front of a 4 inch thick laptop to play obscure cobbled together kids games that my tiny brain could understand. I've been hooked ever since.",
+      "I double major in Game Design and Game Programming at Champlain College (2028), with a minor in Project Management and specific focus in system design, level design, technical design, narrative design, gameplay programming, rapid prototyping, and more. I have experience with Unreal Engine 5, Unity 6, C++, Lua, C#, Python, Java, Blueprints, and web tools like Astro and Next.js. I love the puzzle of making people happy. I've worked across a plethora of genres and projects: Maze-Puzzle, Action-Adventure, Educational, Drawing-Combat, Multiplayer Coop/Competitive, Website Portfolios, Web Tools, and more!",
+      "I've shipped three non-academic large-team project demos: Mega Market Mayhem, Scriptorium, and Open Shift, with Scriptorium and Open Shift in active development. Beyond that, dozens of indie and jam games, and a plethora of academic prototypes and web centered projects, like the one you're on right now! Each project has taught me invaluable lessons about teamwork, scope, design, and the importance of the user."
     ],
     "lookingFor": "I'm currently seeking passionately led projects and game industry internships in the US, Canada, and EU regions. I'm particularly excited about work involving user psychology, narrative-driven experiences, large-scale multiplayer stacks, and community-driven development.",
-    "howIWork": [
-      {
-        "name": "Design",
-        "role": "The core",
-        "text": "Design is what I do: systems, gameplay, level, technical, and narrative design. I prototype fast and test on real players. I’ve run dozens of playtests on my own games, compiled the data, and used it to iterate, and I’ve playtested externally for Behaviour Interactive. I write the GDDs, VDDs, and system diagrams that keep art, programming, and audio aligned."
-      },
-      {
-        "name": "Programming",
-        "role": "Why it helps the design",
-        "text": "I prototype my own designs in C++, Lua, and C# across Unreal Engine 5 and Unity 6, so I can test ideas firsthand and work fluently with engineers. Scriptorium’s rune-recognition model and Easy Third Person both came from building the design myself."
-      },
-      {
-        "name": "Production",
-        "role": "Why it helps the team",
-        "text": "As a producer for 5+ academic teams and product owner at Pentad Games, I run sprints, scope features, and build the tools the team uses every day. When something has to give, like the voice acting on The Owl Keeper, I find the cut that keeps what matters."
-      }
-    ],
     "education": {
       "school": "Champlain College",
       "dates": "Expected May 2028",
