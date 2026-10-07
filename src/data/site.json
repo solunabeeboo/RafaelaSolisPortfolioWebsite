@@ -1,7 +1,26 @@
 {
   "home": {
     "role": "Game Designer",
-    "tagline": "I design games, build the systems behind them, and lead the teams that ship them."
+    "tagline": "I design games, build the systems behind them, and lead the teams that ship them.",
+    "openTo": "Open to summer 2027 internships · US / CA / EU",
+    "proof": [
+      {
+        "stat": "2nd place",
+        "label": "Internationally, CurseForge Subnautica 2 Modding Contest"
+      },
+      {
+        "stat": "6,500+",
+        "label": "Mod downloads"
+      },
+      {
+        "stat": "Lead Developer",
+        "label": "Pentad Games: design, programming, product"
+      },
+      {
+        "stat": "3.90 GPA",
+        "label": "Dean’s List, every semester"
+      }
+    ]
   },
   "about": {
     "name": "Rafaela Solís",
@@ -26,90 +45,34 @@
       }
     ],
     "bio": [
-      "Hi! I'm Rafaela Solis, a passionate game developer dedicated to creating engaging, immersive, and emotional player-focused gaming experiences. My journey in game development started as a tiny baby. My father started a company during the tech boom, and performed IT services for the city of Austin, Texas. He always had every kind of computer, and quite often we would sit down together in front of a 4 inch thick laptop to play obscure cobbled together kids games that my tiny brain could understand. I've been hooked ever since.",
+      "My journey in game development started as a tiny baby. My father started a company during the tech boom doing IT for the city of Austin, Texas, and he always had every kind of computer around. We’d sit down in front of a 4-inch-thick laptop to play obscure, cobbled-together kids’ games my tiny brain could understand. I’ve been hooked ever since.",
       "I’m earning a dual B.S. in Game Design and Game Programming with a Project Management minor at Champlain College (2028), with a 3.90 GPA and Dean’s List every semester. Design is the core of what I do: systems, gameplay, level, technical, and narrative design, prototyped fast and tested on real players. Programming in C++, Lua, and C# across Unreal Engine 5 and Unity 6 lets me build and prove my own designs, and production lets me help teams ship them.",
-      "I've shipped two non-academic large-team project demos: Mega Market Mayhem and Scriptorium, both in demo stages with Scriptorium in active development. Beyond that, dozens of indie and jam games, and a plethora of academic prototypes and web centered projects, like the one you’re on right now! Each project has taught me invaluable lessons about teamwork, scope, design, and the importance of the user."
+      "Today I’m Lead Developer at Pentad Games, leading design on Open Shift and Scriptorium, and my Subnautica 2 mod Easy Third Person placed 2nd internationally in the CurseForge modding contest. Beyond that: 12+ indie and jam games on itch.io with all original art, plenty of academic prototypes, and web projects like the one you’re on right now. I love the puzzle of making people happy, and every project has taught me something about teamwork, scope, design, and the player."
     ],
-    "skillCategories": [
-      {
-        "name": "Languages",
-        "wide": false,
-        "skills": [
-          "C++",
-          "Lua",
-          "C#",
-          "Python",
-          "Java",
-          "HTML/CSS"
-        ]
-      },
-      {
-        "name": "Engines",
-        "wide": false,
-        "skills": [
-          "Unreal Engine 5 (Lyra Framework)",
-          "UEFN",
-          "Unity 6",
-          "UE4SS",
-          "Blueprints",
-          "OpenGL",
-          "Shaders"
-        ]
-      },
+    "lookingFor": "I'm currently seeking passionately led projects and game industry internships in the US, Canada, and EU regions. I'm particularly excited about work involving user psychology, narrative-driven experiences, large-scale multiplayer stacks, and community-driven development.",
+    "howIWork": [
       {
         "name": "Design",
-        "wide": true,
-        "skills": [
-          "Systems Design",
-          "Gameplay Design",
-          "Level Design",
-          "Technical Design",
-          "Narrative Design",
-          "Rapid Prototyping",
-          "Playtesting & Data Analysis",
-          "GDDs, VDDs & System Diagrams",
-          "UI/UX"
-        ]
+        "role": "The core",
+        "text": "Design is what I do: systems, gameplay, level, technical, and narrative design. I prototype fast and test on real players. I’ve run dozens of playtests on my own games, compiled the data, and used it to iterate, and I’ve playtested externally for Behaviour Interactive. I write the GDDs, VDDs, and system diagrams that keep art, programming, and audio aligned."
+      },
+      {
+        "name": "Programming",
+        "role": "Why it helps the design",
+        "text": "I prototype my own designs in C++, Lua, and C# across Unreal Engine 5 and Unity 6, so I can test ideas firsthand and work fluently with engineers. Scriptorium’s rune-recognition model and Easy Third Person both came from building the design myself."
       },
       {
         "name": "Production",
-        "wide": true,
-        "skills": [
-          "Agile / Scrum",
-          "Kanban",
-          "Waterfall",
-          "Jira",
-          "Confluence",
-          "Taiga",
-          "AFFiNE",
-          "Git",
-          "GitHub Actions",
-          "Subversion"
-        ]
-      },
-      {
-        "name": "Art",
-        "wide": false,
-        "skills": [
-          "Blender",
-          "Aseprite",
-          "Photoshop",
-          "Illustrator",
-          "DaVinci Resolve",
-          "Audacity"
-        ]
-      },
-      {
-        "name": "Web",
-        "wide": false,
-        "skills": [
-          "Astro",
-          "Next.js"
-        ]
+        "role": "Why it helps the team",
+        "text": "As a producer for 5+ academic teams and product owner at Pentad Games, I run sprints, scope features, and build the tools the team uses every day. When something has to give, like the voice acting on The Owl Keeper, I find the cut that keeps what matters."
       }
     ],
-    "lookingFor": "I'm currently seeking passionately led projects and game industry internships in the US, Canada, and EU regions. I'm particularly excited about work involving user psychology, narrative-driven experiences, large-scale multiplayer stacks, and community-driven development.",
-    "resumeDownloadUrl": "https://drive.google.com/uc?export=download&id=1esAsb0Ccf4hPH9a1IM9tLYnNevK0NVrC"
+    "education": {
+      "school": "Champlain College",
+      "dates": "Expected May 2028",
+      "degrees": "B.S. Game Design · B.S. Game Programming · Project Management minor",
+      "honors": "GPA 3.90 · Dean’s List, all semesters"
+    }
   },
   "contact": {
     "nodes": [
@@ -154,5 +117,44 @@
         "cssClass": "node-github"
       }
     ]
+  },
+  "resume": {
+    "summary": "Game designer pursuing dual B.S. degrees in Game Design and Game Programming with a Project Management minor. Leads design across three studio titles at Pentad Games, prototyping features directly in Unity and Unreal Engine 5 with C++, Lua, and C#, and directing the team that builds them. Placed 2nd internationally in the CurseForge Subnautica 2 Modding Contest, with 6,500+ mod downloads on CurseForge. Programming makes it possible to prototype designs firsthand and work fluently with engineers; production training means leading a team or supporting one.",
+    "projects": [
+      {
+        "title": "Subnautica 2 Modding Contest: 2nd Place Internationally",
+        "org": "CurseForge",
+        "dates": "June 2026",
+        "href": "/projects/easy-third-person/",
+        "bullets": [
+          "Designed and built Easy Third Person, a third-person camera mod in C++ and Lua for Unreal Engine 5, winning 2nd place internationally and $650",
+          "Reverse-engineered UE4SS to implement custom systems; featured on CurseForge’s main page banner for multiple weeks",
+          "Released Easy Third Person and The Gold Mod with 6,000+ combined downloads, plus 3 Minecraft modpacks with 560+ downloads"
+        ]
+      },
+      {
+        "title": "Indie Game Development",
+        "org": "solunabeeboo.itch.io",
+        "dates": "March 2020 – Present",
+        "bullets": [
+          "Designed and developed 12+ original games solo, owning concept, systems design, art, build, and release",
+          "Created all original art, including hand-drawn sprites, 3D models, and textures"
+        ]
+      }
+    ]
+  },
+  "lenses": {
+    "design": {
+      "title": "Game Designer",
+      "summary": "Game designer pursuing dual B.S. degrees in Game Design and Game Programming with a Project Management minor. Leads design across three studio titles at Pentad Games, prototyping features directly in Unity and Unreal Engine 5 with C++, Lua, and C#, and directing the team that builds them. Placed 2nd internationally in the CurseForge Subnautica 2 Modding Contest, with 6,500+ mod downloads on CurseForge. Programming makes it possible to prototype designs firsthand and work fluently with engineers; production training means leading a team or supporting one."
+    },
+    "programming": {
+      "title": "Gameplay Programmer",
+      "summary": "Gameplay programmer pursuing dual B.S. degrees in Game Programming and Game Design with a Project Management minor. Writes C++ and Lua in Unreal Engine 5 and C# in Unity; placed 2nd internationally in the CurseForge Subnautica 2 Modding Contest, with 6,000+ downloads across Subnautica 2 mods. Lead programmer at Pentad Games, building gameplay systems, CI pipelines, and team tooling. Design training means building systems that serve the player; production training means shipping them on schedule."
+    },
+    "production": {
+      "title": "Game Producer",
+      "summary": "Game producer pursuing a Project Management minor alongside dual B.S. degrees in Game Design and Game Programming. Has run weekly Agile/Scrum sprints for 5+ game teams and serves as product owner at Pentad Games, building the studio’s production toolchain from scratch. Hands-on C++, Lua, and C# experience in Unreal Engine 5 and Unity, including a 2nd-place international finish in the CurseForge Subnautica 2 Modding Contest, makes it possible to plan with every discipline in its own language."
+    }
   }
 }

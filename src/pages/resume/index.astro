@@ -1,143 +1,136 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import siteData from '../../data/site.json';
+import { getExperience, getCourses, getSkills, RESUMES, DISCIPLINE_LABELS } from '../../lib/content';
+
+const { resume, about } = siteData as any;
+const [experience, courses, skills] = await Promise.all([getExperience(), getCourses(), getSkills()]);
+// The HTML resume is the Design resume, so list design coursework
+const designCourses = courses.filter(c => c.data.disciplines.includes('design'));
 ---
 <Layout
     title="Resume | Rafaela Solís, Game Designer"
-    description="Resume of Rafaela Solís, game designer: experience, projects, education, and skills."
+    description="Resume of Rafaela Solís, game designer: experience at Pentad Games, a 2nd-place international modding contest finish, education at Champlain College, and skills in C++, Lua, C#, Unreal Engine 5, and Unity 6."
 >
     <style>
-        .resume-page {
-            display: flex;
-            flex-direction: column;
-            height: calc(100vh - var(--nav-h));
-            padding-top: var(--nav-h);
-        }
+        .resume { max-width: 860px; margin: 0 auto; padding: calc(var(--nav-h) + 3rem) var(--section-padding) 4rem; width: 100%; }
 
-        .resume-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.85rem 2rem;
-            border-bottom: 2px solid var(--border);
-            background: var(--bg);
-            flex-shrink: 0;
+        .downloads {
+            display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center;
+            padding: 1.1rem 1.25rem; margin-bottom: 2.5rem;
+            border: 2px solid var(--border); box-shadow: 4px 4px 0 var(--border); background: var(--card-bg);
         }
-
-        .resume-header-left {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .resume-eyebrow {
-            font-size: 0.62rem;
-            font-weight: 700;
-            color: var(--accent-sage);
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-        }
-
-        .resume-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            letter-spacing: -0.02em;
-        }
-
-        .resume-actions {
-            display: flex;
-            gap: 0.75rem;
-            align-items: center;
-        }
-
-        .action-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 0.55rem 1.25rem;
-            font-weight: 700;
-            font-size: 0.78rem;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            text-decoration: none;
-            border: 2px solid var(--border);
-            box-shadow: 3px 3px 0 var(--border);
+        .downloads-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--text-muted); margin-right: 0.25rem; }
+        .dl {
+            display: inline-flex; align-items: center; gap: 0.4rem; text-decoration: none;
+            padding: 0.55rem 1rem; font-weight: 700; font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.05em;
+            background: transparent; color: var(--accent); border: 2px solid var(--accent); box-shadow: 3px 3px 0 var(--accent);
             transition: transform 0.15s, box-shadow 0.15s;
-            cursor: pointer;
         }
+        .dl.primary { background: var(--accent); color: var(--bg); border-color: var(--border); box-shadow: 3px 3px 0 var(--border); }
+        .dl:hover { transform: translate(-2px, -2px); }
 
-        .action-btn:hover {
-            transform: translate(-2px, -2px);
-            box-shadow: 5px 5px 0 var(--border);
+        header h1 { font-size: clamp(2.2rem, 5vw, 3.2rem); line-height: 1; letter-spacing: -0.02em; }
+        .headline { font-size: 0.85rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.2em; margin: 0.6rem 0 0.75rem; }
+        .contact-line { font-size: 0.9rem; color: var(--text-secondary); display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; list-style: none; padding: 0; }
+        .contact-line a { color: var(--text-secondary); }
+
+        h2 {
+            font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em;
+            color: var(--accent); border-bottom: 2px solid var(--border); padding-bottom: 0.35rem;
+            margin: 2.25rem 0 1rem;
         }
+        .summary { line-height: 1.8; color: var(--text-secondary); }
+        .entry + .entry { margin-top: 1.35rem; }
+        .entry-head { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; align-items: baseline; }
+        .entry-title { font-size: 1rem; font-weight: 700; }
+        .entry-dates { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; }
+        .entry-org { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.4rem; }
+        .entry ul { padding-left: 1.2rem; line-height: 1.7; color: var(--text-secondary); font-size: 0.93rem; }
+        .entry a { color: var(--accent); }
+        .skills dt { font-weight: 700; font-size: 0.9rem; }
+        .skills dd { margin: 0 0 0.6rem; color: var(--text-secondary); font-size: 0.93rem; line-height: 1.6; }
 
-        .action-btn.primary {
-            background: var(--accent);
-            color: var(--bg);
-        }
-
-        .action-btn.outline {
-            background: transparent;
-            color: var(--accent);
-            border-color: var(--accent);
-            box-shadow: 3px 3px 0 var(--accent);
-        }
-
-        .action-btn.outline:hover { box-shadow: 5px 5px 0 var(--accent); }
-
-        .resume-embed-wrapper {
-            flex: 1;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .resume-iframe {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        /* Mobile */
-        @media (max-width: 768px) {
-            .resume-header { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
-            .resume-actions { flex-wrap: wrap; }
+        @media print {
+            nav, footer, .burger-menu, .mobile-menu, .downloads { display: none !important; }
+            .resume { padding: 0; }
         }
     </style>
 
-    <div class="resume-page">
-        <div class="resume-header">
-            <div class="resume-header-left">
-                <span class="resume-eyebrow">Rafaela Solis</span>
-                <span class="resume-title">Resume</span>
-            </div>
-            <div class="resume-actions">
-                <a
-                    href="https://drive.google.com/file/d/1esAsb0Ccf4hPH9a1IM9tLYnNevK0NVrC/view?usp=sharing"
-                    class="action-btn outline"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Open in Google Drive ↗
+    <main class="resume">
+        <div class="downloads">
+            <span class="downloads-label">Download PDF</span>
+            {Object.entries(RESUMES).map(([key, r], i) => (
+                <a class:list={['dl', { primary: i === 0 }]} href={r.href} download>
+                    {DISCIPLINE_LABELS[key as keyof typeof DISCIPLINE_LABELS]} &#8595;
                 </a>
-                <a
-                    href="https://drive.google.com/uc?export=download&id=1esAsb0Ccf4hPH9a1IM9tLYnNevK0NVrC"
-                    class="action-btn primary"
-                    download="Rafaela_Solis_Resume.pdf"
-                    target="_blank"
-                >
-                    Download PDF
-                </a>
-            </div>
+            ))}
         </div>
 
-        <div class="resume-embed-wrapper">
-            <iframe
-                class="resume-iframe"
-                src="https://drive.google.com/file/d/1esAsb0Ccf4hPH9a1IM9tLYnNevK0NVrC/preview"
-                title="Rafaela Solis — Resume"
-                allowfullscreen
-            ></iframe>
-        </div>
-    </div>
+        <header>
+            <h1>Rafaela X. Solís</h1>
+            <p class="headline">Game Designer</p>
+            <ul class="contact-line">
+                <li>Burlington, VT / San Antonio, TX</li>
+                <li><a href="mailto:rafa@miguelsolis.com">rafa@miguelsolis.com</a></li>
+                <li><a href="https://www.linkedin.com/in/rafaelasolis/">linkedin.com/in/rafaelasolis</a></li>
+                <li><a href="https://solunabeeboo.itch.io/">solunabeeboo.itch.io</a></li>
+                <li><a href="https://github.com/solunabeeboo">github.com/solunabeeboo</a></li>
+            </ul>
+        </header>
+
+        <section>
+            <h2>Professional Summary</h2>
+            <p class="summary">{resume.summary}</p>
+        </section>
+
+        <section>
+            <h2>Education</h2>
+            <div class="entry">
+                <div class="entry-head">
+                    <h3 class="entry-title">{about.education.school} · Burlington, VT</h3>
+                    <span class="entry-dates">{about.education.dates}</span>
+                </div>
+                <p class="entry-org">{about.education.degrees}. {about.education.honors}.</p>
+                <ul><li>Relevant coursework: {designCourses.map(c => c.data.name).join(', ')}</li></ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>Experience</h2>
+            {experience.map(e => (
+                <div class="entry">
+                    <div class="entry-head">
+                        <h3 class="entry-title">{e.data.title}</h3>
+                        <span class="entry-dates">{e.data.start} – {e.data.end}</span>
+                    </div>
+                    <p class="entry-org">{e.data.org}{e.data.location && ` · ${e.data.location}`}</p>
+                    <ul>{e.data.bullets.map(b => <li>{b}</li>)}</ul>
+                </div>
+            ))}
+        </section>
+
+        <section>
+            <h2>Projects</h2>
+            {resume.projects.map((p: { title: string; org: string; dates: string; href?: string; bullets: string[] }) => (
+                <div class="entry">
+                    <div class="entry-head">
+                        <h3 class="entry-title">{p.href ? <a href={p.href}>{p.title}</a> : p.title}</h3>
+                        <span class="entry-dates">{p.dates}</span>
+                    </div>
+                    <p class="entry-org">{p.org}</p>
+                    <ul>{p.bullets.map(b => <li>{b}</li>)}</ul>
+                </div>
+            ))}
+        </section>
+
+        <section>
+            <h2>Skills</h2>
+            <dl class="skills">
+                {skills.map(s => (
+                    <Fragment><dt>{s.data.name}</dt><dd>{s.data.items.join(', ')}</dd></Fragment>
+                ))}
+            </dl>
+        </section>
+    </main>
 </Layout>
