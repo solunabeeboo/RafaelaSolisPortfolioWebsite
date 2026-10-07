@@ -7,3 +7,6 @@ dist/
 .DS_Store
 Thumbs.db
 *.bak
+
+# private vault (its own private git repo)
+vault/
