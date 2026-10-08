@@ -23,14 +23,6 @@ contribution:
   - "Product owner: manage the backlog, priorities, and community and teaser launch planning"
   - Lead programming, prototyping designs directly in Unity 6 (C#) and delivering weekly playable builds within an Agile/Scrum workflow
   - Run iterative playtests, compile player data, and turn findings into design revisions
-todo:
-  - Confirm engine (Unity 6 assumed) and add `engine`
-  - Add hero image/video and media
-  - Add Steam or wishlist link
-  - Add duration
-  - Write Design / Process / Outcome sections
-media: []
-links: []
 ---
 
 ## Design

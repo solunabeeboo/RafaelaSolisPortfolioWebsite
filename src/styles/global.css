@@ -1,191 +1,326 @@
-/* ===== DESIGN TOKENS ===== */
-:root {
-    --bg: #f5f2eb;
-    --accent: #2d5016;
-    --accent-sage: #6b8f47;
-    --border: #1a1a1a;
-    --text-primary: #1a1a1a;
-    --text-secondary: #3a3a3a;
-    --text-muted: #6a6a6a;
-    --card-bg: rgba(255, 255, 255, 0.7);
-    --nav-bg: rgba(255, 255, 255, 0.75);
-    --nav-h: 60px;
-    --max-content-width: 1200px;
-    --section-padding: 2rem;
+/* Folio design system: tokens, base, shell, and the shared folder-tab device. */
+
+/* Archivo variable (wght axis), self-hosted. The fallback is Arial scaled to
+   Archivo's metrics so the swap does not move the layout. */
+@font-face {
+    font-family: 'Archivo';
+    src: url('/fonts/archivo-latin-wght.woff2') format('woff2');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Archivo Fallback';
+    src: local('Arial');
+    size-adjust: 98.4%;
+    ascent-override: 89.4%;
+    descent-override: 21.3%;
+    line-gap-override: 0%;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+    color-scheme: light dark;
 
-/* Sticky footer: body is a full-viewport-tall column so the footer sits at
-   the bottom even when a page's content is shorter than the viewport
-   (rather than floating wherever the content happens to end), while still
-   scrolling normally underneath it when content is taller. */
-/* overflow-x:hidden on body (its previous home) computes overflow-y to
-   "auto" no matter what overflow-y is explicitly set to — CSS forces
-   whichever axis is "visible" to become "auto" the moment the other axis
-   isn't visible too, and there's no way to opt out short of matching them.
-   That's harmless when body's height is plain auto (an auto-height auto
-   overflow container just grows to fit its content, so nothing visibly
-   clips) — but body now has min-height, giving it a real size to clip
-   *to*, which turned it into its own inner scroll container instead of
-   letting the page scroll normally. html doesn't have this problem: it's
-   the root element, so its scrolling directly *is* the page's scrolling —
-   there's no separate box for content to get clipped inside. */
-html { overflow-x: hidden; }
+    --paper: #f6f6f1;
+    --board: #e8e6da;
+    --ink: #1c1f1a;
+    --ink-2: #4a4f45;
+    --ink-3: #5d6358;
+    --rule: #c8c6b8;
+    --rule-strong: #8c8f84;
+    --outline: var(--ink);
+    --forest: #2d5016;
+    --forest-2: #3d6b1f;
+    --moss: #6b8f47;
+    --forest-wash: #c9d8b8;
+    --on-forest: #f6f6f1;
+
+    --font: 'Archivo', 'Archivo Fallback', Arial, sans-serif;
+    --mono: ui-monospace, 'Cascadia Mono', 'SF Mono', Consolas, monospace;
+
+    /* Fluid type scale, 16 to 18px body (360 to 1440px viewport) */
+    --step--1: clamp(0.8333rem, 0.8111rem + 0.0988vw, 0.9rem);
+    --step-0: clamp(1rem, 0.9167rem + 0.2778vw, 1.125rem);
+    --step-1: clamp(1.2rem, 1.1312rem + 0.3056vw, 1.4063rem);
+    --step-2: clamp(1.44rem, 1.3341rem + 0.4708vw, 1.7578rem);
+    --step-3: clamp(1.728rem, 1.5716rem + 0.6952vw, 2.1973rem);
+    --step-4: clamp(2.0736rem, 1.8493rem + 0.997vw, 2.7466rem);
+    --step-5: clamp(2.4883rem, 2.1734rem + 1.3999vw, 3.4332rem);
+
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+    --space-7: 48px;
+    --space-8: 64px;
+    --space-9: 96px;
+
+    --gutter: clamp(16px, 4vw, 48px);
+    --header-h: 56px;
+    --radius: 10px;
+    --dur: 200ms;
+    --ease: cubic-bezier(0.2, 0, 0.38, 0.9);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --paper: #151913;
+        --board: #1f251c;
+        --ink: #e8eadf;
+        --ink-2: #bfc5b5;
+        --ink-3: #a9b0a0;
+        --rule: #2f3a29;
+        --rule-strong: #737b6c;
+        --outline: #8b9482;
+        --forest: #a3c585;
+        --forest-2: #bad79f;
+        --moss: #6b8f47;
+        --forest-wash: #34452a;
+        --on-forest: #151913;
+    }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: calc(var(--header-h) + 16px);
+}
 
 body {
-    font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
-    line-height: 1.6;
-    color: var(--text-primary);
-    background: var(--bg);
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font: 400 var(--step-0) / 1.6 var(--font);
+    min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
-    min-height: 100svh;
+    overflow-wrap: break-word;
 }
+main { flex: 1; }
 
-.page-body {
-    flex: 1 0 auto;
-    display: flex;
-    flex-direction: column;
-}
+h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.15; text-wrap: balance; }
+h1 { font-size: var(--step-3); letter-spacing: -0.01em; }
+h2 { font-size: var(--step-2); }
+h3 { font-size: var(--step-1); }
+p { margin: 0; text-wrap: pretty; }
+ul, ol, dl, dd, figure { margin: 0; padding: 0; }
+ul, ol { list-style: none; }
+img, video, svg { max-width: 100%; }
+img, video { display: block; height: auto; }
+code, pre, kbd { font-family: var(--mono); font-size: 0.9em; }
 
-footer { flex-shrink: 0; }
+a { color: var(--forest); text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
+a:hover { color: var(--forest-2); text-decoration-thickness: 2px; }
+::selection { background: var(--forest-wash); color: var(--ink); }
 
-/* ===== NAV ===== */
-.site-nav {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    height: var(--nav-h);
-    background: var(--nav-bg);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-bottom: 2px solid var(--border);
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-}
+:focus-visible { outline: 2px solid var(--forest); outline-offset: 2px; }
 
-.site-nav ul {
-    display: flex;
-    justify-content: center;
-    list-style: none;
-    padding: 0 1.5rem;
-    max-width: var(--max-content-width);
-    margin: 0 auto;
-    width: 100%;
-}
-
-.site-nav a {
-    text-decoration: none;
-    color: var(--text-primary);
-    padding: 0.5rem 1.5rem;
-    font-weight: 600;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    transition: color 0.2s;
-    position: relative;
-}
-
-.site-nav a::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 50%;
-    width: 0; height: 2px;
-    background: var(--accent);
-    transform: translateX(-50%);
-    transition: width 0.25s;
-}
-
-.site-nav a:hover { color: var(--accent); }
-.site-nav a:hover::after { width: 80%; }
-
-/* ===== BURGER ===== */
-.burger-menu {
-    display: none;
-    flex-direction: column;
-    cursor: pointer;
-    padding: 1rem;
-    position: fixed;
-    top: 1rem; right: 1rem;
-    z-index: 1001;
-    background: var(--card-bg);
-    border: 2px solid var(--border);
-    box-shadow: 3px 3px 0 var(--border);
-    backdrop-filter: blur(16px);
-}
-
-.burger-line {
-    width: 25px; height: 3px;
-    background: var(--border);
-    margin: 3px 0;
-    transition: all 0.3s;
-}
-
-.burger-menu.active .burger-line:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-.burger-menu.active .burger-line:nth-child(2) { opacity: 0; }
-.burger-menu.active .burger-line:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
-
-/* ===== MOBILE MENU ===== */
-.mobile-menu {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(245, 242, 235, 0.97);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    z-index: 1000;
-    display: none;
-    align-items: center;
-    justify-content: center;
-}
-
-.mobile-menu.active { display: flex; }
-
-.mobile-menu ul {
-    list-style: none;
-    width: 100%;
-    max-width: 360px;
-    border: 2px solid var(--border);
-}
-
-.mobile-menu li { border-bottom: 2px solid var(--border); }
-.mobile-menu li:last-child { border-bottom: none; }
-
-.mobile-menu a {
-    display: block;
-    font-size: 1.4rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    padding: 1.5rem 2rem;
-    color: var(--text-primary);
-    text-decoration: none;
-    text-align: center;
-    transition: background 0.15s, color 0.15s;
-}
-
-.mobile-menu a:hover { background: var(--accent); color: var(--bg); }
-
-/* ===== FOOTER ===== */
-footer {
-    background: var(--accent);
-    text-align: center;
-    padding: var(--section-padding);
-    color: rgba(245, 242, 235, 0.8);
-    border-top: 3px solid var(--border);
-    font-size: 0.9rem;
-}
-
-/* ===== MOBILE: hide desktop nav, show burger ===== */
-@media (max-width: 768px) {
-    .site-nav { display: none; }
-    .burger-menu { display: flex; }
-}
-
-/* Visually hidden, still read by screen readers and crawlers */
+.wrap { width: min(1200px, calc(100% - 2 * var(--gutter))); margin-inline: auto; }
 .sr-only {
-    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
     overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+.skip {
+    position: absolute; left: var(--space-3); top: -100px; z-index: 100;
+    padding: var(--space-2) var(--space-4); background: var(--forest); color: var(--on-forest);
+    border-radius: 6px; text-decoration: none; font-weight: 600;
+}
+.skip:focus { top: var(--space-3); }
+
+/* Buttons and text links. One primary action per screen. */
+.btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+    min-height: 44px; padding: 0 var(--space-5);
+    border: 2px solid var(--forest); border-radius: 6px;
+    background: transparent; color: var(--forest);
+    font: 600 var(--step-0) / 1 var(--font); text-decoration: none; cursor: pointer;
+    transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.btn:hover { background: var(--forest-wash); color: var(--ink); }
+.btn.primary { background: var(--forest); color: var(--on-forest); }
+.btn.primary:hover { background: var(--forest-2); border-color: var(--forest-2); color: var(--on-forest); }
+.btn.small { min-height: 36px; padding: 0 var(--space-3); font-size: var(--step--1); }
+.btn svg { width: 1em; height: 1em; flex: none; }
+
+.copy-btn { display: none; }
+.js .copy-btn { display: inline-flex; }
+
+/* ── Header ──────────────────────────────────────────────────────────── */
+.site-header {
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+    position: sticky; top: 0; z-index: 20;
+}
+.site-header .bar {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    min-height: var(--header-h); gap: var(--space-5);
+}
+.wordmark {
+    display: flex; align-items: center; height: 44px; margin-bottom: -4px;
+    color: var(--ink); text-decoration: none;
+    font-weight: 700; font-size: var(--step-0); line-height: 1.2; white-space: nowrap;
+}
+.wordmark:hover { color: var(--forest); }
+.site-nav ul { display: flex; align-items: flex-end; gap: var(--space-1); }
+.site-nav a {
+    display: flex; align-items: center; height: 44px; padding: 0 var(--space-4);
+    color: var(--ink); text-decoration: none; font-weight: 600; font-size: var(--step-0);
+    border: 2px solid transparent; border-bottom: 0; border-radius: var(--radius) var(--radius) 0 0;
+    margin-bottom: -1px;
+}
+.site-nav a:hover { color: var(--forest); }
+/* The active page is a folder tab sitting on the header rule. */
+.site-nav a[aria-current='page'] {
+    background: var(--board); border-color: var(--outline); height: 46px; padding-bottom: 1px;
+}
+
+@media (max-width: 560px) {
+    .site-header .bar { flex-direction: column; align-items: stretch; gap: 0; }
+    .wordmark { height: 48px; margin-bottom: 0; }
+    .site-nav ul { justify-content: space-between; }
+    .site-nav a { padding: 0 var(--space-3); flex: 1; justify-content: center; }
+    .site-header { position: static; }
+}
+@media (max-width: 380px) {
+    .site-nav a { padding: 0 var(--space-2); font-size: var(--step--1); }
+    .wordmark { font-size: var(--step-0); }
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────── */
+.site-footer { margin-top: var(--space-9); border-top: 1px solid var(--rule); background: var(--paper); }
+.site-footer .inner {
+    display: grid; gap: var(--space-4) var(--space-7); padding-block: var(--space-6) var(--space-7);
+    grid-template-columns: 1fr auto; align-items: start;
+}
+.footer-mail { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+.footer-mail a { font-weight: 600; font-size: var(--step-1); }
+.footer-links { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-5); }
+.footer-links a { color: var(--ink); }
+.footer-links a:hover { color: var(--forest); }
+.footer-copy { grid-column: 1 / -1; color: var(--ink-3); font-size: var(--step--1); }
+@media (max-width: 760px) {
+    .site-footer { margin-top: var(--space-8); }
+    .site-footer .inner { grid-template-columns: 1fr; }
+}
+
+/* ── Facts (definition list used in folders and case studies) ────────── */
+.facts { display: grid; grid-template-columns: max-content 1fr; gap: var(--space-2) var(--space-5); }
+.facts dt { color: var(--ink-3); font-size: var(--step--1); line-height: 1.7; }
+.facts dd { color: var(--ink); line-height: 1.45; }
+.facts dd a { overflow-wrap: anywhere; }
+@media (max-width: 420px) {
+    .facts { grid-template-columns: 1fr; gap: 0; }
+    .facts dd { margin-bottom: var(--space-3); }
+}
+
+/* ── Folder drawer: the one bold device ──────────────────────────────── */
+.drawer { display: flex; flex-direction: column; gap: var(--space-2); }
+.folder { position: relative; display: flex; flex-direction: column; }
+.folder-head {
+    display: flex; align-items: flex-end; gap: var(--space-4);
+    padding-left: var(--tab-x, 0px);
+    border-bottom: 2px solid var(--outline);
+}
+.folder-tab {
+    display: inline-flex; align-items: center; gap: var(--space-3); flex: none;
+    min-height: 44px; margin: 0 0 -2px; padding: 0 var(--space-4);
+    background: var(--board); color: var(--ink);
+    border: 2px solid var(--outline); border-bottom: 0; border-radius: var(--radius) var(--radius) 0 0;
+    font: 700 var(--step-1) / 1.1 var(--font); text-align: left; cursor: pointer;
+    letter-spacing: -0.005em;
+}
+.folder-tab:hover { color: var(--forest); }
+.folder-tab .chev { width: 14px; height: 14px; flex: none; transition: transform var(--dur) var(--ease); }
+.folder[data-open] .folder-tab .chev { transform: rotate(180deg); }
+/* Stretch the click target over the whole closed folder row */
+.folder-tab::after { content: ''; position: absolute; inset: 0; }
+.folder[data-open] .folder-tab::after { display: none; }
+.folder-summary {
+    flex: 1; min-width: 0; display: flex; justify-content: space-between; gap: var(--space-5);
+    padding-bottom: var(--space-2); color: var(--ink-2); font-size: var(--step--1);
+}
+.folder-summary .hook { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.folder-summary .ctx { color: var(--ink-3); white-space: nowrap; flex: none; }
+.folder[data-open] .folder-summary { visibility: hidden; }
+
+.folder-panel { display: grid; grid-template-rows: 1fr; }
+.folder-inner {
+    min-height: 0; overflow: hidden; background: var(--board);
+    border: 2px solid var(--outline); border-top: 0; border-radius: 0 0 var(--radius) var(--radius);
+}
+.folder-body {
+    display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: var(--space-6); padding: var(--space-5);
+    align-items: start;
+}
+.folder-media { display: block; background: var(--paper); border-radius: 4px; overflow: hidden; }
+.folder-media img { width: 100%; max-height: min(52vh, 520px); object-fit: contain; }
+.folder-info { display: flex; flex-direction: column; gap: var(--space-4); min-width: 0; }
+.folder-info .hook { font-size: var(--step-1); line-height: 1.35; max-width: 34ch; }
+.folder-links { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-5); font-weight: 600; }
+.folder.typographic .folder-body { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+.folder.typographic .folder-info .hook { font-size: var(--step-2); max-width: 28ch; }
+
+/* Without JS every folder stays open and the tab is only a label */
+html:not(.js) .folder-tab { pointer-events: none; }
+html:not(.js) .folder-tab .chev { display: none; }
+html:not(.js) .folder-summary { display: none; }
+html:not(.js) .folder-tab::after { display: none; }
+
+.js .folder-panel { transition: grid-template-rows var(--dur) var(--ease); }
+.js .folder:not([data-open]) .folder-panel { grid-template-rows: 0fr; }
+.js .folder:not([data-open]) .folder-inner { visibility: hidden; border-width: 0; transition: visibility 0s linear var(--dur); }
+.js .folder:not([data-open]) .folder-tab { cursor: pointer; }
+
+@media (min-width: 761px) {
+    .folder:nth-child(4n + 2) { --tab-x: 78px; }
+    .folder:nth-child(4n + 3) { --tab-x: 156px; }
+    .folder:nth-child(4n + 4) { --tab-x: 234px; }
+}
+@media (max-width: 760px) {
+    .folder-body { grid-template-columns: 1fr; gap: var(--space-4); padding: var(--space-4); }
+    .folder-summary { display: none; }
+    .folder-head { border-bottom-color: var(--outline); }
+    .folder-tab { min-height: 48px; }
+    .folder.typographic .folder-body { grid-template-columns: 1fr; }
+}
+
+/* Lens focus (?focus=): matching folders and rows come first; others dim */
+[data-focus] .drawer .folder { order: 1; }
+[data-focus='design'] .folder[data-d~='design'],
+[data-focus='programming'] .folder[data-d~='programming'],
+[data-focus='production'] .folder[data-d~='production'] { order: 0; }
+[data-focus='design'] .folder:not([data-d~='design']) .folder-tab,
+[data-focus='programming'] .folder:not([data-d~='programming']) .folder-tab,
+[data-focus='production'] .folder:not([data-d~='production']) .folder-tab { color: var(--ink-3); }
+
+/* ── Prose (her markdown) ─────────────────────────────────────────────── */
+.prose { max-width: 68ch; }
+.prose > * + * { margin-top: var(--space-4); }
+.prose h2 { margin-top: var(--space-7); font-size: var(--step-2); }
+.prose h3 { margin-top: var(--space-6); font-size: var(--step-1); }
+.prose h2 + *, .prose h3 + * { margin-top: var(--space-3); }
+.prose ul { list-style: disc; padding-left: 1.25em; }
+.prose ol { list-style: decimal; padding-left: 1.5em; }
+.prose li + li { margin-top: var(--space-1); }
+.prose img { border-radius: 4px; }
+.prose blockquote { margin-left: 0; padding-left: var(--space-4); border-left: 2px solid var(--rule-strong); color: var(--ink-2); }
+.prose pre { overflow-x: auto; padding: var(--space-4); background: var(--board); border-radius: 6px; }
+.prose table { border-collapse: collapse; width: 100%; font-size: var(--step--1); }
+.prose th, .prose td { text-align: left; padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--rule); }
+
+/* ── Cross-document transition: the folder tab carries over ──────────── */
+@view-transition { navigation: auto; }
+::view-transition-group(*) { animation-duration: 200ms; animation-timing-function: var(--ease); }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 120ms; }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        transition-duration: 0.01ms !important; animation: none !important; scroll-behavior: auto !important;
+    }
+    @view-transition { navigation: none; }
 }

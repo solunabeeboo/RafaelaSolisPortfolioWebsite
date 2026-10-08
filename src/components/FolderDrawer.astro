@@ -1,0 +1,113 @@
+---
+// Featured projects as a drawer of folders. One folder is open at a time; the
+// rest show only their tab and a one-line summary. Without JS all stay open.
+import Media from './Media.astro';
+import { projectMedia, type Project } from '../lib/content';
+import { projectFacts, playLink, contextOf } from '../lib/view';
+
+interface Props {
+    projects: Project[];
+    /** Load the first open folder's image eagerly (it is the LCP candidate). */
+    priority?: boolean;
+}
+
+const { projects, priority = false } = Astro.props;
+
+const items = projects.map(p => {
+    const media = projectMedia(p);
+    const cover = media.find(m => m.src === p.data.image && !m.video)
+        ?? media.find(m => !m.video)
+        ?? media.find(m => m.video && m.posterUrl);
+    return { p, cover };
+});
+// Open the first folder that has something to show; fall back to the first.
+const openIndex = Math.max(0, items.findIndex(i => i.cover));
+---
+<ol class="drawer" data-drawer>
+    {items.map(({ p, cover }, i) => {
+        const d = p.data;
+        const open = i === openIndex;
+        const facts = projectFacts(d);
+        const play = playLink(d.links);
+        return (
+            <li
+                class:list={['folder', { typographic: !cover }]}
+                id={p.id}
+                data-open={open ? '' : undefined}
+                data-d={d.disciplines.join(' ')}
+            >
+                <div class="folder-head">
+                    <h3 class="folder-title">
+                        <button
+                            type="button"
+                            class="folder-tab"
+                            aria-expanded={open ? 'true' : 'false'}
+                            aria-controls={`panel-${p.id}`}
+                            style={`view-transition-name: tab-${p.id}`}
+                        >
+                            <span>{d.title}</span>
+                            <svg class="chev" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg>
+                        </button>
+                    </h3>
+                    <p class="folder-summary">
+                        <span class="hook">{d.hook}</span>
+                        <span class="ctx">{contextOf(d)}</span>
+                    </p>
+                </div>
+                <div class="folder-panel" id={`panel-${p.id}`}>
+                    <div class="folder-inner">
+                        <div class="folder-body">
+                            {cover && (
+                                <a class="folder-media" href={`/projects/${p.id}/`}>
+                                    <Media
+                                        item={cover}
+                                        alt={cover.alt || `${d.title} screenshot`}
+                                        sizes="(min-width: 761px) 700px, 100vw"
+                                        widths={[480, 700, 1000, 1400]}
+                                        priority={priority && i === openIndex}
+                                    />
+                                </a>
+                            )}
+                            <div class="folder-info">
+                                <p class="hook">{d.hook}</p>
+                                {facts.length > 0 && (
+                                    <dl class="facts">
+                                        {facts.map(f => <><dt>{f.label}</dt><dd>{f.value}</dd></>)}
+                                    </dl>
+                                )}
+                                <p class="folder-links">
+                                    <a href={`/projects/${p.id}/`}>Case study &rarr;</a>
+                                    {play && <a href={play.url}>{play.label} <span aria-hidden="true">&#8599;</span></a>}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        );
+    })}
+</ol>
+
+<script>
+    // Click or tap a tab to open its folder (and close the one that was open).
+    function setOpen(folder: HTMLElement, open: boolean) {
+        folder.toggleAttribute('data-open', open);
+        folder.querySelector('.folder-tab')?.setAttribute('aria-expanded', String(open));
+    }
+    document.querySelectorAll<HTMLElement>('[data-drawer]').forEach(drawer => {
+        drawer.addEventListener('click', e => {
+            const tab = (e.target as Element).closest('.folder-tab');
+            const folder = tab?.closest<HTMLElement>('.folder');
+            if (!folder) return;
+            const wasOpen = folder.hasAttribute('data-open');
+            drawer.querySelectorAll<HTMLElement>('.folder[data-open]').forEach(f => setOpen(f, false));
+            setOpen(folder, !wasOpen);
+        });
+        // A link to /projects/#slug opens that folder
+        const target = drawer.querySelector<HTMLElement>(`.folder${location.hash ? location.hash.replace(/[^#\w-]/g, '') : '#none'}`);
+        if (target) {
+            drawer.querySelectorAll<HTMLElement>('.folder[data-open]').forEach(f => setOpen(f, false));
+            setOpen(target, true);
+        }
+    });
+</script>

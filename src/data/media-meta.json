@@ -1,0 +1,44 @@
+{
+  "/vault-media/projects/opengl-environments/beachscene-1.mp4": {
+    "bytes": 20073417,
+    "width": 1280,
+    "height": 682,
+    "duration": 132.39
+  },
+  "/vault-media/projects/opengl-environments/opengl-1.mp4": {
+    "bytes": 1381846,
+    "width": 1256,
+    "height": 716,
+    "duration": 20.53
+  },
+  "/vault-media/projects/opengl-environments/opengl-2.mp4": {
+    "bytes": 4654775,
+    "width": 1258,
+    "height": 718,
+    "duration": 84.27
+  },
+  "/vault-media/projects/opengl-environments/opengl-3.mp4": {
+    "bytes": 9276244,
+    "width": 1140,
+    "height": 640,
+    "duration": 10.05
+  },
+  "/vault-media/projects/opengl-environments/opengl-4.mp4": {
+    "bytes": 249748,
+    "width": 1274,
+    "height": 718,
+    "duration": 10.13
+  },
+  "/vault-media/projects/opengl-environments/opengl-5.mp4": {
+    "bytes": 2354474,
+    "width": 1256,
+    "height": 716,
+    "duration": 10.24
+  },
+  "/vault-media/projects/scriptorium/scriptorium-5.mp4": {
+    "bytes": 4872322,
+    "width": 1280,
+    "height": 684,
+    "duration": 58.28
+  }
+}

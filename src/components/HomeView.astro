@@ -1,0 +1,77 @@
+---
+// Home and the unlisted /for/<lens>/ pages share this body: who, what role,
+// availability, résumé and email, then the featured folders.
+import FolderDrawer from './FolderDrawer.astro';
+import { getProjects, featuredFor, resumeFor, type Discipline } from '../lib/content';
+import { site, EMAIL } from '../lib/view';
+
+interface Props {
+    lens?: Discipline;
+}
+
+const { lens } = Astro.props;
+const copy = lens ? site.lenses[lens] : undefined;
+const projects = await getProjects();
+const featured = featuredFor(projects, lens);
+const archiveCount = projects.length - projects.filter(p => p.data.featured).length;
+const resume = resumeFor(lens);
+const resumeHref = resume.id === resumeFor().id ? '/resume/' : `/resume/${resume.id}/`;
+const role = copy?.title ?? site.home.role;
+---
+<section class="hero wrap">
+    <div class="hero-id">
+        <h1><span class="name">Rafaela Solís</span> <span class="role">{role}</span></h1>
+        <div class="hero-actions">
+            <a class="btn primary" href={resumeHref}>Résumé</a>
+            <span class="mail">
+                <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+                <button type="button" class="btn small copy-btn" data-copy={EMAIL}>
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="5.25" y="5.25" width="8" height="8.5" rx="1.25"/><path d="M10.75 5.25V3.5a1.25 1.25 0 0 0-1.25-1.25h-5.5A1.25 1.25 0 0 0 2.75 3.5v6.25A1.25 1.25 0 0 0 4 11h1.25"/></svg>
+                    <span aria-live="polite">Copy</span>
+                </button>
+            </span>
+        </div>
+    </div>
+    <div class="hero-copy">
+        <p class="tagline">{site.home.tagline}</p>
+        {site.home.proof && <p class="proof">{site.home.proof}</p>}
+        {copy && <p class="summary">{copy.summary}</p>}
+        <p class="open">{site.home.openTo}</p>
+    </div>
+</section>
+
+<section class="wrap work" aria-labelledby="featured-h">
+    <h2 class="sr-only" id="featured-h">Featured work</h2>
+    <FolderDrawer projects={featured} priority />
+    {archiveCount > 0 && (
+        <p class="more"><a href="/projects/#archive">More work &rarr;</a> <span class="count">{archiveCount} more projects in the archive</span></p>
+    )}
+</section>
+
+<style>
+    .hero {
+        display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+        gap: var(--space-5) var(--space-8); align-items: end;
+        padding-block: var(--space-6) var(--space-5);
+    }
+    .hero h1 { display: flex; flex-direction: column; gap: var(--space-1); line-height: 1.02; letter-spacing: -0.02em; }
+    .hero h1 .name { font-size: var(--step-5); font-weight: 800; }
+    .hero h1 .role { font-size: var(--step-2); font-weight: 600; color: var(--forest); letter-spacing: -0.005em; }
+    .hero-id { display: flex; flex-direction: column; gap: var(--space-5); }
+    .hero-copy { display: flex; flex-direction: column; gap: var(--space-3); max-width: 46ch; }
+    .tagline { font-size: var(--step-1); line-height: 1.4; }
+    .proof { color: var(--ink-2); }
+    .summary { color: var(--ink-2); font-size: var(--step--1); line-height: 1.5; }
+    .open { color: var(--ink-2); }
+    .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3) var(--space-5); }
+    .mail { display: inline-flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+    .mail a { font-weight: 600; overflow-wrap: anywhere; }
+    .more { margin-top: var(--space-5); font-weight: 600; }
+    .more .count { color: var(--ink-3); font-weight: 400; margin-left: var(--space-3); font-size: var(--step--1); }
+    .work { padding-bottom: var(--space-4); }
+
+    @media (max-width: 860px) {
+        .hero { grid-template-columns: 1fr; padding-block: var(--space-5); align-items: start; }
+        .hero h1 .name { font-size: var(--step-4); }
+    }
+</style>

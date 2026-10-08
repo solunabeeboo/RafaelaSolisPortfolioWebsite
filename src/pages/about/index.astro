@@ -1,384 +1,157 @@
 ---
+import { Picture } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
-import siteData from '../../data/site.json';
-import { getSkills, resumeFor } from '../../lib/content';
+import headshot from '../../assets/site/headshot.webp';
+import { getExperience, getAwards, getSkills, getCourses } from '../../lib/content';
+import { site } from '../../lib/view';
 import { personJsonLd } from '../../lib/person';
 
-const about = (siteData as any).about;
-const skills = await getSkills();
+const about = site.about;
+const [experience, awards, skills, courses] = await Promise.all([getExperience(), getAwards(), getSkills(), getCourses()]);
+const edu = about.education;
 ---
 <Layout
     title="About | Rafaela Solís, Game Designer"
     description="About Rafaela Solís: game designer studying Game Design and Game Programming at Champlain College, with skills in C++, Lua, C#, Unreal Engine 5, and Unity 6."
     jsonLd={personJsonLd}
 >
-    <style>
-        /* ===== LAYOUT ===== */
-        .about-page {
-            min-height: 100vh;
-            display: flex;
-            padding-top: var(--nav-h);
-        }
+    <div class="wrap about">
+        <h1>About</h1>
 
-        /* ===== LEFT PANEL ===== */
-        .about-left {
-            width: 38%;
-            flex-shrink: 0;
-            position: sticky;
-            top: var(--nav-h);
-            height: calc(100vh - var(--nav-h));
-            background: var(--accent);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 3rem 3rem;
-            border-right: 3px solid var(--border);
-            text-align: center;
-            gap: 0;
-        }
+        <div class="layout">
+            <div class="text">
+                <section class="bio prose" aria-label="Bio">
+                    {about.bio.map((para: string) => <p>{para}</p>)}
+                    {about.lookingFor && <p>{about.lookingFor}</p>}
+                </section>
 
-        .headshot-circle {
-            width: 240px;
-            height: 240px;
-            border-radius: 50%;
-            border: 5px solid rgba(245, 242, 235, 0.9);
-            box-shadow: 10px 10px 0 var(--border);
-            object-fit: cover;
-            display: block;
-            margin-bottom: 2rem;
-            flex-shrink: 0;
-        }
+                {experience.length > 0 && (
+                    <section>
+                        <h2>Experience</h2>
+                        <ol class="entries">
+                            {experience.map(e => (
+                                <li>
+                                    <p class="when">{e.data.start} to {e.data.end}</p>
+                                    <div>
+                                        <h3>{e.data.title}</h3>
+                                        <p class="org">{e.data.org}{e.data.location && `, ${e.data.location}`}</p>
+                                        {e.data.bullets.length > 0 && (
+                                            <ul class="bullets">
+                                                {e.data.bullets.map((b: string) => <li>{b}</li>)}
+                                            </ul>
+                                        )}
+                                    </div>
+                                </li>
+                            ))}
+                        </ol>
+                    </section>
+                )}
 
-        .left-name {
-            font-size: clamp(1.9rem, 2.5vw, 2.6rem);
-            font-weight: 700;
-            color: var(--bg);
-            letter-spacing: -0.02em;
-            line-height: 1.05;
-            margin-bottom: 0.6rem;
-        }
+                {edu && (
+                    <section>
+                        <h2>Education</h2>
+                        <ol class="entries">
+                            <li>
+                                <p class="when">{edu.dates}</p>
+                                <div>
+                                    <h3>{edu.school}</h3>
+                                    <p class="org">{edu.degrees}</p>
+                                    {edu.honors && <p class="org">{edu.honors}</p>}
+                                </div>
+                            </li>
+                        </ol>
+                    </section>
+                )}
 
-        .left-title {
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: rgba(245, 242, 235, 0.65);
-            text-transform: uppercase;
-            letter-spacing: 0.22em;
-            margin-bottom: 2.25rem;
-        }
+                {awards.length > 0 && (
+                    <section>
+                        <h2>Awards</h2>
+                        <ul class="plain">
+                            {awards.map(a => (
+                                <li>
+                                    {a.data.url ? <a href={a.data.url}>{a.data.title}</a> : a.data.title}
+                                    {(a.data.issuer || a.data.date) && <span class="org">, {[a.data.issuer, a.data.date].filter(Boolean).join(', ')}</span>}
+                                </li>
+                            ))}
+                        </ul>
+                    </section>
+                )}
 
-        .left-divider {
-            width: 64px;
-            height: 3px;
-            background: rgba(245, 242, 235, 0.35);
-            margin: 0 auto 2.25rem;
-        }
+                {skills.length > 0 && (
+                    <section>
+                        <h2>Skills</h2>
+                        <dl class="facts skills">
+                            {skills.map(s => <><dt>{s.data.name}</dt><dd>{s.data.items.join(', ')}</dd></>)}
+                        </dl>
+                    </section>
+                )}
 
-        .left-stats {
-            display: flex;
-            flex-direction: column;
-            gap: 1.25rem;
-            width: 100%;
-            text-align: left;
-        }
-
-        .stat-item {
-            display: flex;
-            flex-direction: column;
-            gap: 0.2rem;
-            padding-left: 0.85rem;
-            border-left: 2px solid rgba(245, 242, 235, 0.2);
-        }
-
-        .stat-label {
-            font-size: 0.65rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.16em;
-            color: rgba(245, 242, 235, 0.75);
-        }
-
-        .stat-value {
-            font-size: 0.97rem;
-            font-weight: 600;
-            color: rgba(245, 242, 235, 0.9);
-            line-height: 1.4;
-        }
-
-        /* ===== RIGHT PANEL ===== */
-        .about-right {
-            flex: 1;
-            padding: 4.5rem 3.5rem 5rem;
-            min-width: 0;
-        }
-
-        .section-eyebrow {
-            font-size: 0.68rem;
-            font-weight: 700;
-            color: #4a6628;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            margin-bottom: 0.5rem;
-        }
-
-        h1 {
-            font-size: clamp(2.2rem, 3.5vw, 3rem);
-            font-weight: 700;
-            color: var(--text-primary);
-            letter-spacing: -0.03em;
-            line-height: 1;
-            margin-bottom: 0.75rem;
-        }
-
-        .accent-rule {
-            width: 60px;
-            height: 4px;
-            background: var(--accent);
-            margin-bottom: 2.25rem;
-        }
-
-        .bio {
-            font-size: 0.96rem;
-            line-height: 1.9;
-            color: var(--text-secondary);
-        }
-
-        .bio p + p { margin-top: 1.25rem; }
-
-        .content-divider {
-            width: 100%;
-            height: 1px;
-            background: var(--border);
-            opacity: 0.15;
-            margin: 3rem 0;
-        }
-
-        h2 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 1.25rem;
-            padding-left: 0.85rem;
-            border-left: 4px solid var(--accent);
-            letter-spacing: 0.01em;
-        }
-
-        /* ===== SKILLS GRID ===== */
-        .skills-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.85rem;
-        }
-
-        .skills-category {
-            background: var(--card-bg);
-            border: 2px solid var(--border);
-            box-shadow: 4px 4px 0 var(--border);
-            padding: 1.1rem 1.35rem;
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
-        }
-
-        .skills-category:hover {
-            transform: translate(-2px, -2px);
-            box-shadow: 6px 6px 0 var(--border);
-            border-color: var(--accent);
-        }
-
-        .skills-category.wide { grid-column: span 2; }
-
-        .skills-category h3 {
-            font-size: 0.64rem;
-            font-weight: 700;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 0.14em;
-            margin-bottom: 0.75rem;
-            padding-bottom: 0.35rem;
-            border-bottom: 1.5px solid var(--accent);
-            display: inline-block;
-        }
-
-        .skills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.35rem;
-        }
-
-        .skill-badge {
-            background: transparent;
-            color: var(--text-primary);
-            padding: 0.28rem 0.6rem;
-            font-weight: 600;
-            font-size: 0.77rem;
-            border: 1.5px solid rgba(26,26,26,0.28);
-            letter-spacing: 0.01em;
-            transition: background 0.15s, color 0.15s;
-            cursor: default;
-        }
-
-        .skill-badge:hover { background: var(--accent); color: var(--bg); }
-
-        /* ===== LOOKING FOR ===== */
-        .looking-for-card {
-            background: var(--card-bg);
-            border: 2px solid var(--border);
-            box-shadow: 4px 4px 0 var(--border);
-            padding: 1.4rem 1.75rem;
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            font-size: 0.94rem;
-            line-height: 1.85;
-            color: var(--text-secondary);
-            margin-top: 0.25rem;
-        }
-
-        /* ===== RESUME ===== */
-        .resume-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 2px solid rgba(26,26,26,0.1);
-        }
-
-        .resume-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.85rem 2rem;
-            background: var(--accent);
-            color: var(--bg);
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            border: 2px solid var(--border);
-            box-shadow: 4px 4px 0 var(--border);
-            transition: transform 0.15s, box-shadow 0.15s;
-        }
-
-        .resume-button:hover {
-            transform: translate(-2px, -2px);
-            box-shadow: 6px 6px 0 var(--border);
-        }
-
-        .resume-button.secondary {
-            background: transparent;
-            color: var(--accent);
-            border-color: var(--accent);
-            box-shadow: 4px 4px 0 var(--accent);
-        }
-
-        .resume-button.secondary:hover { box-shadow: 6px 6px 0 var(--accent); }
-
-        /* ===== LEFT RESUME BUTTON ===== */
-        .left-resume-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.45rem;
-            margin-top: 2.5rem;
-            padding: 0.7rem 1.6rem;
-            background: rgba(245, 242, 235, 0.12);
-            color: var(--bg);
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.78rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            border: 2px solid rgba(245, 242, 235, 0.55);
-            box-shadow: 3px 3px 0 rgba(26, 26, 26, 0.45);
-            transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
-        }
-
-        .left-resume-btn:hover {
-            background: rgba(245, 242, 235, 0.22);
-            transform: translate(-2px, -2px);
-            box-shadow: 5px 5px 0 rgba(26, 26, 26, 0.55);
-        }
-
-        /* ===== MOBILE ===== */
-        @media (max-width: 768px) {
-            .about-page { flex-direction: column; }
-            .about-left {
-                position: relative;
-                width: 100%;
-                height: auto;
-                padding: 3rem 2rem 2.5rem;
-            }
-            .about-right { padding: 2.5rem 1.5rem 4rem; }
-            .skills-grid { grid-template-columns: 1fr; }
-            .skills-category.wide { grid-column: span 1; }
-        }
-
-        .left-stats dd { margin: 0; }
-
-    </style>
-
-    <div class="about-page">
-
-        <!-- ── LEFT: sticky photo panel ── -->
-        <aside class="about-left">
-            <img
-                src={about.headshotUrl}
-                alt="Rafaela Solís"
-                class="headshot-circle"
-                width="240"
-                height="240"
-                fetchpriority="high"
-            >
-            <p class="left-name">{about.name}</p>
-            <p class="left-title">{about.title}</p>
-            <div class="left-divider"></div>
-            <dl class="left-stats">
-                {about.stats.map((s: { label: string; value: string }) => (
-                    <div class="stat-item">
-                        <dt class="stat-label">{s.label}</dt>
-                        <dd class="stat-value">{s.value}</dd>
-                    </div>
-                ))}
-            </dl>
-            <a href="/resume/" class="left-resume-btn">View Resume &#8599;</a>
-        </aside>
-
-        <!-- ── RIGHT: scrollable content ── -->
-        <main class="about-right">
-            <p class="section-eyebrow">Introduction</p>
-            <h1>About Me</h1>
-            <div class="accent-rule"></div>
-
-            <div class="bio">
-                {about.bio.map((para: string) => <p>{para}</p>)}
+                {courses.length > 0 && (
+                    <section>
+                        <details>
+                            <summary>Coursework</summary>
+                            <p>{courses.map(c => c.data.name).join(', ')}</p>
+                        </details>
+                    </section>
+                )}
             </div>
 
-            <div class="content-divider"></div>
-
-            <h2>Skills &amp; Expertise</h2>
-            <div class="skills-grid">
-                {skills.map(cat => (
-                    <div class:list={['skills-category', { wide: cat.data.wide }]}>
-                        <h3>{cat.data.name}</h3>
-                        <div class="skills">
-                            {cat.data.items.map(skill => <span class="skill-badge">{skill}</span>)}
-                        </div>
-                    </div>
-                ))}
-            </div>
-
-            <div class="content-divider"></div>
-
-            <h2>What I'm Looking For</h2>
-            <div class="looking-for-card">{about.lookingFor}</div>
-
-            <div class="resume-buttons">
-                <a href={resumeFor("design").file} class="resume-button" download>Download Resume</a>
-                <a href="/resume/" class="resume-button secondary">View Resume</a>
-            </div>
-        </main>
-
+            <aside class="side" aria-label="At a glance">
+                <Picture
+                    src={headshot}
+                    alt={about.name}
+                    formats={['avif', 'webp']}
+                    widths={[280, 560]}
+                    sizes="(min-width: 861px) 280px, 200px"
+                    loading="eager"
+                    fetchpriority="high"
+                    class="photo"
+                />
+                <dl class="facts card">
+                    {about.stats.map((s: { label: string; value: string }) => <><dt>{s.label}</dt><dd>{s.value}</dd></>)}
+                </dl>
+            </aside>
+        </div>
     </div>
 </Layout>
+
+<style>
+    .about { padding-top: var(--space-6); }
+    .layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: var(--space-8); margin-top: var(--space-5); align-items: start; }
+    .text > section + section { margin-top: var(--space-8); }
+    .text h2 { margin-bottom: var(--space-4); }
+    .bio { max-width: 68ch; }
+    .bio > * + * { margin-top: var(--space-4); }
+
+    .entries { display: grid; gap: var(--space-6); }
+    .entries > li { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: var(--space-5); }
+    .when { color: var(--ink-3); font-size: var(--step--1); line-height: 1.9; font-variant-numeric: tabular-nums; }
+    .entries h3 { font-size: var(--step-0); line-height: 1.35; }
+    .org { color: var(--ink-2); }
+    .bullets { list-style: disc; padding-left: 1.25em; display: grid; gap: var(--space-2); margin-top: var(--space-3); max-width: 68ch; }
+    .plain { display: grid; gap: var(--space-2); }
+
+    .skills { gap: var(--space-3) var(--space-6); max-width: 68ch; }
+    .skills dt { color: var(--ink); font-weight: 600; font-size: var(--step-0); line-height: 1.6; }
+    .skills dd { color: var(--ink-2); }
+
+    details summary { cursor: pointer; font-weight: 600; font-size: var(--step-1); }
+    details p { margin-top: var(--space-3); color: var(--ink-2); max-width: 68ch; }
+
+    .side { position: sticky; top: calc(var(--header-h) + var(--space-5)); display: grid; gap: var(--space-5); }
+    .side :global(.photo) { width: 100%; max-width: 300px; aspect-ratio: 1; object-fit: cover; border-radius: 6px; background: var(--board); }
+    .card { background: var(--board); border-top: 2px solid var(--forest); padding: var(--space-4) var(--space-5); border-radius: 0 0 6px 6px; grid-template-columns: 1fr; gap: 0; }
+    .card dd { margin-bottom: var(--space-3); }
+    .card dd:last-child { margin-bottom: 0; }
+
+    @media (max-width: 860px) {
+        .layout { grid-template-columns: 1fr; gap: var(--space-6); }
+        .side { position: static; order: -1; grid-template-columns: 140px minmax(0, 1fr); align-items: start; }
+        .side :global(.photo) { max-width: 140px; }
+        .entries > li { grid-template-columns: 1fr; gap: var(--space-1); }
+    }
+    @media (max-width: 480px) {
+        .side { grid-template-columns: 1fr; }
+        .side :global(.photo) { max-width: 160px; }
+    }
+</style>

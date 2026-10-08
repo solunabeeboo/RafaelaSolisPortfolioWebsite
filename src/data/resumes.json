@@ -1,32 +1,41 @@
-{
-  "_help": "PDFs live in public/resume/. To add or swap one: drop the PDF there, add/edit an entry, set enabled. First enabled entry is the default in the viewer. `discipline` ties a resume to the /for/<discipline>/ recruiter page; without one enabled for that discipline, the default is used.",
-  "resumes": [
-    {
-      "id": "design",
-      "label": "Design",
-      "discipline": "design",
-      "file": "/resume/rafaela-solis-resume-design.pdf",
-      "enabled": true
-    },
-    {
-      "id": "programming",
-      "label": "Programming",
-      "discipline": "programming",
-      "file": "/resume/rafaela-solis-resume-programming.pdf",
-      "enabled": true
-    },
-    {
-      "id": "production",
-      "label": "Production",
-      "discipline": "production",
-      "file": "/resume/rafaela-solis-resume-production.pdf",
-      "enabled": true
-    },
-    {
-      "id": "current",
-      "label": "Old resume",
-      "file": "/resume/rafaela-solis-resume.pdf",
-      "enabled": false
-    }
-  ]
-}
+[
+  {
+    "id": "design",
+    "label": "Design",
+    "lens": "design",
+    "file": "/resume/rafaela-solis-resume-design.pdf",
+    "pages": [
+      {
+        "src": "/resume/design-p1.webp",
+        "width": 1275,
+        "height": 1650
+      }
+    ]
+  },
+  {
+    "id": "programming",
+    "label": "Programming",
+    "lens": "programming",
+    "file": "/resume/rafaela-solis-resume-programming.pdf",
+    "pages": [
+      {
+        "src": "/resume/programming-p1.webp",
+        "width": 1275,
+        "height": 1650
+      }
+    ]
+  },
+  {
+    "id": "production",
+    "label": "Production",
+    "lens": "production",
+    "file": "/resume/rafaela-solis-resume-production.pdf",
+    "pages": [
+      {
+        "src": "/resume/production-p1.webp",
+        "width": 1275,
+        "height": 1650
+      }
+    ]
+  }
+]
