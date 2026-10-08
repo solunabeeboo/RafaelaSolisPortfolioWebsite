@@ -1,0 +1,44 @@
+---
+// One still from a project: an optimized <Picture> when the image went through
+// the build, a plain <img> for vault-preview files and video posters.
+import { Picture } from 'astro:assets';
+import type { MediaItem } from '../lib/content';
+
+interface Props {
+    item: MediaItem;
+    alt: string;
+    sizes: string;
+    widths?: number[];
+    priority?: boolean;
+    class?: string;
+}
+
+const { item, alt, sizes, widths = [480, 800, 1200], priority = false, class: className } = Astro.props;
+const loading = priority ? 'eager' : 'lazy';
+const raw = (item as any).rawUrl ?? item.posterUrl;
+const dims = item.meta;
+---
+{item.image ? (
+    <Picture
+        src={item.image}
+        alt={alt}
+        formats={['avif', 'webp']}
+        fallbackFormat="webp"
+        widths={widths}
+        sizes={sizes}
+        loading={loading}
+        decoding={priority ? 'sync' : 'async'}
+        fetchpriority={priority ? 'high' : undefined}
+        class={className}
+    />
+) : raw ? (
+    <img
+        src={raw}
+        alt={alt}
+        width={dims?.width}
+        height={dims?.height}
+        loading={loading}
+        decoding="async"
+        class={className}
+    />
+) : null}

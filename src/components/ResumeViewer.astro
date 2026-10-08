@@ -1,0 +1,148 @@
+---
+// The résumé as a sheet of paper on a desk. The page image is prerendered at
+// publish time; text and link hotspots from the PDF sit on top of it, so the
+// text can be selected and the links clicked without loading a PDF viewer.
+import { RESUMES, resumeLayer, type Resume } from '../lib/content';
+
+interface Props {
+    resume: Resume;
+}
+
+const { resume } = Astro.props;
+const layer = resumeLayer(resume.id);
+// Her phone number is not published: drop it from the selectable text.
+const PHONE = /\s*\|?\s*\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}\s*(\|)?/;
+const clean = (t: string) => t.replace(PHONE, (m, bar) => (bar ? ' | ' : ''));
+const hrefFor = (r: Resume) => (r === RESUMES[0] ? '/resume/' : `/resume/${r.id}/`);
+---
+<div class="wrap bar">
+    <h1>Résumé</h1>
+    {RESUMES.length > 1 && (
+        <nav class="roles" aria-label="Résumé version">
+            {RESUMES.map(r => (
+                <a href={hrefFor(r)} aria-current={r.id === resume.id ? 'page' : undefined}>{r.label}</a>
+            ))}
+        </nav>
+    )}
+    <div class="tools">
+        <div class="fit" role="group" aria-label="Page size">
+            <button type="button" data-fit="page" aria-pressed="true">Fit page</button>
+            <button type="button" data-fit="width" aria-pressed="false">Fit width</button>
+        </div>
+        <a class="btn primary" href={resume.file} download>Download PDF</a>
+    </div>
+</div>
+
+<div class="desk" data-fit="page">
+    <div class="sheets">
+        {resume.pages.map((page, i) => {
+            const pageLayer = layer?.pages[i];
+            return (
+                <div class="sheet" style={`--ratio: ${page.width / page.height}; --k: ${page.height / page.width}`}>
+                    <img
+                        src={page.src}
+                        width={page.width}
+                        height={page.height}
+                        alt={`Résumé of Rafaela Solís, ${resume.label.toLowerCase()} version${resume.pages.length > 1 ? `, page ${i + 1}` : ''}`}
+                        fetchpriority={i === 0 ? 'high' : undefined}
+                        loading={i === 0 ? 'eager' : 'lazy'}
+                        decoding="async"
+                    />
+                    {pageLayer && (
+                        <div class="layer">
+                            {pageLayer.text.map(t => (
+                                <span style={`left:${t.x}%;top:${t.y}%;width:${t.w}%;--h:${t.h}`}>{clean(t.s)}</span>
+                            ))}
+                            {pageLayer.links.map(l => (
+                                <a
+                                    href={l.url}
+                                    aria-label={l.url}
+                                    style={`left:${l.x}%;top:${l.y}%;width:${l.w}%;height:${l.h}%`}
+                                ></a>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        })}
+    </div>
+</div>
+
+<script is:inline>
+    // Size the sheet so the whole page fits under the toolbar, before first paint and on resize.
+    (function () {
+        var desk = document.querySelector('.desk');
+        function fit() {
+            var top = desk.getBoundingClientRect().top + window.scrollY;
+            var h = window.innerHeight - top - 24 - 16;
+            desk.style.setProperty('--fit-h', Math.max(h, 240) + 'px');
+        }
+        fit();
+        window.addEventListener('resize', fit);
+        window.addEventListener('load', fit);
+    })();
+</script>
+<script>
+    const desk = document.querySelector<HTMLElement>('.desk');
+    document.querySelectorAll<HTMLButtonElement>('.fit button').forEach(btn => {
+        btn.addEventListener('click', () => {
+            desk!.dataset.fit = btn.dataset.fit;
+            document.querySelectorAll<HTMLButtonElement>('.fit button').forEach(b =>
+                b.setAttribute('aria-pressed', String(b === btn)));
+        });
+    });
+</script>
+
+<style>
+    .bar {
+        display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-6);
+        padding-block: var(--space-3);
+    }
+    .bar h1 { font-size: var(--step-2); }
+    .roles { display: flex; gap: var(--space-5); }
+    .roles a { color: var(--ink-2); text-decoration: none; font-weight: 600; padding-block: var(--space-2); border-bottom: 2px solid transparent; }
+    .roles a:hover { color: var(--forest); }
+    .roles a[aria-current] { color: var(--ink); border-bottom-color: var(--forest); }
+    .tools { margin-left: auto; display: flex; align-items: center; gap: var(--space-4); }
+    .fit { display: none; gap: var(--space-1); }
+    :global(.js) .fit { display: flex; }
+    .fit button {
+        min-height: 36px; padding: 0 var(--space-3); border: 1px solid var(--rule-strong); border-radius: 6px;
+        background: transparent; color: var(--ink-2); font: 600 var(--step--1) / 1 var(--font); cursor: pointer;
+    }
+    .fit button:hover { color: var(--forest); border-color: var(--forest); }
+    .fit button[aria-pressed='true'] { background: var(--forest-wash); color: var(--ink); border-color: var(--forest); }
+
+    :global(.site-footer) { margin-top: 0; }
+
+    /* The desk is card stock; the sheet stays white in dark mode, like paper under a lamp. */
+    .desk { background: var(--board); padding: var(--space-5) var(--gutter) var(--space-7); }
+    .sheets { display: grid; justify-items: center; gap: var(--space-5); }
+    .sheet {
+        position: relative; background: #fff; container-type: inline-size;
+        aspect-ratio: var(--ratio);
+        width: min(100%, calc(var(--fit-h, calc(100dvh - 190px)) * var(--ratio)));
+        box-shadow: 0 1px 2px rgb(0 0 0 / 0.08), 0 12px 32px rgb(0 0 0 / 0.1);
+    }
+    .desk[data-fit='width'] .sheet { width: min(100%, 980px); }
+    .sheet img { width: 100%; height: 100%; }
+
+    .layer { position: absolute; inset: 0; }
+    .layer span {
+        position: absolute; display: block; white-space: nowrap; overflow: hidden;
+        color: transparent; line-height: 1; font: 400 calc(var(--h) * var(--k) * 0.92 * 1cqw) / 1 Arial, sans-serif;
+        text-align: justify; text-align-last: justify;
+    }
+    .layer span::selection { background: rgb(45 80 22 / 0.3); color: transparent; }
+    .layer a { position: absolute; display: block; }
+    .layer a:focus-visible { outline-offset: 0; }
+
+    @media (max-width: 760px) {
+        .tools { margin-left: 0; width: 100%; justify-content: space-between; }
+        .sheet { width: 100%; }
+        .desk { padding-top: var(--space-4); }
+        .fit { display: none !important; }
+        /* The sheet is too small to select from; keep the text for screen readers only */
+        .layer span { width: 1px !important; height: 1px; font-size: 13px; clip-path: inset(50%); }
+    }
+</style>

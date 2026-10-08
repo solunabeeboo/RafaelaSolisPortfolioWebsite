@@ -1,0 +1,22 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="Page not found | Rafaela Solís" description="This page does not exist." noindex>
+    <div class="wrap missing">
+        <h1>Page not found</h1>
+        <p>That address does not lead anywhere on this site. Try one of these instead.</p>
+        <ul>
+            <li><a href="/projects/">Work</a></li>
+            <li><a href="/about/">About</a></li>
+            <li><a href="/resume/">Résumé</a></li>
+            <li><a href="/">Home</a></li>
+        </ul>
+    </div>
+</Layout>
+
+<style>
+    .missing { padding-top: var(--space-8); display: grid; gap: var(--space-4); justify-items: start; }
+    .missing h1 { font-size: var(--step-4); }
+    .missing p { color: var(--ink-2); max-width: 46ch; }
+    .missing ul { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-6); font-weight: 600; font-size: var(--step-1); }
+</style>

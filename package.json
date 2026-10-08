@@ -4,17 +4,28 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "astro dev",
+    "prebuild": "node scripts/check-leaks.mjs",
     "build": "astro build",
+    "postbuild": "node scripts/check-leaks.mjs --dist",
     "preview": "astro preview",
     "publish": "node scripts/vault.mjs publish",
-    "vault:new": "node scripts/vault.mjs new"
+    "vault:new": "node scripts/vault.mjs new",
+    "vault": "node scripts/vault-app.mjs",
+    "vault:server": "node scripts/vault-server.mjs",
+    "vault:install": "node scripts/vault-install.mjs",
+    "migrate-media": "node scripts/migrate-media.mjs",
+    "test": "node --test \"tests/*.test.mjs\"",
+    "check": "node scripts/check-leaks.mjs && node scripts/check-slop.mjs"
   },
   "dependencies": {
     "astro": "^5.0.0",
-    "pdfjs-dist": "4.10.38",
     "yaml": "2.8.0"
   },
   "devDependencies": {
+    "@preact/signals": "^2.11.3",
+    "esbuild": "^0.27.3",
+    "pdfjs-dist": "4.10.38",
+    "preact": "^11.0.0",
     "sharp": "^0.34.5"
   }
 }

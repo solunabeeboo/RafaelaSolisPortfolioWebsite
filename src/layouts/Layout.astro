@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+import { EMAIL, SOCIAL } from '../lib/view';
+import { RESUMES } from '../lib/content';
 
 interface Props {
     title: string;
@@ -8,7 +10,7 @@ interface Props {
     image?: string;
     /** Structured data object(s) emitted as JSON-LD */
     jsonLd?: object | object[];
-    /** Keep the page out of search results (e.g. recruiter-specific links) */
+    /** Keep the page out of search results (recruiter links, 404, previews) */
     noindex?: boolean;
 }
 
@@ -22,16 +24,26 @@ const {
 
 // Canonical/og:url come from the page's own path so every page self-identifies
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const ogImage   = new URL(image, Astro.site).href;
+const ogImage = new URL(image, Astro.site).href;
+
+const path = Astro.url.pathname;
+const NAV = [
+    { href: '/projects/', label: 'Work' },
+    { href: '/about/', label: 'About' },
+    { href: '/resume/', label: 'Résumé' },
+    { href: '/contact/', label: 'Contact' },
+];
+const isCurrent = (href: string) => path === href || path.startsWith(href);
 ---
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{title}</title>
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="canonical" href={canonical}>
+    <link rel="preload" href="/fonts/archivo-latin-wght.woff2" as="font" type="font/woff2" crossorigin>
 
     <meta name="description" content={description}>
     <meta property="og:type" content="website">
@@ -43,69 +55,56 @@ const ogImage   = new URL(image, Astro.site).href;
     <meta name="twitter:card" content="summary_large_image">
     {noindex && <meta name="robots" content="noindex">}
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Non-render-blocking font load: preload the CSS, swap to stylesheet once fetched -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=optional" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=optional" rel="stylesheet"></noscript>
+    <script is:inline>document.documentElement.classList.add('js')</script>
 
     <slot name="head" />
 </head>
 <body>
-    <!-- Burger button -->
-    <div class="burger-menu" id="burgerMenu">
-        <div class="burger-line"></div>
-        <div class="burger-line"></div>
-        <div class="burger-line"></div>
-    </div>
+    <a class="skip" href="#main">Skip to content</a>
 
-    <!-- Mobile overlay -->
-    <div class="mobile-menu" id="mobileMenu">
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/projects/">Projects</a></li>
-            <li><a href="/about/">About</a></li>
-            <li><a href="/resume/">Resume</a></li>
-            <li><a href="/contact/">Contact</a></li>
-        </ul>
-    </div>
+    <header class="site-header">
+        <div class="wrap bar">
+            <a class="wordmark" href="/">Rafaela Solís</a>
+            <nav class="site-nav" aria-label="Main">
+                <ul>
+                    {NAV.map(n => (
+                        <li><a href={n.href} aria-current={isCurrent(n.href) ? 'page' : undefined}>{n.label}</a></li>
+                    ))}
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-    <!-- Desktop nav -->
-    <nav class="site-nav" aria-label="Main">
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/projects/">Projects</a></li>
-            <li><a href="/about/">About</a></li>
-            <li><a href="/resume/">Resume</a></li>
-            <li><a href="/contact/">Contact</a></li>
-        </ul>
-    </nav>
-
-    <div class="page-body">
+    <main id="main">
         <slot />
-    </div>
+    </main>
 
-    <footer>
-        <p>&copy; {new Date().getFullYear()} Rafaela Solís. All rights reserved.</p>
+    <footer class="site-footer">
+        <div class="wrap inner">
+            <div class="footer-mail">
+                <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+                <button type="button" class="btn small copy-btn" data-copy={EMAIL}>
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="5.25" y="5.25" width="8" height="8.5" rx="1.25"/><path d="M10.75 5.25V3.5a1.25 1.25 0 0 0-1.25-1.25h-5.5A1.25 1.25 0 0 0 2.75 3.5v6.25A1.25 1.25 0 0 0 4 11h1.25"/></svg>
+                    <span aria-live="polite">Copy email</span>
+                </button>
+            </div>
+            <nav class="footer-links" aria-label="Elsewhere">
+                {SOCIAL.filter(n => n.id !== 'bluesky').map(n => <a href={n.href}>{n.label}</a>)}
+                <a href={RESUMES[0].file}>Résumé</a>
+            </nav>
+            <p class="footer-copy">&copy; {new Date().getFullYear()} Rafaela Solís</p>
+        </div>
     </footer>
 
-    <script>
-        const burger = document.getElementById('burgerMenu')!;
-        const menu   = document.getElementById('mobileMenu')!;
-        burger.addEventListener('click', () => {
-            burger.classList.toggle('active');
-            menu.classList.toggle('active');
-        });
-        menu.querySelectorAll('a').forEach(l => l.addEventListener('click', () => {
-            burger.classList.remove('active');
-            menu.classList.remove('active');
-        }));
-        menu.addEventListener('click', e => {
-            if (e.target === menu) {
-                burger.classList.remove('active');
-                menu.classList.remove('active');
-            }
+    <script is:inline>
+        document.addEventListener('click', function (e) {
+            var b = e.target.closest('[data-copy]');
+            if (!b || !navigator.clipboard) return;
+            navigator.clipboard.writeText(b.dataset.copy).then(function () {
+                var t = b.querySelector('span'), was = t.textContent;
+                t.textContent = 'Copied';
+                setTimeout(function () { t.textContent = was; }, 1500);
+            });
         });
     </script>
 </body>

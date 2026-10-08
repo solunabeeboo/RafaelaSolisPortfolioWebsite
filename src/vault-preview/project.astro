@@ -1,0 +1,45 @@
+---
+/*
+ * Dev-only preview of a vault project (private or public) at
+ * /__preview/projects/<slug>. It renders through the same CaseStudy component
+ * as the public page, reading the vault (VAULT_DIR) instead of src/content.
+ */
+import Layout from '../layouts/Layout.astro';
+import CaseStudy from '../components/CaseStudy.astro';
+import { createVault } from '../../scripts/vault-lib.mjs';
+import { schemas } from '../lib/schema.mjs';
+import { previewMedia } from '../lib/view';
+import { renderMarkdown } from '../lib/markdown';
+
+export const prerender = false;
+
+const slug = Astro.params.slug!;
+let item: { data: Record<string, any>; body: string } | undefined;
+try {
+    item = createVault().getItem('projects', slug);
+} catch {
+    item = undefined;
+}
+if (!item) Astro.response.status = 404;
+
+// Validate for defaults; a half-written draft still renders with what it has.
+const parsed = item ? schemas.projects.safeParse(item.data) : undefined;
+const data = parsed?.success ? parsed.data : item?.data;
+const bodyHtml = item ? await renderMarkdown(item.body) : '';
+---
+<Layout title={item ? `Preview: ${data?.title ?? slug}` : 'Not found'} noindex>
+    {item && data ? (
+        <>
+            <p class="wrap note">Preview from the vault ({data.visibility ?? 'private'}). Not published.</p>
+            <CaseStudy project={{ id: slug, data }} media={previewMedia(data)}>
+                <Fragment slot="body" set:html={bodyHtml} />
+            </CaseStudy>
+        </>
+    ) : (
+        <p class="wrap note">No project called "{slug}" in the vault.</p>
+    )}
+</Layout>
+
+<style>
+    .note { padding-top: var(--space-4); color: var(--ink-3); font-size: var(--step--1); }
+</style>

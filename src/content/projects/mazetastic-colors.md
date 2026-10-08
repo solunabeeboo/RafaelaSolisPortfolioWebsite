@@ -1,26 +1,34 @@
 ---
-title: "Mazetastic Colors"
-hook: "A strategic yet multi-leveled fun maze game focused around matching colors and finding the exit!"
-visibility: "public"
+title: Mazetastic Colors
+hook: A strategic yet multi-leveled fun maze game focused around matching colors and finding the exit!
+visibility: public
 featured: false
-team: "Solo project"
-engine: "Unity 2022.3, C#"
-duration: "2 weeks"
-image: "/projects/images/mazegame.webp"
-media: [
-  "/projects/images/mazegame.webp",
-  "/projects/screenshots/maze (1).webp",
-  "/projects/screenshots/maze (2).webp",
-  "/projects/screenshots/maze (3).webp"
-  ]
-links: [
-  {"label":"View on Itch.io","url":"https://solunabeeboo.itch.io/mazetastic-colors"}
-  ]
-embed: {"type":"game","url":"https://itch.io/embed-upload/15301466?color=ca50c5"}
-tags: ["Unity","C#","Academic","2D","Puzzle","Maze","Color Based Puzzles"]
+team: Solo project
+engine: Unity 2022.3, C#
+duration: 2 weeks
+image: /vault-media/projects/mazetastic-colors/mazegame.webp
+media:
+  - /vault-media/projects/mazetastic-colors/mazegame.webp
+  - /vault-media/projects/mazetastic-colors/maze-1.webp
+  - /vault-media/projects/mazetastic-colors/maze-2.webp
+  - /vault-media/projects/mazetastic-colors/maze-3.webp
+links:
+  - label: View on Itch.io
+    url: https://solunabeeboo.itch.io/mazetastic-colors
+embed:
+  type: game
+  url: https://itch.io/embed-upload/15301466?color=ca50c5
+tags:
+  - Unity
+  - C#
+  - Academic
+  - 2D
+  - Puzzle
+  - Maze
+  - Color Based Puzzles
 order: 11
-disciplines: ["design"]
-todo: ["Add 3–5 \"My contribution\" bullets","Add a Process section (prototypes, playtests, what changed)"]
+disciplines:
+  - design
 ---
 
 Mazetastic Colors combines traditional maze navigation with color-based puzzle mechanics, creating a unique and challenging gameplay experience across multiple levels of increasing complexity.

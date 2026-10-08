@@ -1,0 +1,19 @@
+---
+// Static pages for the other résumé versions: /resume/programming/, /resume/production/.
+// The first live résumé is the default and lives at /resume/.
+import Layout from '../../layouts/Layout.astro';
+import ResumeViewer from '../../components/ResumeViewer.astro';
+import { RESUMES } from '../../lib/content';
+
+export function getStaticPaths() {
+    return RESUMES.slice(1).map(resume => ({ params: { id: resume.id }, props: { resume } }));
+}
+
+const { resume } = Astro.props;
+---
+<Layout
+    title={`Résumé, ${resume.label} | Rafaela Solís`}
+    description={`Résumé of Rafaela Solís, ${resume.label.toLowerCase()} version.`}
+>
+    <ResumeViewer resume={resume} />
+</Layout>

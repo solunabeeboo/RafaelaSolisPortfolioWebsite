@@ -1,0 +1,672 @@
+{
+  "id": "design",
+  "sha1": "b29154bddd9c29c7d12df99c1b3b8cad4aabcf8d",
+  "pages": [
+    {
+      "src": "/resume/design-p1.webp",
+      "width": 1275,
+      "height": 1650,
+      "text": [
+        {
+          "s": "Rafaela X. Solís (she/her)",
+          "x": 35.93,
+          "y": 2.98,
+          "w": 28.15,
+          "h": 2.02
+        },
+        {
+          "s": "Burlington, VT | rafa@miguelsolis.com | (210) 846-1806 | www.rafaelasolis.work | linkedin.com/in/rafaelasolis | solunabeeboo.itch.io",
+          "x": 10.56,
+          "y": 5.81,
+          "w": 78.85,
+          "h": 1.14
+        },
+        {
+          "s": "P",
+          "x": 4.13,
+          "y": 7.77,
+          "w": 1.1,
+          "h": 1.39
+        },
+        {
+          "s": "ROFESSIONAL",
+          "x": 5.23,
+          "y": 8.04,
+          "w": 10.3,
+          "h": 1.11
+        },
+        {
+          "s": "S",
+          "x": 15.99,
+          "y": 7.77,
+          "w": 1,
+          "h": 1.39
+        },
+        {
+          "s": "UMMARY",
+          "x": 16.99,
+          "y": 8.04,
+          "w": 6.86,
+          "h": 1.11
+        },
+        {
+          "s": "Game designer pursuing dual B.S. degrees in Game Design and Game Programming with a Project Management minor. Designs across",
+          "x": 5.93,
+          "y": 10.04,
+          "w": 88.55,
+          "h": 1.26
+        },
+        {
+          "s": "three studio titles at Pentad Games, leading two, prototyping in Unity and Unreal Engine 5 (C++, Lua, C#) and directing the team that",
+          "x": 5.93,
+          "y": 11.56,
+          "w": 87.52,
+          "h": 1.26
+        },
+        {
+          "s": "builds them. Placed 2nd internationally in the CurseForge Subnautica 2 Modding Contest (6,500+ mod downloads). Programming makes",
+          "x": 5.93,
+          "y": 13.07,
+          "w": 89.67,
+          "h": 1.26
+        },
+        {
+          "s": "it possible to prototype firsthand and work fluently with engineers; production training means leading or supporting a team.",
+          "x": 5.93,
+          "y": 14.59,
+          "w": 80.7,
+          "h": 1.26
+        },
+        {
+          "s": "E",
+          "x": 4.13,
+          "y": 16.7,
+          "w": 1.2,
+          "h": 1.39
+        },
+        {
+          "s": "DUCATION",
+          "x": 5.33,
+          "y": 16.98,
+          "w": 7.83,
+          "h": 1.11
+        },
+        {
+          "s": "Champlain College",
+          "x": 5.93,
+          "y": 18.98,
+          "w": 13.38,
+          "h": 1.26
+        },
+        {
+          "s": "Burlington, VT",
+          "x": 83.03,
+          "y": 18.98,
+          "w": 10.07,
+          "h": 1.26
+        },
+        {
+          "s": "Bachelor of Science in Game Design; Bachelor of Science in Game Programming",
+          "x": 5.93,
+          "y": 20.49,
+          "w": 53.64,
+          "h": 1.26
+        },
+        {
+          "s": "Expected May 2028",
+          "x": 80.13,
+          "y": 20.49,
+          "w": 12.96,
+          "h": 1.26
+        },
+        {
+          "s": "Project Management Minor. GPA: 3.90. Dean's List, all semesters.",
+          "x": 5.93,
+          "y": 22.01,
+          "w": 43.93,
+          "h": 1.26
+        },
+        {
+          "s": "Relevant Coursework:",
+          "x": 5.93,
+          "y": 23.71,
+          "w": 15.74,
+          "h": 1.26
+        },
+        {
+          "s": "Level Design, Applied Ludology, Principles of Game Design, Game Technology I and II, Game Studio I,",
+          "x": 22.08,
+          "y": 23.71,
+          "w": 68.92,
+          "h": 1.26
+        },
+        {
+          "s": "Games Testing Lab, Artificial Intelligence for Games, Game Architecture, Principles of Project Management",
+          "x": 5.93,
+          "y": 25.23,
+          "w": 71.29,
+          "h": 1.26
+        },
+        {
+          "s": "E",
+          "x": 4.13,
+          "y": 27.34,
+          "w": 1.2,
+          "h": 1.39
+        },
+        {
+          "s": "XPERIENCE",
+          "x": 5.33,
+          "y": 27.61,
+          "w": 8.46,
+          "h": 1.11
+        },
+        {
+          "s": "Lead Developer (Lead Designer, Lead Programmer, Product Owner)",
+          "x": 5.93,
+          "y": 29.61,
+          "w": 48.1,
+          "h": 1.26
+        },
+        {
+          "s": "October 2024 – Present",
+          "x": 77.72,
+          "y": 29.61,
+          "w": 15.37,
+          "h": 1.26
+        },
+        {
+          "s": "Pentad Games (formerly Vellum Games)",
+          "x": 5.93,
+          "y": 31.32,
+          "w": 26.66,
+          "h": 1.26
+        },
+        {
+          "s": "•",
+          "x": 6.91,
+          "y": 33.02,
+          "w": 0.57,
+          "h": 1.26
+        },
+        {
+          "s": "Lead design on Open Shift, a co-op cozy-horror storekeeping game entering beta, directing a 5–7 person team (up to 10) and driving",
+          "x": 8.46,
+          "y": 33.02,
+          "w": 86.56,
+          "h": 1.26
+        },
+        {
+          "s": "community building and teaser launch",
+          "x": 8.46,
+          "y": 34.54,
+          "w": 25.03,
+          "h": 1.26
+        },
+        {
+          "s": "•",
+          "x": 6.91,
+          "y": 36.24,
+          "w": 0.57,
+          "h": 1.26
+        },
+        {
+          "s": "Designed 50+ gameplay features across Open Shift, Scriptorium (Lead Designer), and Mega Market Mayhem (Designer, Engine",
+          "x": 8.46,
+          "y": 36.24,
+          "w": 84.06,
+          "h": 1.26
+        },
+        {
+          "s": "Implementer), scoping each from concept to a playtested, implementable state",
+          "x": 8.46,
+          "y": 37.76,
+          "w": 50.99,
+          "h": 1.26
+        },
+        {
+          "s": "•",
+          "x": 6.91,
+          "y": 39.46,
+          "w": 0.57,
+          "h": 1.26
+        },
+        {
+          "s": "Prototype in Unity 6 (C#) for weekly Agile/Scrum builds; Open Shift playtests found constant scares numbing, so paced them out",
+          "x": 8.46,
+          "y": 39.46,
+          "w": 84.8,
+          "h": 1.26
+        },
+        {
+          "s": "•",
+          "x": 6.91,
+          "y": 41.17,
+          "w": 0.57,
+          "h": 1.26
+        },
+        {
+          "s": "Designed rune-drawing combat; messy runes misread in playtests, so retrained the CNN (TensorFlow, Keras) on player samples",
+          "x": 8.46,
+          "y": 41.17,
+          "w": 83.78,
+          "h": 1.26
+        },
+        {
+          "s": "•",
+          "x": 6.91,
+          "y": 42.87,
+          "w": 0.57,
+          "h": 1.26
+        },
+        {
+          "s": "Author GDDs, VDDs, system diagrams, and level design mockups that align art, programming, and audio",
+          "x": 8.46,
+          "y": 42.87,
+          "w": 69.25,
+          "h": 1.26
+        },
+        {
+          "s": "•",
+          "x": 6.91,
+          "y": 44.58,
+          "w": 0.57,
+          "h": 1.26
+        },
+        {
+          "s": "Built the studio's self-hosted AFFiNE suite: kanban tracking, art critique workflows, AI meeting notes, and nightly CI builds",
+          "x": 8.46,
+          "y": 44.58,
+          "w": 81.45,
+          "h": 1.26
+        },
+        {
+          "s": "Project Manager",
+          "x": 5.93,
+          "y": 46.28,
+          "w": 11.83,
+          "h": 1.26
+        },
+        {
+          "s": "October 2026 – Present",
+          "x": 77.72,
+          "y": 46.28,
+          "w": 15.37,
+          "h": 1.26
+        },
+        {
+          "s": "Leahy Center for Digital Forensics & Cybersecurity, Champlain College",
+          "x": 5.93,
+          "y": 47.99,
+          "w": 47.84,
+          "h": 1.26
+        },
+        {
+          "s": "Burlington, VT",
+          "x": 83.3,
+          "y": 47.99,
+          "w": 9.8,
+          "h": 1.26
+        },
+        {
+          "s": "•",
+          "x": 6.91,
+          "y": 49.69,
+          "w": 0.57,
+          "h": 1.26
+        },
+        {
+          "s": "Restructure documentation, workflows, and meetings across the organization's teams while keeping each team's familiar setup",
+          "x": 8.46,
+          "y": 49.69,
+          "w": 82.45,
+          "h": 1.26
+        },
+        {
+          "s": "Producer",
+          "x": 5.93,
+          "y": 51.4,
+          "w": 6.53,
+          "h": 1.26
+        },
+        {
+          "s": "August 2024 – Present",
+          "x": 78.26,
+          "y": 51.4,
+          "w": 14.83,
+          "h": 1.26
+        },
+        {
+          "s": "Champlain College Academic Game Projects",
+          "x": 5.93,
+          "y": 53.1,
+          "w": 29.74,
+          "h": 1.26
+        },
+        {
+          "s": "•",
+          "x": 6.91,
+          "y": 54.8,
+          "w": 0.57,
+          "h": 1.26
+        },
+        {
+          "s": "Produced 5+ multidisciplinary teams of 3–6 on weekly sprints, shipping every project on time across one-month to multi-year runs",
+          "x": 8.46,
+          "y": 54.8,
+          "w": 85.48,
+          "h": 1.26
+        },
+        {
+          "s": "•",
+          "x": 6.91,
+          "y": 56.51,
+          "w": 0.57,
+          "h": 1.26
+        },
+        {
+          "s": "Rat Attack: too dark and not tense enough in playtests; added audio cues, faster rats, and spline-driven random-intent movement",
+          "x": 8.46,
+          "y": 56.51,
+          "w": 83.78,
+          "h": 1.26
+        },
+        {
+          "s": "•",
+          "x": 6.91,
+          "y": 58.21,
+          "w": 0.57,
+          "h": 1.26
+        },
+        {
+          "s": "Mazetastic: playtests found colors too similar and spins hard to read, so raised palette contrast and added clear spin telegraphs",
+          "x": 8.46,
+          "y": 58.21,
+          "w": 82.23,
+          "h": 1.26
+        },
+        {
+          "s": "•",
+          "x": 6.91,
+          "y": 59.92,
+          "w": 0.57,
+          "h": 1.26
+        },
+        {
+          "s": "On The Owl Keeper (educational game), cut full voice-acted dialogue to meet the deadline and redirected the sound designer to voice",
+          "x": 8.46,
+          "y": 59.92,
+          "w": 87.25,
+          "h": 1.26
+        },
+        {
+          "s": "key story moments, preserving narrative impact",
+          "x": 8.46,
+          "y": 61.43,
+          "w": 31.19,
+          "h": 1.26
+        },
+        {
+          "s": "Food Handler (FOH/BOH)",
+          "x": 5.93,
+          "y": 63.14,
+          "w": 18.86,
+          "h": 1.26
+        },
+        {
+          "s": "August 2022 – May 2023",
+          "x": 76.41,
+          "y": 63.14,
+          "w": 16.7,
+          "h": 1.26
+        },
+        {
+          "s": "Bakery Lorraine",
+          "x": 5.93,
+          "y": 64.84,
+          "w": 10.84,
+          "h": 1.26
+        },
+        {
+          "s": "San Antonio, TX",
+          "x": 82.34,
+          "y": 64.84,
+          "w": 10.75,
+          "h": 1.26
+        },
+        {
+          "s": "•",
+          "x": 6.91,
+          "y": 66.55,
+          "w": 0.57,
+          "h": 1.26
+        },
+        {
+          "s": "Stepped into team lead during peak hours in a high-volume kitchen, coordinating prep and preventing stock shortages",
+          "x": 8.46,
+          "y": 66.55,
+          "w": 76.85,
+          "h": 1.26
+        },
+        {
+          "s": "P",
+          "x": 4.13,
+          "y": 68.66,
+          "w": 1.1,
+          "h": 1.39
+        },
+        {
+          "s": "ROJECTS",
+          "x": 5.23,
+          "y": 68.93,
+          "w": 6.63,
+          "h": 1.11
+        },
+        {
+          "s": "Subnautica 2 Modding Contest, 2nd Place Internationally (CurseForge)",
+          "x": 5.93,
+          "y": 70.93,
+          "w": 49.89,
+          "h": 1.26
+        },
+        {
+          "s": "June 2026",
+          "x": 86.43,
+          "y": 70.93,
+          "w": 6.67,
+          "h": 1.26
+        },
+        {
+          "s": "•",
+          "x": 6.91,
+          "y": 72.64,
+          "w": 0.57,
+          "h": 1.26
+        },
+        {
+          "s": "Designed and built Easy Third Person (C++, Lua, UE5), a third-person camera mod; won 2nd place internationally and $650",
+          "x": 8.46,
+          "y": 72.64,
+          "w": 81.5,
+          "h": 1.26
+        },
+        {
+          "s": "•",
+          "x": 6.91,
+          "y": 74.34,
+          "w": 0.57,
+          "h": 1.26
+        },
+        {
+          "s": "Reverse-engineered UE4SS for custom systems; added camera collision after playtesters saw the camera clip through walls",
+          "x": 8.46,
+          "y": 74.34,
+          "w": 80.54,
+          "h": 1.26
+        },
+        {
+          "s": "•",
+          "x": 6.91,
+          "y": 76.05,
+          "w": 0.57,
+          "h": 1.26
+        },
+        {
+          "s": "Released Easy Third Person and The Gold Mod (6,000+ downloads; CurseForge banner), plus 3 Minecraft modpacks (560+)",
+          "x": 8.46,
+          "y": 76.05,
+          "w": 81.65,
+          "h": 1.26
+        },
+        {
+          "s": "Indie Game Development https://solunabeeboo.itch.io/",
+          "x": 5.93,
+          "y": 77.75,
+          "w": 37.78,
+          "h": 1.26
+        },
+        {
+          "s": "March 2020 – Present",
+          "x": 78.72,
+          "y": 77.75,
+          "w": 14.38,
+          "h": 1.26
+        },
+        {
+          "s": "•",
+          "x": 6.91,
+          "y": 79.46,
+          "w": 0.57,
+          "h": 1.26
+        },
+        {
+          "s": "Designed and developed 12+ original games solo, owning concept, systems design, art, build, and release",
+          "x": 8.46,
+          "y": 79.46,
+          "w": 68.89,
+          "h": 1.26
+        },
+        {
+          "s": "•",
+          "x": 6.91,
+          "y": 81.16,
+          "w": 0.57,
+          "h": 1.26
+        },
+        {
+          "s": "Created all original art, including hand-drawn sprites, 3D models, and textures",
+          "x": 8.46,
+          "y": 81.16,
+          "w": 51.27,
+          "h": 1.26
+        },
+        {
+          "s": "S",
+          "x": 4.13,
+          "y": 83.27,
+          "w": 1,
+          "h": 1.39
+        },
+        {
+          "s": "KILLS",
+          "x": 5.13,
+          "y": 83.55,
+          "w": 4.39,
+          "h": 1.11
+        },
+        {
+          "s": "Design:",
+          "x": 5.93,
+          "y": 85.55,
+          "w": 5.26,
+          "h": 1.26
+        },
+        {
+          "s": "Systems Design, Gameplay Design, Level Design, Technical Design, Narrative Design, Rapid Prototyping, Playtesting and Data",
+          "x": 11.6,
+          "y": 85.55,
+          "w": 84.06,
+          "h": 1.26
+        },
+        {
+          "s": "Analysis, GDDs, VDDs, System Diagrams, UI/UX",
+          "x": 5.93,
+          "y": 87.06,
+          "w": 33.43,
+          "h": 1.26
+        },
+        {
+          "s": "Languages:",
+          "x": 5.93,
+          "y": 88.58,
+          "w": 8.08,
+          "h": 1.26
+        },
+        {
+          "s": "C++, Lua, C#, Python, Java, HTML/CSS",
+          "x": 14.42,
+          "y": 88.58,
+          "w": 26.97,
+          "h": 1.26
+        },
+        {
+          "s": "Engines:",
+          "x": 5.93,
+          "y": 90.09,
+          "w": 6.08,
+          "h": 1.26
+        },
+        {
+          "s": "Unreal Engine 5 (Lyra Framework), UEFN, Unity 6, UE4SS, Blueprints, Shaders, OpenGL",
+          "x": 12.43,
+          "y": 90.09,
+          "w": 59.82,
+          "h": 1.26
+        },
+        {
+          "s": "Production and Pipeline:",
+          "x": 5.93,
+          "y": 91.61,
+          "w": 17.42,
+          "h": 1.26
+        },
+        {
+          "s": "Agile/Scrum, Jira, Confluence, Taiga, AFFiNE, Git, GitHub Actions, Subversion, Production Documentation",
+          "x": 23.77,
+          "y": 91.61,
+          "w": 71.55,
+          "h": 1.26
+        },
+        {
+          "s": "Art:",
+          "x": 5.93,
+          "y": 93.13,
+          "w": 2.99,
+          "h": 1.26
+        },
+        {
+          "s": "Pixel Art, 3D Modeling, Blender, Aseprite, Photoshop, Illustrator, DaVinci Resolve",
+          "x": 9.33,
+          "y": 93.13,
+          "w": 54.83,
+          "h": 1.26
+        },
+        {
+          "s": "Playtesting:",
+          "x": 5.93,
+          "y": 94.64,
+          "w": 8.25,
+          "h": 1.26
+        },
+        {
+          "s": "External playtests for Behaviour Interactive (Dead by Daylight, Blight: Survival)",
+          "x": 14.6,
+          "y": 94.64,
+          "w": 52.95,
+          "h": 1.26
+        }
+      ],
+      "links": []
+    }
+  ]
+}

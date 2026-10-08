@@ -1,29 +1,36 @@
 ---
-title: "Mega Market Mayhem"
-hook: "A fast-paced multiplayer 1v1 fighting game where players compete to see who's on top with quirky and fun food based characters."
-visibility: "public"
+title: Mega Market Mayhem
+hook: A fast-paced multiplayer 1v1 fighting game where players compete to see who's on top with quirky and fun food based characters.
+visibility: public
 featured: false
-team: "Team of 7-10"
-engine: "Unity 2022.3, C#"
-duration: "9 months"
-image: "/projects/images/megamarketmayhem.webp"
-media: [
-  "/projects/images/megamarketmayhem.webp",
-  "/projects/screenshots/mmm (1).webp",
-  "/projects/screenshots/mmm (2).webp",
-  "/projects/screenshots/mmm (3).webp"
-  ]
-links: [
-  {"label":"Play on itch.io","url":"https://studio-212.itch.io/mega-market-mayhem"}
-  ]
-embed: {"type":"game","url":"https://itch.io/embed-upload/15303000?color=333333"}
-tags: ["Unity","C#","Multiplayer","Action","Fighting"]
+team: Team of 7-10
+engine: Unity 2022.3, C#
+duration: 9 months
+image: /vault-media/projects/mega-market-mayhem/megamarketmayhem.webp
+media:
+  - /vault-media/projects/mega-market-mayhem/megamarketmayhem.webp
+  - /vault-media/projects/mega-market-mayhem/mmm-1.webp
+  - /vault-media/projects/mega-market-mayhem/mmm-2.webp
+  - /vault-media/projects/mega-market-mayhem/mmm-3.webp
+links:
+  - label: Play on itch.io
+    url: https://studio-212.itch.io/mega-market-mayhem
+embed:
+  type: game
+  url: https://itch.io/embed-upload/15303000?color=333333
+tags:
+  - Unity
+  - C#
+  - Multiplayer
+  - Action
+  - Fighting
 order: 5
-disciplines: ["design","programming"]
-studio: "Pentad Games (as Vellum Games)"
-role: "Designer, Engine Implementer"
-status: "Demo"
-todo: ["Add 3–5 \"My contribution\" bullets","Add a Process section (prototypes, playtests, what changed)"]
+disciplines:
+  - design
+  - programming
+studio: Pentad Games (as Vellum Games)
+role: Designer, Engine Implementer
+status: Demo
 ---
 
 Mega Market Mayhem is an intense multiplayer fighting game that combines fast-paced combat with quirky food-themed characters in a chaotic supermarket setting. Players engage in 1v1 battles using unique food-based fighters, each with their own special abilities and combat styles.

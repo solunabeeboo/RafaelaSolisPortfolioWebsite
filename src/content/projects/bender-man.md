@@ -1,25 +1,30 @@
 ---
-title: "Bender Man"
-hook: "A silly collecting game parodying the Slender Man series, collect the pages before he gets you!"
-visibility: "public"
+title: Bender Man
+hook: A silly collecting game parodying the Slender Man series, collect the pages before he gets you!
+visibility: public
 featured: false
-team: "Solo project"
-engine: "Unreal Engine, Blueprints"
-duration: "3 weeks"
-image: "/projects/images/benderman.webp"
-media: [
-  "/projects/images/benderman.webp",
-  "/projects/screenshots/bender (1).webp",
-  "/projects/screenshots/bender (2).webp",
-  "/projects/screenshots/bender (3).webp"
-  ]
-links: [
-  {"label":"View on Itch.io","url":"https://solunabeeboo.itch.io/bender-man-the-something-something"}
-  ]
-tags: ["Unreal Engine","Blueprints","Academic","3D","Collecting","Survival"]
+team: Solo project
+engine: Unreal Engine, Blueprints
+duration: 3 weeks
+image: /vault-media/projects/bender-man/benderman.webp
+media:
+  - /vault-media/projects/bender-man/benderman.webp
+  - /vault-media/projects/bender-man/bender-1.webp
+  - /vault-media/projects/bender-man/bender-2.webp
+  - /vault-media/projects/bender-man/bender-3.webp
+links:
+  - label: View on Itch.io
+    url: https://solunabeeboo.itch.io/bender-man-the-something-something
+tags:
+  - Unreal Engine
+  - Blueprints
+  - Academic
+  - 3D
+  - Collecting
+  - Survival
 order: 14
-disciplines: ["design"]
-todo: ["Add 3–5 \"My contribution\" bullets","Add a Process section (prototypes, playtests, what changed)"]
+disciplines:
+  - design
 ---
 
 Bender Man is a humorous parody of the classic Slender Man horror games, turning the terrifying concept into a lighthearted collecting adventure. Players must gather scattered pages while avoiding the comically reimagined antagonist.

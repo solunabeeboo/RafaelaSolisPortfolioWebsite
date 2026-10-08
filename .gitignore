@@ -10,3 +10,6 @@ Thumbs.db
 
 # private vault (its own private git repo)
 vault/
+
+# Vault app working files (settings, token, logs, thumbnails, built UI)
+.vault/

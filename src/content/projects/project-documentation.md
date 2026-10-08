@@ -1,27 +1,32 @@
 ---
-title: "Project Documentation"
-hook: "Various examples of documentation I've created as a game designer and programmer, as well as more historically focused deconstructions."
-visibility: "public"
+title: Project Documentation
+hook: Various examples of documentation I've created as a game designer and programmer, as well as more historically focused deconstructions.
+visibility: public
 featured: false
-team: "Solo"
-duration: "Ongoing"
-image: "/projects/images/LevelMockup.webp"
-media: [
-  "/projects/images/LevelMockup.webp",
-  "/projects/screenshots/Screenshot 2026-03-14 160709.webp",
-  "/projects/screenshots/Screenshot 2026-03-14 160057.webp",
-  "/projects/screenshots/Screenshot 2026-03-14 160038.webp",
-  "/projects/screenshots/Screenshot 2026-03-14 160005.webp",
-  "/projects/screenshots/Screenshot 2026-03-14 160726.webp",
-  "/projects/screenshots/Screenshot 2026-03-14 160654.webp"
-  ]
-links: [
-  {"label":"View Documentation","url":"https://drive.google.com/drive/folders/1hvGCdWkKDu4m5sOoh1iUT9PrOuzKkuLB?usp=sharing"}
-  ]
-tags: ["Documentation","Academic","Game Design","Game Programming","Game History"]
+team: Solo
+duration: Ongoing
+image: /vault-media/projects/project-documentation/levelmockup.webp
+media:
+  - /vault-media/projects/project-documentation/levelmockup.webp
+  - /vault-media/projects/project-documentation/screenshot-2026-03-14-160709.webp
+  - /vault-media/projects/project-documentation/screenshot-2026-03-14-160057.webp
+  - /vault-media/projects/project-documentation/screenshot-2026-03-14-160038.webp
+  - /vault-media/projects/project-documentation/screenshot-2026-03-14-160005.webp
+  - /vault-media/projects/project-documentation/screenshot-2026-03-14-160726.webp
+  - /vault-media/projects/project-documentation/screenshot-2026-03-14-160654.webp
+links:
+  - label: View Documentation
+    url: https://drive.google.com/drive/folders/1hvGCdWkKDu4m5sOoh1iUT9PrOuzKkuLB?usp=sharing
+tags:
+  - Documentation
+  - Academic
+  - Game Design
+  - Game Programming
+  - Game History
 order: 16
-disciplines: ["design","production"]
-todo: ["Add 3–5 \"My contribution\" bullets","Add a Process section (prototypes, playtests, what changed)"]
+disciplines:
+  - design
+  - production
 ---
 
 A comprehensive portfolio of technical and design documentation spanning game development, programming practices, and historical game analysis. This collection showcases my ability to communicate complex technical concepts clearly and thoroughly.
