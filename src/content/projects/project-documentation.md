@@ -43,6 +43,7 @@ contribution:
   - Wrote deconstructions of historically significant games
 problem: Documentation has to be readable by both technical and non-technical teammates.
 year: "2025"
+engine: Adobe Illustrator, Adobe Photoshop
 ---
 
 This is a collection of documentation I have written as a game designer and programmer: game design documents (GDDs), visual design documents (VDDs), system diagrams, and level design mockups, plus deconstructions of historical games. The full set is in the Drive folder linked above.
