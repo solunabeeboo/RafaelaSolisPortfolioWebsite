@@ -33,7 +33,7 @@ tags:
   - Vertical Shooter
   - Multi-Leveled
   - Multi-Camera Rendering
-order: 12
+order: 11
 disciplines:
   - design
   - programming

@@ -28,7 +28,7 @@ tags:
   - Multiplayer
   - Action
   - Fighting
-order: 5
+order: 6
 disciplines:
   - design
   - programming
