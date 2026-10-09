@@ -3,7 +3,7 @@ import { render } from 'astro:content';
 import { getImage } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
 import CaseStudy from '../../components/CaseStudy.astro';
-import { getProjects, projectMedia, featuredFor } from '../../lib/content';
+import { getProjects, projectMedia, logoOf, featuredFor } from '../../lib/content';
 
 export async function getStaticPaths() {
     const projects = await getProjects();
@@ -32,7 +32,7 @@ const ogImage = cover?.image
     description={`${d.hook}${d.role ? ` Role: ${d.role}.` : ''}`}
     image={ogImage}
 >
-    <CaseStudy project={entry} media={media} prev={prev} next={next}>
+    <CaseStudy project={entry} media={media} logo={logoOf(entry)} prev={prev} next={next}>
         <Content slot="body" />
     </CaseStudy>
 </Layout>

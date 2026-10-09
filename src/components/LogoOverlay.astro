@@ -1,0 +1,42 @@
+---
+// A project's logo laid over its header image: centered, sized to the frame,
+// lifted off the art with a layered drop shadow and a soft vignette. Put it
+// inside a positioned box that holds the image or video. The title is already
+// on the page as text, so the logo itself is decorative.
+import Media from './Media.astro';
+import type { MediaItem } from '../lib/content';
+
+interface Props {
+    logo: MediaItem;
+    /** Rendered width of the frame, for responsive sizes. */
+    sizes?: string;
+    priority?: boolean;
+}
+
+const { logo, sizes = '(min-width: 1000px) 500px, 70vw', priority = false } = Astro.props;
+---
+<span class="logo-overlay" data-logo-overlay>
+    <Media item={logo} alt="" sizes={sizes} widths={[320, 640, 960]} priority={priority} />
+</span>
+
+<style>
+    .logo-overlay {
+        position: absolute; inset: 0; z-index: 1;
+        display: grid; place-items: center; padding: 8%;
+        pointer-events: none;
+        /* Vignette: darkens the edges a little so the logo reads on busy art */
+        box-shadow: inset 0 0 clamp(40px, 12vw, 140px) rgb(0 0 0 / 0.38);
+        transition: opacity var(--dur) var(--ease);
+    }
+    .logo-overlay :global(picture) { display: contents; }
+    .logo-overlay :global(img) {
+        width: auto; height: auto; max-width: min(72%, 640px); max-height: 52%;
+        object-fit: contain;
+        filter:
+            drop-shadow(0 1px 1px rgb(0 0 0 / 0.55))
+            drop-shadow(0 4px 8px rgb(0 0 0 / 0.4))
+            drop-shadow(0 12px 28px rgb(0 0 0 / 0.35));
+    }
+    /* Step aside while someone is watching the video underneath */
+    :global(.is-playing) > .logo-overlay { opacity: 0; }
+</style>

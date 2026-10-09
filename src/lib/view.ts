@@ -68,7 +68,7 @@ const VAULT_ORIGIN = (typeof process !== 'undefined' && process.env.VAULT_ORIGIN
 
 export function previewMedia(data: Record<string, any>): MediaItem[] {
     return normalizeMedia(data.media, { cover: data.image })
-        .filter((m: any) => !m.hidden)
+        .filter((m: any) => !m.hidden && m.src !== data.logo)
         .map((m: any) => {
             const remote = (src: string) => VAULT_ORIGIN + src;
             if (!m.video) return { ...m, rawUrl: remote(m.src) } as unknown as MediaItem;
@@ -79,6 +79,12 @@ export function previewMedia(data: Record<string, any>): MediaItem[] {
                 posterUrl: poster && mediaRel(poster) ? remote(poster) : undefined,
             } as MediaItem;
         });
+}
+
+/** The vault preview's logo: the vault file as is. */
+export function previewLogo(data: Record<string, any>): MediaItem | undefined {
+    const [logo] = normalizeMedia([], { cover: data.logo }).filter((m: any) => !m.video);
+    return logo ? ({ ...logo, rawUrl: VAULT_ORIGIN + logo.src } as unknown as MediaItem) : undefined;
 }
 
 const STATIC_PAGES = new Set(['/', '/projects/', '/about/', '/resume/', '/contact/']);

@@ -1,7 +1,10 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import PixelIcon from '../../components/PixelIcon.astro';
 import { RESUMES } from '../../lib/content';
 import { site, EMAIL, SOCIAL } from '../../lib/view';
+
+const ICONS: Record<string, string> = { linkedin: 'briefcase', github: 'code', itch: 'gamepad', bluesky: 'butterfly' };
 ---
 <Layout
     title="Contact | Rafaela Solís"
@@ -9,44 +12,74 @@ import { site, EMAIL, SOCIAL } from '../../lib/view';
 >
     <div class="wrap contact">
         <h1>Contact</h1>
-        <p class="open">{site.home.openTo}</p>
+        <p class="open"><PixelIcon name="star" class="open-icon" />{site.home.openTo}</p>
 
-        <dl class="channels">
-            <dt>Email</dt>
-            <dd>
-                <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
-                <button type="button" class="btn small copy-btn" data-copy={EMAIL}>
-                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="5.25" y="5.25" width="8" height="8.5" rx="1.25"/><path d="M10.75 5.25V3.5a1.25 1.25 0 0 0-1.25-1.25h-5.5A1.25 1.25 0 0 0 2.75 3.5v6.25A1.25 1.25 0 0 0 4 11h1.25"/></svg>
-                    <span aria-live="polite">Copy email</span>
-                </button>
-            </dd>
-            {SOCIAL.map(n => (
-                <>
-                    <dt>{n.label}</dt>
-                    <dd><a href={n.href}>{n.handle}</a></dd>
-                </>
-            ))}
-            <dt>Résumé</dt>
-            <dd><a href="/resume/">View online</a> <span class="sep">or</span> <a href={RESUMES[0].file} download>download the PDF</a></dd>
-        </dl>
+        <div class="card">
+            <p class="card-tab"><PixelIcon name="mail" /> Contact</p>
+            <dl class="channels">
+                <div class="row primary">
+                    <dt><span class="ico"><PixelIcon name="mail" /></span>Email</dt>
+                    <dd>
+                        <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+                        <button type="button" class="btn small copy-btn" data-copy={EMAIL}>
+                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="5.25" y="5.25" width="8" height="8.5" rx="1.25"/><path d="M10.75 5.25V3.5a1.25 1.25 0 0 0-1.25-1.25h-5.5A1.25 1.25 0 0 0 2.75 3.5v6.25A1.25 1.25 0 0 0 4 11h1.25"/></svg>
+                            <span aria-live="polite">Copy email</span>
+                        </button>
+                    </dd>
+                </div>
+                {SOCIAL.map(n => (
+                    <div class="row">
+                        <dt><span class="ico"><PixelIcon name={ICONS[n.id] ?? 'star'} /></span>{n.label}</dt>
+                        <dd><a href={n.href}>{n.handle}</a></dd>
+                    </div>
+                ))}
+                <div class="row">
+                    <dt><span class="ico"><PixelIcon name="document" /></span>Résumé</dt>
+                    <dd><a href="/resume/">View online</a> <span class="sep">or</span> <a href={RESUMES[0].file} download>download the PDF</a></dd>
+                </div>
+            </dl>
+        </div>
     </div>
 </Layout>
 
 <style>
     .contact { padding-top: var(--space-6); }
-    .open { margin-top: var(--space-3); color: var(--ink-2); }
-    .channels {
-        display: grid; grid-template-columns: 8rem minmax(0, 1fr); margin-top: var(--space-6); max-width: 44rem;
-        border-top: 2px solid var(--outline);
+    h1 { font-size: var(--step-4); }
+    .open { display: flex; align-items: center; gap: var(--space-3); margin-top: var(--space-3); color: var(--ink-2); font-size: var(--step-1); }
+    .open :global(.open-icon) { width: 20px; height: 20px; color: var(--moss); flex: none; }
+
+    .card { margin-top: var(--space-7); max-width: 48rem; }
+    .card-tab {
+        display: inline-flex; align-items: center; gap: var(--space-2); position: relative;
+        margin: 0 0 -2px var(--space-5); padding: var(--space-2) var(--space-4);
+        background: var(--board); border: 2px solid var(--outline); border-bottom: 0;
+        border-radius: var(--radius) var(--radius) 0 0; font-weight: 700;
     }
-    .channels dt, .channels dd { padding: var(--space-4) 0; border-bottom: 1px solid var(--rule); display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-3); }
-    .channels dt { color: var(--ink-3); font-size: var(--step--1); }
-    .channels dd { font-size: var(--step-1); font-weight: 600; }
-    .channels dd a { overflow-wrap: anywhere; }
+    .card-tab :global(.pixel-icon) { width: 16px; height: 16px; color: var(--forest); }
+
+    .channels {
+        background: var(--board); border: 2px solid var(--outline); border-radius: var(--radius);
+        padding: var(--space-2) var(--space-5);
+    }
+    .row {
+        display: grid; grid-template-columns: 10rem minmax(0, 1fr); align-items: center; gap: var(--space-4);
+        padding: var(--space-4) 0; border-bottom: 1px solid var(--rule);
+    }
+    .row:last-child { border-bottom: 0; }
+    .row dt { display: flex; align-items: center; gap: var(--space-3); color: var(--ink-2); font-size: var(--step--1); font-weight: 600; }
+    .ico {
+        display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: 8px;
+        background: var(--paper); border: 2px solid var(--outline); color: var(--forest);
+    }
+    .ico :global(.pixel-icon) { width: 18px; height: 18px; }
+    .row.primary .ico { background: var(--forest); border-color: var(--forest); color: var(--on-forest); }
+    .row dd { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-3); font-size: var(--step-1); font-weight: 600; }
+    .row dd a { overflow-wrap: anywhere; }
     .sep { color: var(--ink-3); font-weight: 400; font-size: var(--step-0); }
-    @media (max-width: 480px) {
-        .channels { grid-template-columns: 1fr; }
-        .channels dt { padding-bottom: 0; border-bottom: 0; }
-        .channels dd { padding-top: var(--space-1); }
+
+    @media (max-width: 560px) {
+        .channels { padding: var(--space-1) var(--space-4); }
+        .row { grid-template-columns: 1fr; gap: var(--space-2); }
+        .row dd { padding-left: calc(36px + var(--space-3)); }
     }
 </style>

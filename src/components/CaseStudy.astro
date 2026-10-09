@@ -3,6 +3,7 @@
 // Her markdown goes in the "body" slot; empty sections are not rendered.
 import { getImage } from 'astro:assets';
 import Media from './Media.astro';
+import LogoOverlay from './LogoOverlay.astro';
 import { getProjects, canLoop, type MediaItem } from '../lib/content';
 import { projectFacts, liveLinks, isExternal, type ProjectLike } from '../lib/view';
 import { renderMarkdown } from '../lib/markdown';
@@ -10,11 +11,13 @@ import { renderMarkdown } from '../lib/markdown';
 interface Props {
     project: ProjectLike;
     media: MediaItem[];
+    /** Laid over the header image or video. */
+    logo?: MediaItem;
     prev?: { id: string; title: string };
     next?: { id: string; title: string };
 }
 
-const { project, media, prev, next } = Astro.props;
+const { project, media, logo, prev, next } = Astro.props;
 const d = project.data;
 
 const facts = projectFacts(d);
@@ -80,6 +83,7 @@ const heroRatio = (m: MediaItem) => (m.image ? m.image.width / m.image.height : 
                                 />
                             </a>
                         )}
+                        {logo && <LogoOverlay logo={logo} priority />}
                     </div>
                 )}
                 <aside class="card" aria-label="Project facts">
@@ -268,6 +272,13 @@ const heroRatio = (m: MediaItem) => (m.image ? m.image.width / m.image.height : 
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
         document.querySelectorAll<HTMLVideoElement>('video[data-loop]').forEach(v => v.play().catch(() => {}));
     }
+
+    // A logo over the hero video steps aside while someone plays it (looping teasers keep it).
+    document.querySelectorAll<HTMLVideoElement>('.hero video:not([data-loop])').forEach(v => {
+        const hero = v.closest('.hero')!;
+        v.addEventListener('play', () => hero.classList.add('is-playing'));
+        v.addEventListener('pause', () => hero.classList.remove('is-playing'));
+    });
 </script>
 
 <style>
@@ -292,7 +303,7 @@ const heroRatio = (m: MediaItem) => (m.image ? m.image.width / m.image.height : 
     .lead { font-size: var(--step-1); line-height: 1.4; max-width: 60ch; margin-bottom: var(--space-5); }
     .cs-grid { display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); gap: var(--space-5); align-items: start; }
     .cs-grid:not(:has(.hero)) { grid-template-columns: minmax(0, 1fr); }
-    .hero { background: var(--paper); border-radius: 4px; overflow: hidden; }
+    .hero { position: relative; background: var(--paper); border-radius: 4px; overflow: hidden; }
     .hero img, .hero video { width: 100%; max-height: 72vh; object-fit: contain; }
     .hero video { aspect-ratio: var(--ratio); background: #000; }
     .card { position: sticky; top: calc(var(--header-h) + var(--space-4)); background: var(--paper); border-top: 2px solid var(--forest); padding: var(--space-4) var(--space-5); border-radius: 0 0 6px 6px; }

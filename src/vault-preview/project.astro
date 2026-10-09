@@ -8,7 +8,7 @@ import Layout from '../layouts/Layout.astro';
 import CaseStudy from '../components/CaseStudy.astro';
 import { createVault } from '../../scripts/vault-lib.mjs';
 import { schemas } from '../lib/schema.mjs';
-import { previewMedia } from '../lib/view';
+import { previewMedia, previewLogo } from '../lib/view';
 import { renderMarkdown } from '../lib/markdown';
 
 export const prerender = false;
@@ -31,7 +31,7 @@ const bodyHtml = item ? await renderMarkdown(item.body) : '';
     {item && data ? (
         <>
             <p class="wrap note">Preview from the vault ({data.visibility ?? 'private'}). Not published.</p>
-            <CaseStudy project={{ id: slug, data }} media={previewMedia(data)}>
+            <CaseStudy project={{ id: slug, data }} media={previewMedia(data)} logo={previewLogo(data)}>
                 <Fragment slot="body" set:html={bodyHtml} />
             </CaseStudy>
         </>

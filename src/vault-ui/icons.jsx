@@ -37,6 +37,7 @@ const PATHS = {
     publish: 'M12 19V6M6 11l6-6 6 6M5 21h14',
     phone: 'M7 2h10a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zM11 18h2',
     desktop: 'M3 4h18v12H3zM8 20h8M12 16v4',
+    logo: 'M12 3l8 4.5v9L12 21l-8-4.5v-9zM9 12h6',
     lock: 'M6 11h12v9H6zM8 11V8a4 4 0 0 1 8 0v3',
     globe: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18',
     file: 'M6 3h9l4 4v14H6zM14 3v5h5',

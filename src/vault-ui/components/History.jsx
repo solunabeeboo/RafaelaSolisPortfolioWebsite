@@ -26,7 +26,7 @@ function diff(now, then) {
 }
 
 const LABELS = {
-    hook: 'Hook', title: 'Title', disciplines: 'Disciplines', media: 'Media', image: 'Cover image', visibility: 'Visibility', featured: 'Featured',
+    hook: 'Hook', title: 'Title', disciplines: 'Disciplines', media: 'Media', image: 'Cover image', logo: 'Logo', visibility: 'Visibility', featured: 'Featured',
     tags: 'Tags', platforms: 'Platforms', year: 'Year', studio: 'Studio', role: 'Role', engine: 'Engine', order: 'Site order', links: 'Links',
 };
 

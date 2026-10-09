@@ -19,7 +19,7 @@
 }
 
 :root {
-    color-scheme: light dark;
+    color-scheme: light;
 
     --paper: #f6f6f1;
     --board: #e8e6da;
@@ -34,6 +34,13 @@
     --moss: #6b8f47;
     --forest-wash: #c9d8b8;
     --on-forest: #f6f6f1;
+    --box: #dcd9ca;
+
+    /* Ordered (4x4 Bayer) dither in 2px pixels: a mask that dissolves a fill
+       over its bottom 16px instead of ending it on a hard line. */
+    --dither: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%278%27 height=%2716%27%3E%3Cpath d=%27M0 0h2v2h-2zM2 0h2v2h-2zM4 0h2v2h-2zM6 0h2v2h-2zM0 2h2v2h-2zM2 2h2v2h-2zM6 2h2v2h-2zM0 4h2v2h-2zM4 4h2v2h-2zM6 4h2v2h-2zM2 6h2v2h-2zM6 6h2v2h-2zM0 8h2v2h-2zM4 8h2v2h-2zM2 10h2v2h-2zM4 12h2v2h-2z%27/%3E%3C/svg%3E");
+    --dither-solid: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%271%27 height=%271%27%3E%3Cpath d=%27M0 0h1v1H0z%27/%3E%3C/svg%3E");
+    --dither-band: 16px;
 
     --font: 'Archivo', 'Archivo Fallback', Arial, sans-serif;
     --mono: ui-monospace, 'Cascadia Mono', 'SF Mono', Consolas, monospace;
@@ -62,24 +69,6 @@
     --radius: 10px;
     --dur: 200ms;
     --ease: cubic-bezier(0.2, 0, 0.38, 0.9);
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --paper: #151913;
-        --board: #1f251c;
-        --ink: #e8eadf;
-        --ink-2: #bfc5b5;
-        --ink-3: #a9b0a0;
-        --rule: #2f3a29;
-        --rule-strong: #737b6c;
-        --outline: #8b9482;
-        --forest: #a3c585;
-        --forest-2: #bad79f;
-        --moss: #6b8f47;
-        --forest-wash: #34452a;
-        --on-forest: #151913;
-    }
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -165,6 +154,19 @@ a:hover { color: var(--forest-2); text-decoration-thickness: 2px; }
     font-weight: 700; font-size: var(--step-0); line-height: 1.2; white-space: nowrap;
 }
 .wordmark:hover { color: var(--forest); }
+
+/* A darker fill that dissolves downward in dither pixels instead of ending
+   on a hard line: tabs, and any positioned element with .dither-fill. The
+   fill sits on ::before, behind the content. */
+.dither-fill { isolation: isolate; }
+.dither-fill::before,
+.site-nav a[aria-current='page']::before,
+.folder-tab::before {
+    content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    background: var(--fill, var(--board)); border-radius: inherit;
+    -webkit-mask: var(--dither) left bottom / 8px var(--dither-band) repeat-x, var(--dither-solid) left top / 100% calc(100% - var(--dither-band) + 1px) no-repeat;
+    mask: var(--dither) left bottom / 8px var(--dither-band) repeat-x, var(--dither-solid) left top / 100% calc(100% - var(--dither-band) + 1px) no-repeat;
+}
 .site-nav ul { display: flex; align-items: flex-end; gap: var(--space-1); }
 .site-nav a {
     display: flex; align-items: center; height: 44px; padding: 0 var(--space-4);
@@ -175,8 +177,10 @@ a:hover { color: var(--forest-2); text-decoration-thickness: 2px; }
 .site-nav a:hover { color: var(--forest); }
 /* The active page is a folder tab sitting on the header rule. */
 .site-nav a[aria-current='page'] {
-    background: var(--board); border-color: var(--outline); height: 46px; padding-bottom: 1px;
+    position: relative; isolation: isolate;
+    background: var(--paper); border-color: var(--outline); height: 46px; padding-bottom: 1px;
 }
+.site-nav a[aria-current='page']::before { border-radius: calc(var(--radius) - 2px) calc(var(--radius) - 2px) 0 0; }
 
 @media (max-width: 560px) {
     .site-header .bar { flex-direction: column; align-items: stretch; gap: 0; }
@@ -218,7 +222,12 @@ a:hover { color: var(--forest-2); text-decoration-thickness: 2px; }
 }
 
 /* ── Folder drawer: the one bold device ──────────────────────────────── */
-.drawer { display: flex; flex-direction: column; gap: var(--space-2); }
+/* The folders stand together in one outlined file box. */
+.drawer {
+    display: flex; flex-direction: column; gap: var(--space-2);
+    background: var(--box); border: 2px solid var(--outline); border-radius: var(--radius);
+    padding: var(--space-5) var(--space-5) var(--space-6);
+}
 .folder { position: relative; display: flex; flex-direction: column; }
 .folder-head {
     display: flex; align-items: flex-end; gap: var(--space-4);
@@ -228,7 +237,8 @@ a:hover { color: var(--forest-2); text-decoration-thickness: 2px; }
 .folder-tab {
     display: inline-flex; align-items: center; gap: var(--space-3); flex: none;
     min-height: 44px; margin: 0 0 -2px; padding: 0 var(--space-4);
-    background: var(--board); color: var(--ink);
+    position: relative; isolation: isolate;
+    background: var(--box); color: var(--ink);
     border: 2px solid var(--outline); border-bottom: 0; border-radius: var(--radius) var(--radius) 0 0;
     font: 700 var(--step-1) / 1.1 var(--font); text-align: left; cursor: pointer;
     letter-spacing: -0.005em;
@@ -236,9 +246,13 @@ a:hover { color: var(--forest-2); text-decoration-thickness: 2px; }
 .folder-tab:hover { color: var(--forest); }
 .folder-tab .chev { width: 14px; height: 14px; flex: none; transition: transform var(--dur) var(--ease); }
 .folder[data-open] .folder-tab .chev { transform: rotate(180deg); }
-/* Stretch the click target over the whole closed folder row */
-.folder-tab::after { content: ''; position: absolute; inset: 0; }
-.folder[data-open] .folder-tab::after { display: none; }
+.folder-tab::before { border-radius: calc(var(--radius) - 2px) calc(var(--radius) - 2px) 0 0; }
+/* A closed tab dissolves into the box; an open one runs solid into its folder. */
+.folder[data-open] .folder-tab { background: var(--board); }
+.folder[data-open] .folder-tab::before { -webkit-mask: none; mask: none; }
+/* The whole closed folder row is clickable (see FolderDrawer) */
+.js .folder:not([data-open]) .folder-head { cursor: pointer; }
+.js .folder:not([data-open]) .folder-head:hover .folder-tab { color: var(--forest); }
 .folder-summary {
     flex: 1; min-width: 0; display: flex; justify-content: space-between; gap: var(--space-5);
     padding-bottom: var(--space-2); color: var(--ink-2); font-size: var(--step--1);
@@ -257,7 +271,7 @@ a:hover { color: var(--forest-2); text-decoration-thickness: 2px; }
     gap: var(--space-6); padding: var(--space-5);
     align-items: start;
 }
-.folder-media { display: block; background: var(--paper); border-radius: 4px; overflow: hidden; }
+.folder-media { position: relative; display: block; background: var(--paper); border-radius: 4px; overflow: hidden; }
 .folder-media img { width: 100%; max-height: min(52vh, 520px); object-fit: contain; }
 .folder-info { display: flex; flex-direction: column; gap: var(--space-4); min-width: 0; }
 .folder-info .hook { font-size: var(--step-1); line-height: 1.35; max-width: 34ch; }
@@ -269,7 +283,8 @@ a:hover { color: var(--forest-2); text-decoration-thickness: 2px; }
 html:not(.js) .folder-tab { pointer-events: none; }
 html:not(.js) .folder-tab .chev { display: none; }
 html:not(.js) .folder-summary { display: none; }
-html:not(.js) .folder-tab::after { display: none; }
+html:not(.js) .folder-tab { background: var(--board); }
+html:not(.js) .folder-tab::before { -webkit-mask: none; mask: none; }
 
 .js .folder-panel { transition: grid-template-rows var(--dur) var(--ease); }
 .js .folder:not([data-open]) .folder-panel { grid-template-rows: 0fr; }
@@ -282,6 +297,7 @@ html:not(.js) .folder-tab::after { display: none; }
     .folder:nth-child(4n + 4) { --tab-x: 234px; }
 }
 @media (max-width: 760px) {
+    .drawer { padding: var(--space-4) var(--space-3) var(--space-5); }
     .folder-body { grid-template-columns: 1fr; gap: var(--space-4); padding: var(--space-4); }
     .folder-summary { display: none; }
     .folder-head { border-bottom-color: var(--outline); }
