@@ -2,7 +2,7 @@
 title: Rat Attack!
 hook: Play as a seasoned exterminator in upstate New York, going into a job he will never forget.
 visibility: public
-featured: false
+featured: true
 team: Solo
 engine: Unity, C#
 duration: 3 months
