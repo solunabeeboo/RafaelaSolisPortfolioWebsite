@@ -30,7 +30,7 @@
       "UE4SS",
       "Blueprints",
       "OpenGL",
-      "Shaders"
+      "GLSL Shaders"
     ],
     "disciplines": [
       "programming",
@@ -87,6 +87,8 @@
     "order": 5,
     "wide": false,
     "items": [
+      "Pixel Art",
+      "3D Modeling",
       "Blender",
       "Aseprite",
       "Photoshop",
