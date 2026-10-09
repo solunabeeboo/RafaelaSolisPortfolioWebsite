@@ -3,7 +3,7 @@ title: Scrum Facilitation
 hook: The production suite I built for Pentad Games, with self-hosted AFFiNE, kanban tracking, art critiques, meeting notes, and nightly builds.
 visibility: public
 featured: true
-order: 4
+order: 5
 disciplines:
   - production
   - programming

@@ -36,7 +36,7 @@ tags:
   - Pixel Art
   - Puzzle
   - Singleplayer
-order: 10
+order: 3
 disciplines:
   - design
   - programming

@@ -32,7 +32,7 @@ tags:
   - Puzzle
   - Maze
   - Color Based Puzzles
-order: 11
+order: 10
 disciplines:
   - design
 contribution:

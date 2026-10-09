@@ -3,7 +3,7 @@ title: Easy Third Person
 hook: A third-person camera mod for Subnautica 2. Runner-up ($650) in CurseForge's Subnautica 2 Modding Contest, with 3,000+ downloads.
 visibility: public
 featured: true
-order: 3
+order: 4
 disciplines:
   - programming
   - design
