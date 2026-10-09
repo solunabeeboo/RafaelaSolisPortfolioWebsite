@@ -2,7 +2,8 @@
   "home": {
     "role": "Game Designer",
     "tagline": "I design games, build the systems behind them, and lead the teams that ship them.",
-    "openTo": "Open to summer 2027 internships · US / CA / EU"
+    "openTo": "Open to summer 2027 internships · US / CA / EU",
+    "proof": "Runner-up in CurseForge’s Subnautica 2 Modding Contest ($650 prize) for Easy Third Person, a third-person camera mod with 3,000+ downloads."
   },
   "about": {
     "name": "Rafaela Solís",
@@ -27,7 +28,7 @@
       }
     ],
     "bio": [
-      "Hi! I'm Rafaela Solís, a passionate game designer dedicated to creating engaging, immersive, and emotional player-focused gaming experiences. My journey in game development started as a tiny baby. My father started a company during the tech boom, and performed IT services for the city of Austin, Texas. He always had every kind of computer, and quite often we would sit down together in front of a 4 inch thick laptop to play obscure cobbled together kids games that my tiny brain could understand. I've been hooked ever since.",
+      "Hi! I'm Rafaela Solís, a passionate game designer dedicated to creating engaging, immersive, and emotional player-focused gaming experiences. My journey in game development started as a tiny baby. My father started a company during the tech boom, and performed IT services for the city of Austin, Texas. He always had every kind of computer, and quite often we would sit down together in front of a 4-inch-thick laptop to play obscure, cobbled-together kids games that my tiny brain could understand. I've been hooked ever since.",
       "I double major in Game Design and Game Programming at Champlain College (2028), with a minor in Project Management and specific focus in system design, level design, technical design, narrative design, gameplay programming, rapid prototyping, and more. I have experience with Unreal Engine 5, Unity 6, C++, Lua, C#, Python, Java, Blueprints, and web tools like Astro and Next.js. I love the puzzle of making people happy. I've worked across a plethora of genres and projects: Maze-Puzzle, Action-Adventure, Educational, Drawing-Combat, Multiplayer Coop/Competitive, Website Portfolios, Web Tools, and more!",
       "I've shipped three non-academic large-team project demos: Mega Market Mayhem, Scriptorium, and Open Shift, with Scriptorium and Open Shift in active development. Beyond that, dozens of indie and jam games, and a plethora of academic prototypes and web centered projects, like the one you're on right now! Each project has taught me invaluable lessons about teamwork, scope, design, and the importance of the user."
     ],
@@ -86,11 +87,11 @@
   "lenses": {
     "design": {
       "title": "Game Designer",
-      "summary": "Game designer pursuing dual B.S. degrees in Game Design and Game Programming with a Project Management minor. Leads design across three studio titles at Pentad Games, prototyping features directly in Unity and Unreal Engine 5 with C++, Lua, and C#, and directing the team that builds them. Placed 2nd internationally in the CurseForge Subnautica 2 Modding Contest, with 6,500+ mod downloads on CurseForge. Programming makes it possible to prototype designs firsthand and work fluently with engineers; production training means leading a team or supporting one."
+      "summary": "Game designer pursuing dual B.S. degrees in Game Design and Game Programming with a Project Management minor. Designs across three studio titles at Pentad Games, leading two, prototyping in Unity and Unreal Engine 5 (C++, Lua, C#) and directing the team that builds them. Placed 2nd internationally in the CurseForge Subnautica 2 Modding Contest (6,500+ mod downloads). Programming makes it possible to prototype firsthand and work fluently with engineers; production training means leading or supporting a team."
     },
     "programming": {
       "title": "Gameplay Programmer",
-      "summary": "Gameplay programmer pursuing dual B.S. degrees in Game Programming and Game Design with a Project Management minor. Writes C++ and Lua in Unreal Engine 5 and C# in Unity; placed 2nd internationally in the CurseForge Subnautica 2 Modding Contest, with 6,000+ downloads across Subnautica 2 mods. Lead programmer at Pentad Games, building gameplay systems, CI pipelines, and team tooling. Design training means building systems that serve the player; production training means shipping them on schedule."
+      "summary": "Gameplay and engine programmer pursuing dual B.S. degrees in Game Programming and Game Design with a Project Management minor. Works primarily in C++: building a custom physics engine, an OpenGL renderer with custom shaders, and Unreal Engine 5 mods in C++ and Lua, plus C# in Unity. Placed 2nd internationally in the CurseForge Subnautica 2 Modding Contest, with 6,000+ downloads across Subnautica 2 mods. Lead programmer at Pentad Games, building gameplay systems, CI pipelines, and team tooling. Design training means building systems that serve the player; production training means shipping them on schedule."
     },
     "production": {
       "title": "Game Producer",

@@ -1,17 +1,23 @@
 ---
 title: Bender Man
-hook: A silly collecting game parodying the Slender Man series, collect the pages before he gets you!
+hook: A silly collecting game parodying Slender Man. Collect the pages before he gets you!
 visibility: public
 featured: false
-team: Solo project
+team: Solo
 engine: Unreal Engine, Blueprints
 duration: 3 weeks
+kind: solo
+role: Designer and programmer
 image: /vault-media/projects/bender-man/benderman.webp
 media:
-  - /vault-media/projects/bender-man/benderman.webp
-  - /vault-media/projects/bender-man/bender-1.webp
-  - /vault-media/projects/bender-man/bender-2.webp
-  - /vault-media/projects/bender-man/bender-3.webp
+  - src: /vault-media/projects/bender-man/benderman.webp
+    alt: A hand-drawn, goofy yellow-shirted figure on a page in a foggy pine forest
+  - src: /vault-media/projects/bender-man/bender-1.webp
+    alt: Player staring into the forest at a shipping container
+  - src: /vault-media/projects/bender-man/bender-2.webp
+    alt: Player staring at bender man in the distance
+  - src: /vault-media/projects/bender-man/bender-3.webp
+    alt: Player staring at and ready to collect a note
 links:
   - label: View on Itch.io
     url: https://solunabeeboo.itch.io/bender-man-the-something-something
@@ -25,19 +31,14 @@ tags:
 order: 14
 disciplines:
   - design
+contribution:
+  - Designed and built the game solo in Unreal Engine Blueprints in three weeks
+  - Designed a page-collecting loop with a comically reimagined antagonist
+  - Worked in Unreal Engine to design blueprint blocks & flow.
+year: "2024"
 ---
 
-Bender Man is a humorous parody of the classic Slender Man horror games, turning the terrifying concept into a lighthearted collecting adventure. Players must gather scattered pages while avoiding the comically reimagined antagonist.
-
-Parody Elements:
-- Playful take on classic horror game mechanics
-- Collecting gameplay with a twist of humor
-- 3D environments that both honor and subvert the original
-- Survival mechanics with comedic timing
-- Easter eggs and references to the original series
-- Accessible horror that's more fun than frightening
-
-The game demonstrates how familiar mechanics can be transformed through tone and presentation to create entirely different experiences.
+Bender Man is a parody of Slender Man games. You gather scattered pages in a 3D forest while avoiding a comically reimagined antagonist, which turns a horror setup into a lighthearted collecting game.
 
 ## Challenges
 

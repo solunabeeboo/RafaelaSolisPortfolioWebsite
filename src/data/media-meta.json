@@ -1,6 +1,12 @@
 {
+  "/vault-media/projects/open-shift/openshift-teaser-filetofit-1-1.mp4": {
+    "bytes": 1846040,
+    "width": 1280,
+    "height": 720,
+    "duration": 40.73
+  },
   "/vault-media/projects/opengl-environments/beachscene-1.mp4": {
-    "bytes": 20073417,
+    "bytes": 10832040,
     "width": 1280,
     "height": 682,
     "duration": 132.39

@@ -1,26 +1,37 @@
 ---
 title: OpenGL Environments
-hook: Scenes and textures coded in C++ and OpenGL.
+hook: Real-time scenes in C++ and OpenGL with hand-written GLSL shaders and Phong lighting.
 visibility: public
 featured: false
-team: Solo project
+team: Solo
 engine: OpenGL, C++
 duration: 1 semester
+kind: class
+role: Programmer
 image: /vault-media/projects/opengl-environments/opengl.webp
 media:
-  - /vault-media/projects/opengl-environments/opengl.webp
-  - /vault-media/projects/opengl-environments/beachscene-1.mp4
-  - /vault-media/projects/opengl-environments/opengl-2.mp4
-  - /vault-media/projects/opengl-environments/opengl-1.mp4
-  - /vault-media/projects/opengl-environments/opengl-5.mp4
-  - /vault-media/projects/opengl-environments/opengl-3.mp4
-  - /vault-media/projects/opengl-environments/opengl-4.mp4
+  - src: /vault-media/projects/opengl-environments/opengl.webp
+    alt: Wood-textured cubes tumbling in space, lit by a light, with an ImGui settings window for light position, light color, ambient, diffuse, and specular strength, and shininess
+    caption: Phong lighting controls tuned live through a Dear ImGui panel
+  - src: /vault-media/projects/opengl-environments/beachscene-1.mp4
+    alt: Beach Scene coded entirely in OpenGL C++, all assets created or dynamically generated through shaders.
+  - src: /vault-media/projects/opengl-environments/opengl-2.mp4
+    alt: Demo Video of lighting & diffusion.
+  - src: /vault-media/projects/opengl-environments/opengl-1.mp4
+    alt: Demo Video of Texturing on 3D Cubes
+  - src: /vault-media/projects/opengl-environments/opengl-5.mp4
+    alt: Projection of Repeating & Non Repeating Textures moving & animated onto a screen space.
+  - src: /vault-media/projects/opengl-environments/opengl-3.mp4
+    alt: Projection of a dynamic shader onto a screen space.
+  - src: /vault-media/projects/opengl-environments/opengl-4.mp4
+    alt: Simple dynamic triangle with projection of colors to demonstrate vertices blending.
 links:
   - label: View Code on GitHub
     url: https://github.com/solunabeeboo/OpenGL-Work
 tags:
   - OpenGL
   - C++
+  - GLSL
   - Academic
   - 3D
   - 2D
@@ -29,24 +40,20 @@ tags:
 order: 15
 disciplines:
   - programming
+contribution:
+  - Built real-time 3D scenes in C++ and OpenGL
+  - Wrote the GLSL vertex and fragment shaders by hand
+  - Implemented Phong lighting with adjustable ambient, diffuse, and specular terms
+  - Applied textures to 3D geometry
+year: "2025"
 ---
 
-A collection of 3D scenes and environments built from scratch using C++ and OpenGL, demonstrating low-level graphics programming and mathematical concepts in computer graphics.
-
-Technical Achievements:
-- Custom 3D rendering pipeline
-- Texture mapping and lighting systems
-- Shader programming (vertex and fragment)
-- Mathematical transformations and camera systems
-- Real-time rendering optimizations
-- Multiple scene compositions with different themes
-
-These projects showcase the fundamentals of computer graphics programming and the mathematical principles that power modern game engines.
+This is a collection of real-time scenes I wrote in C++ and OpenGL for a graphics course. I wrote the GLSL shaders by hand and implemented Phong lighting with textures. The lighting values can be tuned live through a Dear ImGui panel.
 
 ## Challenges
 
-Understanding the mathematical foundations of 3D graphics and implementing efficient rendering pipelines.
+Understanding the mathematical foundations of 3D graphics and implementing a rendering pipeline that runs smoothly.
 
 ## Outcome and lessons
 
-This project gave me deep insight into how modern graphics engines work under the hood.
+This project taught me how modern graphics engines work under the hood.
