@@ -107,5 +107,7 @@ export function mediaRefs(data, { includeHidden = false } = {}) {
             if (rel) refs.add(rel);
         }
     }
+    const logo = data.logo && mediaRel(data.logo);
+    if (logo) refs.add(logo);
     return [...refs];
 }

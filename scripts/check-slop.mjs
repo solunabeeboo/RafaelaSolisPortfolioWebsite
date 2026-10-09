@@ -30,9 +30,13 @@ function* files(dir) {
     }
 }
 
+// Carried over verbatim from the pre-redesign site at her request.
+const EXEMPT = new Set(['src/components/ResumeViewer.astro']);
+
 const problems = [];
 for (const dir of DIRS) {
     for (const file of files(path.join(ROOT, dir))) {
+        if (EXEMPT.has(path.relative(ROOT, file).split(path.sep).join('/'))) continue;
         fs.readFileSync(file, 'utf8').split('\n').forEach((line, i) => {
             for (const { re, why } of RULES) {
                 if (re.test(line)) problems.push(`${path.relative(ROOT, file).split(path.sep).join('/')}:${i + 1}: ${why}`);

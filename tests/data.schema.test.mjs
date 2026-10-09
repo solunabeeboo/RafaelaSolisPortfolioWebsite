@@ -152,3 +152,16 @@ test('isValidUrl', () => {
     for (const ok of ['https://a.itch.io/x', 'http://localhost:3000', 'mailto:a@b.co', '/projects/x/']) assert.ok(isValidUrl(ok), ok);
     for (const bad of ['', 'a.itch.io', 'javascript:alert(1)', '//evil.com', 'https://nodot', null]) assert.ok(!isValidUrl(bad), String(bad));
 });
+
+test('logo: published with the media, and checked like an image', () => {
+    assert.ok(schemas.projects.parse(project({ logo: '/vault-media/projects/g/logo.webp' })).logo);
+    assert.ok(publicKeys('projects').includes('logo'));
+    assert.ok(mediaRefs({ logo: '/vault-media/p/logo.webp' }).includes('p/logo.webp'));
+
+    const ok = readiness('projects', project({ logo: '/vault-media/projects/g/logo.webp' }), ctxWith({ ...FILES, 'projects/g/logo.webp': 9 }));
+    assert.deepEqual(ok.errors, []);
+    const missing = readiness('projects', project({ logo: '/vault-media/projects/g/nope.webp' }), ctxWith(FILES));
+    assert.ok(missing.errors.some(e => e.field === 'logo' && /not found/.test(e.msg)));
+    const video = readiness('projects', project({ logo: '/vault-media/projects/g/clip.mp4' }), ctxWith({ ...FILES, 'projects/g/clip.mp4': 9 }));
+    assert.ok(video.errors.some(e => e.field === 'logo' && /must be an image/.test(e.msg)));
+});

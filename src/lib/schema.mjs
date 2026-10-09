@@ -70,6 +70,8 @@ export const shapes = {
         platforms:    z.array(z.string()).default([]),
         credits:      z.array(z.object({ name: z.string(), role: z.string() })).default([]),
         image:        opt(),
+        /** Transparent logo laid over the header image (kept out of the gallery). */
+        logo:         opt(),
         media:        z.array(mediaItem).default([]),
         links:        z.array(link).default([]),
         embed:        z.object({ type: z.enum(['game', 'widget']), url: z.string() }).optional(),

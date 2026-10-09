@@ -363,7 +363,7 @@ export function ItemEditor({ type, id }) {
     useEffect(() => {
         if (!target || !root.current) return;
         const [base, idx] = target.path.split('.');
-        const alias = { image: 'media' }[base] || base;
+        const alias = { image: 'media', logo: 'media' }[base] || base;
         let el = root.current.querySelector(`[data-field="${target.path}"]`);
         if (!el) {
             el = root.current.querySelector(`[data-field="${alias}"]`);

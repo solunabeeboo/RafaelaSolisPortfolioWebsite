@@ -1,6 +1,7 @@
 ---
 import { Picture } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
+import PixelIcon from '../../components/PixelIcon.astro';
 import headshot from '../../assets/site/headshot.webp';
 import { getExperience, getAwards, getSkills, getCourses } from '../../lib/content';
 import { site } from '../../lib/view';
@@ -9,6 +10,25 @@ import { personJsonLd } from '../../lib/person';
 const about = site.about;
 const [experience, awards, skills, courses] = await Promise.all([getExperience(), getAwards(), getSkills(), getCourses()]);
 const edu = about.education;
+
+// Pixel icons keyed by the words in a label; anything else gets a star.
+const SKILL_ICONS: [RegExp, string][] = [
+    [/language|code/i, 'code'],
+    [/engine/i, 'gear'],
+    [/design/i, 'pencil'],
+    [/produc|manage/i, 'clipboard'],
+    [/art|visual/i, 'palette'],
+    [/web/i, 'globe'],
+    [/test/i, 'magnifier'],
+    [/audio|sound/i, 'heart'],
+];
+const STAT_ICONS: [RegExp, string][] = [
+    [/school|college/i, 'cap'],
+    [/major|degree|minor/i, 'book'],
+    [/based|location|city/i, 'pin'],
+    [/open|available/i, 'star'],
+];
+const iconFor = (label: string, table: [RegExp, string][]) => table.find(([re]) => re.test(label))?.[1] ?? 'star';
 ---
 <Layout
     title="About | Rafaela Solís, Game Designer"
@@ -16,142 +36,252 @@ const edu = about.education;
     jsonLd={personJsonLd}
 >
     <div class="wrap about">
-        <h1>About</h1>
-
         <div class="layout">
             <div class="text">
+                <h1>About <span class="me">{about.name}</span></h1>
                 <section class="bio prose" aria-label="Bio">
                     {about.bio.map((para: string) => <p>{para}</p>)}
-                    {about.lookingFor && <p>{about.lookingFor}</p>}
                 </section>
 
-                {experience.length > 0 && (
-                    <section>
-                        <h2>Experience</h2>
-                        <ol class="entries">
-                            {experience.map(e => (
-                                <li>
-                                    <p class="when">{e.data.start} to {e.data.end}</p>
-                                    <div>
-                                        <h3>{e.data.title}</h3>
-                                        <p class="org">{e.data.org}{e.data.location && `, ${e.data.location}`}</p>
-                                        {e.data.bullets.length > 0 && (
-                                            <ul class="bullets">
-                                                {e.data.bullets.map((b: string) => <li>{b}</li>)}
-                                            </ul>
-                                        )}
-                                    </div>
-                                </li>
-                            ))}
-                        </ol>
-                    </section>
-                )}
-
-                {edu && (
-                    <section>
-                        <h2>Education</h2>
-                        <ol class="entries">
-                            <li>
-                                <p class="when">{edu.dates}</p>
-                                <div>
-                                    <h3>{edu.school}</h3>
-                                    <p class="org">{edu.degrees}</p>
-                                    {edu.honors && <p class="org">{edu.honors}</p>}
-                                </div>
-                            </li>
-                        </ol>
-                    </section>
-                )}
-
-                {awards.length > 0 && (
-                    <section>
-                        <h2>Awards</h2>
-                        <ul class="plain">
-                            {awards.map(a => (
-                                <li>
-                                    {a.data.url ? <a href={a.data.url}>{a.data.title}</a> : a.data.title}
-                                    {(a.data.issuer || a.data.date) && <span class="org">, {[a.data.issuer, a.data.date].filter(Boolean).join(', ')}</span>}
-                                </li>
-                            ))}
-                        </ul>
-                    </section>
-                )}
-
-                {skills.length > 0 && (
-                    <section>
-                        <h2>Skills</h2>
-                        <dl class="facts skills">
-                            {skills.map(s => <><dt>{s.data.name}</dt><dd>{s.data.items.join(', ')}</dd></>)}
-                        </dl>
-                    </section>
-                )}
-
-                {courses.length > 0 && (
-                    <section>
-                        <details>
-                            <summary>Coursework</summary>
-                            <p>{courses.map(c => c.data.name).join(', ')}</p>
-                        </details>
-                    </section>
+                {about.lookingFor && (
+                    <aside class="seeking" aria-label="What I'm looking for">
+                        <PixelIcon name="star" class="seeking-icon" />
+                        <div>
+                            <p class="seeking-label">Looking for</p>
+                            <p>{about.lookingFor}</p>
+                        </div>
+                    </aside>
                 )}
             </div>
 
             <aside class="side" aria-label="At a glance">
-                <Picture
-                    src={headshot}
-                    alt={about.name}
-                    formats={['avif', 'webp']}
-                    widths={[280, 560]}
-                    sizes="(min-width: 861px) 280px, 200px"
-                    loading="eager"
-                    fetchpriority="high"
-                    class="photo"
-                />
-                <dl class="facts card">
-                    {about.stats.map((s: { label: string; value: string }) => <><dt>{s.label}</dt><dd>{s.value}</dd></>)}
-                </dl>
+                <div class="profile">
+                    <p class="profile-tab"><PixelIcon name="heart" /> Profile</p>
+                    <div class="profile-body">
+                        <Picture
+                            src={headshot}
+                            alt={about.name}
+                            formats={['avif', 'webp']}
+                            widths={[280, 560]}
+                            sizes="(min-width: 861px) 280px, 200px"
+                            loading="eager"
+                            fetchpriority="high"
+                            class="photo"
+                        />
+                        <dl class="stats">
+                            {about.stats.map((s: { label: string; value: string }) => (
+                                <div class="stat">
+                                    <PixelIcon name={iconFor(s.label, STAT_ICONS)} class="stat-icon" />
+                                    <dt>{s.label}</dt>
+                                    <dd>{s.value}</dd>
+                                </div>
+                            ))}
+                        </dl>
+                    </div>
+                </div>
             </aside>
         </div>
+
+        {experience.length > 0 && (
+            <section class="block">
+                <h2 class="sec-head"><span class="sec-icon"><PixelIcon name="briefcase" /></span>Experience</h2>
+                <ol class="timeline">
+                    {experience.map(e => (
+                        <li>
+                            <p class="when">{e.data.start} to {e.data.end}</p>
+                            <div class="entry">
+                                <h3>{e.data.title}</h3>
+                                <p class="org">{e.data.org}{e.data.location && <span class="loc">, {e.data.location}</span>}</p>
+                                {e.data.bullets.length > 0 && (
+                                    <ul class="bullets">
+                                        {e.data.bullets.map((b: string) => <li>{b}</li>)}
+                                    </ul>
+                                )}
+                            </div>
+                        </li>
+                    ))}
+                </ol>
+            </section>
+        )}
+
+        {edu && (
+            <section class="block">
+                <h2 class="sec-head"><span class="sec-icon"><PixelIcon name="cap" /></span>Education</h2>
+                <ol class="timeline">
+                    <li>
+                        <p class="when">{edu.dates}</p>
+                        <div class="entry">
+                            <h3>{edu.school}</h3>
+                            <p class="org">{edu.degrees}</p>
+                            {edu.honors && <p class="honors">{edu.honors}</p>}
+                        </div>
+                    </li>
+                </ol>
+            </section>
+        )}
+
+        {awards.length > 0 && (
+            <section class="block">
+                <h2 class="sec-head"><span class="sec-icon"><PixelIcon name="star" /></span>Awards</h2>
+                <ul class="awards">
+                    {awards.map(a => (
+                        <li>
+                            <PixelIcon name="star" class="award-icon" />
+                            <span>
+                                {a.data.url ? <a href={a.data.url}>{a.data.title}</a> : a.data.title}
+                                {(a.data.issuer || a.data.date) && <span class="org">, {[a.data.issuer, a.data.date].filter(Boolean).join(', ')}</span>}
+                            </span>
+                        </li>
+                    ))}
+                </ul>
+            </section>
+        )}
+
+        {skills.length > 0 && (
+            <section class="block">
+                <h2 class="sec-head"><span class="sec-icon"><PixelIcon name="gamepad" /></span>Skills</h2>
+                <ul class="skills">
+                    {skills.map(s => (
+                        <li class="skill">
+                            <h3><PixelIcon name={iconFor(s.data.name, SKILL_ICONS)} class="skill-icon" />{s.data.name}</h3>
+                            <ul class="tags">
+                                {s.data.items.map((item: string) => <li>{item}</li>)}
+                            </ul>
+                        </li>
+                    ))}
+                </ul>
+            </section>
+        )}
+
+        {courses.length > 0 && (
+            <section class="block">
+                <details class="courses">
+                    <summary>
+                        <span class="sec-icon"><PixelIcon name="book" /></span>
+                        <span>Coursework</span>
+                        <svg class="chev" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg>
+                    </summary>
+                    <ul class="tags">
+                        {courses.map(c => <li>{c.data.name}</li>)}
+                    </ul>
+                </details>
+            </section>
+        )}
     </div>
 </Layout>
 
 <style>
     .about { padding-top: var(--space-6); }
-    .layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: var(--space-8); margin-top: var(--space-5); align-items: start; }
-    .text > section + section { margin-top: var(--space-8); }
-    .text h2 { margin-bottom: var(--space-4); }
+    .layout { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: var(--space-8); align-items: start; }
+
+    h1 { margin-bottom: var(--space-5); }
+    h1 .me { color: var(--forest); }
     .bio { max-width: 68ch; }
     .bio > * + * { margin-top: var(--space-4); }
+    .bio > :first-child { font-size: var(--step-1); line-height: 1.5; color: var(--ink); }
 
-    .entries { display: grid; gap: var(--space-6); }
-    .entries > li { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: var(--space-5); }
-    .when { color: var(--ink-3); font-size: var(--step--1); line-height: 1.9; font-variant-numeric: tabular-nums; }
-    .entries h3 { font-size: var(--step-0); line-height: 1.35; }
-    .org { color: var(--ink-2); }
-    .bullets { list-style: disc; padding-left: 1.25em; display: grid; gap: var(--space-2); margin-top: var(--space-3); max-width: 68ch; }
-    .plain { display: grid; gap: var(--space-2); }
+    /* The one loud block: what she's looking for, in forest */
+    .seeking {
+        display: flex; gap: var(--space-4); align-items: flex-start;
+        margin-top: var(--space-6); max-width: 68ch;
+        padding: var(--space-5); border-radius: var(--radius);
+        background: var(--forest); color: var(--on-forest);
+    }
+    .seeking :global(.seeking-icon) { flex: none; width: 24px; height: 24px; margin-top: 2px; color: #c9d8b8; }
+    .seeking-label { font-weight: 700; font-size: var(--step-1); margin-bottom: var(--space-1); }
 
-    .skills { gap: var(--space-3) var(--space-6); max-width: 68ch; }
-    .skills dt { color: var(--ink); font-weight: 600; font-size: var(--step-0); line-height: 1.6; }
-    .skills dd { color: var(--ink-2); }
+    /* Profile: a folder card holding the photo and the quick facts */
+    .side { position: sticky; top: calc(var(--header-h) + var(--space-5)); }
+    .profile-tab {
+        display: inline-flex; align-items: center; gap: var(--space-2);
+        margin-bottom: -2px; margin-left: var(--space-5); padding: var(--space-2) var(--space-4);
+        background: var(--board); border: 2px solid var(--outline); border-bottom: 0;
+        border-radius: var(--radius) var(--radius) 0 0;
+        font-weight: 700; position: relative;
+    }
+    .profile-tab :global(.pixel-icon) { width: 16px; height: 16px; color: var(--forest); }
+    .profile-body {
+        background: var(--board); border: 2px solid var(--outline); border-radius: var(--radius);
+        padding: var(--space-4);
+    }
+    .side :global(.photo) {
+        width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 6px;
+        border: 2px solid var(--outline); background: var(--paper);
+    }
+    .stats { display: grid; gap: var(--space-3); margin-top: var(--space-4); }
+    .stat { display: grid; grid-template-columns: 20px minmax(0, 1fr); column-gap: var(--space-3); }
+    .stat :global(.stat-icon) { grid-row: span 2; width: 20px; height: 20px; margin-top: 2px; color: var(--forest); }
+    .stat dt { color: var(--ink-3); font-size: var(--step--1); line-height: 1.4; }
+    .stat dd { line-height: 1.4; font-weight: 600; }
 
-    details summary { cursor: pointer; font-weight: 600; font-size: var(--step-1); }
-    details p { margin-top: var(--space-3); color: var(--ink-2); max-width: 68ch; }
+    /* Section headings: a pixel icon tile, the title, and a rule out to the edge */
+    .block { margin-top: var(--space-9); }
+    .sec-head { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-6); }
+    .sec-head::after { content: ''; flex: 1; height: 2px; background: var(--outline); margin-left: var(--space-3); }
+    .sec-icon {
+        display: grid; place-items: center; flex: none; width: 40px; height: 40px;
+        background: var(--forest); color: var(--on-forest); border-radius: 8px;
+    }
+    .sec-icon :global(.pixel-icon) { width: 20px; height: 20px; }
 
-    .side { position: sticky; top: calc(var(--header-h) + var(--space-5)); display: grid; gap: var(--space-5); }
-    .side :global(.photo) { width: 100%; max-width: 300px; aspect-ratio: 1; object-fit: cover; border-radius: 6px; background: var(--board); }
-    .card { background: var(--board); border-top: 2px solid var(--forest); padding: var(--space-4) var(--space-5); border-radius: 0 0 6px 6px; grid-template-columns: 1fr; gap: 0; }
-    .card dd { margin-bottom: var(--space-3); }
-    .card dd:last-child { margin-bottom: 0; }
+    /* Timeline: dates on the left, a moss line with square nodes, then the entry */
+    .timeline { display: grid; }
+    .timeline > li { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: var(--space-6); }
+    .when {
+        color: var(--forest); font-weight: 600; font-size: var(--step--1); line-height: 1.9;
+        font-variant-numeric: tabular-nums; text-align: right;
+    }
+    .entry { position: relative; padding: 0 0 var(--space-7) var(--space-6); border-left: 2px solid var(--moss); }
+    .timeline > li:last-child .entry { padding-bottom: 0; }
+    .entry::before {
+        content: ''; position: absolute; left: -8px; top: 6px; width: 14px; height: 14px;
+        background: var(--paper); border: 3px solid var(--forest); border-radius: 3px;
+    }
+    .timeline > li:first-child .entry::before { background: var(--forest); }
+    .entry h3 { font-size: var(--step-1); line-height: 1.3; }
+    .org { color: var(--forest); font-weight: 600; margin-top: var(--space-1); }
+    .org .loc { color: var(--ink-3); font-weight: 400; }
+    .honors { color: var(--ink-2); margin-top: var(--space-1); }
+    .bullets { list-style: none; display: grid; gap: var(--space-2); margin-top: var(--space-3); max-width: 68ch; }
+    .bullets li { position: relative; padding-left: var(--space-5); }
+    .bullets li::before {
+        content: ''; position: absolute; left: 2px; top: 0.62em; width: 6px; height: 6px; background: var(--moss);
+    }
+
+    .awards { display: grid; gap: var(--space-3); }
+    .awards li { display: flex; gap: var(--space-3); align-items: flex-start; }
+    .awards :global(.award-icon) { flex: none; width: 18px; height: 18px; margin-top: 4px; color: #b8860b; }
+    .awards .org { display: inline; font-weight: 400; color: var(--ink-2); }
+
+    /* Skills: one card per group, items as small tags */
+    .skills { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: var(--space-5); align-items: start; }
+    .skill {
+        background: var(--board); border: 2px solid var(--outline); border-radius: var(--radius);
+        padding: var(--space-4) var(--space-5) var(--space-5);
+    }
+    .skill h3 { display: flex; align-items: center; gap: var(--space-3); font-size: var(--step-0); margin-bottom: var(--space-3); }
+    .skill :global(.skill-icon) { width: 20px; height: 20px; color: var(--forest); flex: none; }
+    .tags { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+    .tags li {
+        padding: 2px var(--space-2); border-radius: 4px; font-size: var(--step--1); line-height: 1.5;
+        background: var(--paper); border: 1px solid var(--rule-strong); color: var(--ink);
+    }
+
+    .courses summary {
+        display: flex; align-items: center; gap: var(--space-3); cursor: pointer; list-style: none;
+        font-weight: 700; font-size: var(--step-2);
+    }
+    .courses summary::-webkit-details-marker { display: none; }
+    .courses summary:hover { color: var(--forest); }
+    .courses .chev { width: 16px; height: 16px; transition: transform var(--dur) var(--ease); }
+    .courses[open] .chev { transform: rotate(180deg); }
+    .courses .tags { margin-top: var(--space-5); }
 
     @media (max-width: 860px) {
         .layout { grid-template-columns: 1fr; gap: var(--space-6); }
-        .side { position: static; order: -1; grid-template-columns: 140px minmax(0, 1fr); align-items: start; }
-        .side :global(.photo) { max-width: 140px; }
-        .entries > li { grid-template-columns: 1fr; gap: var(--space-1); }
-    }
-    @media (max-width: 480px) {
-        .side { grid-template-columns: 1fr; }
-        .side :global(.photo) { max-width: 160px; }
+        .side { position: static; max-width: 420px; }
+        .timeline > li { grid-template-columns: 1fr; gap: var(--space-1); }
+        .when { text-align: left; padding-left: var(--space-6); border-left: 2px solid var(--moss); }
+        .block { margin-top: var(--space-8); }
     }
 </style>

@@ -2,7 +2,8 @@
 // Featured projects as a drawer of folders. One folder is open at a time; the
 // rest show only their tab and a one-line summary. Without JS all stay open.
 import Media from './Media.astro';
-import { projectMedia, type Project } from '../lib/content';
+import LogoOverlay from './LogoOverlay.astro';
+import { projectMedia, logoOf, type Project } from '../lib/content';
 import { projectFacts, playLink, contextOf } from '../lib/view';
 
 interface Props {
@@ -18,13 +19,13 @@ const items = projects.map(p => {
     const cover = media.find(m => m.src === p.data.image && !m.video)
         ?? media.find(m => !m.video)
         ?? media.find(m => m.video && m.posterUrl);
-    return { p, cover };
+    return { p, cover, logo: logoOf(p) };
 });
 // Open the first folder that has something to show; fall back to the first.
 const openIndex = Math.max(0, items.findIndex(i => i.cover));
 ---
 <ol class="drawer" data-drawer>
-    {items.map(({ p, cover }, i) => {
+    {items.map(({ p, cover, logo }, i) => {
         const d = p.data;
         const open = i === openIndex;
         const facts = projectFacts(d);
@@ -66,6 +67,7 @@ const openIndex = Math.max(0, items.findIndex(i => i.cover));
                                         widths={[480, 700, 1000, 1400]}
                                         priority={priority && i === openIndex}
                                     />
+                                    {logo && <LogoOverlay logo={logo} sizes="(min-width: 761px) 460px, 70vw" priority={priority && i === openIndex} />}
                                 </a>
                             )}
                             <div class="folder-info">
@@ -96,9 +98,11 @@ const openIndex = Math.max(0, items.findIndex(i => i.cover));
     }
     document.querySelectorAll<HTMLElement>('[data-drawer]').forEach(drawer => {
         drawer.addEventListener('click', e => {
-            const tab = (e.target as Element).closest('.folder-tab');
-            const folder = tab?.closest<HTMLElement>('.folder');
-            if (!folder) return;
+            // The tab toggles; anywhere else on a closed folder's row opens it.
+            const target = e.target as Element;
+            const head = target.closest('.folder-head');
+            const folder = head?.closest<HTMLElement>('.folder');
+            if (!folder || (!target.closest('.folder-tab') && folder.hasAttribute('data-open'))) return;
             const wasOpen = folder.hasAttribute('data-open');
             drawer.querySelectorAll<HTMLElement>('.folder[data-open]').forEach(f => setOpen(f, false));
             setOpen(folder, !wasOpen);

@@ -1,148 +1,297 @@
 ---
-// The résumé as a sheet of paper on a desk. The page image is prerendered at
-// publish time; text and link hotspots from the PDF sit on top of it, so the
-// text can be selected and the links clicked without loading a PDF viewer.
-import { RESUMES, resumeLayer, type Resume } from '../lib/content';
+/*
+ * Resume viewer, modeled on the pre-redesign site's embedded Google Drive
+ * preview: sharp pages at any zoom, selectable text, clickable links, and a
+ * bottom bar with the page number and zoom. Drawn with PDF.js's own viewer
+ * component. Which PDFs appear comes from resumes.json; files live in public/resume/.
+ */
+import { RESUMES, type Resume } from '../lib/content';
 
 interface Props {
     resume: Resume;
 }
 
-const { resume } = Astro.props;
-const layer = resumeLayer(resume.id);
-// Her phone number is not published: drop it from the selectable text.
-const PHONE = /\s*\|?\s*\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}\s*(\|)?/;
-const clean = (t: string) => t.replace(PHONE, (m, bar) => (bar ? ' | ' : ''));
-const hrefFor = (r: Resume) => (r === RESUMES[0] ? '/resume/' : `/resume/${r.id}/`);
+const { resume: first } = Astro.props;
 ---
-<div class="wrap bar">
-    <h1>Résumé</h1>
-    {RESUMES.length > 1 && (
-        <nav class="roles" aria-label="Résumé version">
-            {RESUMES.map(r => (
-                <a href={hrefFor(r)} aria-current={r.id === resume.id ? 'page' : undefined}>{r.label}</a>
-            ))}
-        </nav>
-    )}
-    <div class="tools">
-        <div class="fit" role="group" aria-label="Page size">
-            <button type="button" data-fit="page" aria-pressed="true">Fit page</button>
-            <button type="button" data-fit="width" aria-pressed="false">Fit width</button>
-        </div>
-        <a class="btn primary" href={resume.file} download>Download PDF</a>
-    </div>
-</div>
+<style>
+    .resume-page {
+        display: flex;
+        flex-direction: column;
+    }
 
-<div class="desk" data-fit="page">
-    <div class="sheets">
-        {resume.pages.map((page, i) => {
-            const pageLayer = layer?.pages[i];
-            return (
-                <div class="sheet" style={`--ratio: ${page.width / page.height}; --k: ${page.height / page.width}`}>
-                    <img
-                        src={page.src}
-                        width={page.width}
-                        height={page.height}
-                        alt={`Résumé of Rafaela Solís, ${resume.label.toLowerCase()} version${resume.pages.length > 1 ? `, page ${i + 1}` : ''}`}
-                        fetchpriority={i === 0 ? 'high' : undefined}
-                        loading={i === 0 ? 'eager' : 'lazy'}
-                        decoding="async"
-                    />
-                    {pageLayer && (
-                        <div class="layer">
-                            {pageLayer.text.map(t => (
-                                <span style={`left:${t.x}%;top:${t.y}%;width:${t.w}%;--h:${t.h}`}>{clean(t.s)}</span>
-                            ))}
-                            {pageLayer.links.map(l => (
-                                <a
-                                    href={l.url}
-                                    aria-label={l.url}
-                                    style={`left:${l.x}%;top:${l.y}%;width:${l.w}%;height:${l.h}%`}
-                                ></a>
-                            ))}
-                        </div>
-                    )}
-                </div>
-            );
-        })}
+    .resume-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.85rem 2rem;
+        border-bottom: 2px solid var(--outline);
+        background: var(--paper);
+        flex-shrink: 0;
+    }
+
+    .resume-header-left {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .resume-eyebrow {
+        font-size: 0.62rem;
+        font-weight: 700;
+        color: var(--moss);
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+    }
+
+    .resume-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--ink);
+        letter-spacing: -0.02em;
+    }
+
+    .resume-tabs { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+    .resume-tab {
+        font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+        padding: 0.35rem 0.8rem; border: 2px solid var(--outline); text-decoration: none;
+        color: var(--ink); background: transparent;
+    }
+    .resume-tab:hover { background: var(--moss); color: var(--paper); }
+    .resume-tab[aria-current="true"] { background: var(--forest); color: var(--paper); }
+
+    .resume-actions {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+    }
+
+    .action-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.55rem 1.25rem;
+        font-weight: 700;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        text-decoration: none;
+        border: 2px solid var(--outline);
+        box-shadow: 3px 3px 0 var(--outline);
+        transition: transform 0.15s, box-shadow 0.15s;
+        cursor: pointer;
+    }
+
+    .action-btn:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 5px 5px 0 var(--outline);
+    }
+
+    .action-btn.primary {
+        background: var(--forest);
+        color: var(--paper);
+    }
+
+    .action-btn.outline {
+        background: transparent;
+        color: var(--forest);
+        border-color: var(--forest);
+        box-shadow: 3px 3px 0 var(--forest);
+    }
+
+    .action-btn.outline:hover { box-shadow: 5px 5px 0 var(--forest); }
+
+    /* The document area, styled after the Drive preview: a light gray well,
+       white pages with a hairline edge, and a dark bar floating at the bottom. */
+    .resume-embed-wrapper {
+        position: relative;
+        overflow: hidden;
+        background: #f1f3f4;
+        /* Fills the rest of the screen below the header (set by the inline script) */
+        height: var(--embed-h, calc(100dvh - 160px));
+        min-height: 420px;
+    }
+
+    .pdf-scroll {
+        position: absolute;
+        inset: 0;
+        overflow: auto;
+        --page-margin: 16px auto 0;
+        --page-border: 1px solid #dadce0;
+    }
+    .pdf-scroll :global(.pdfViewer) { padding-bottom: 72px; }
+
+    .resume-fallback { position: absolute; inset: 0; display: grid; place-content: center; color: var(--ink-2); }
+    .resume-fallback a { color: var(--forest); font-weight: 700; }
+    .resume-embed-wrapper.ready .resume-fallback { display: none; }
+
+    .pdf-bar {
+        position: absolute;
+        left: 50%;
+        bottom: 16px;
+        transform: translateX(-50%);
+        display: none;
+        align-items: center;
+        gap: 2px;
+        padding: 4px 6px;
+        border-radius: 8px;
+        background: rgb(32 33 36 / 0.92);
+        color: #e8eaed;
+        font: 500 13px / 1 var(--font);
+        white-space: nowrap;
+        transition: opacity 0.2s;
+    }
+    /* Like Drive, the bar steps aside while the pointer is idle */
+    .resume-embed-wrapper.idle .pdf-bar:not(:focus-within) { opacity: 0; pointer-events: none; }
+    .resume-embed-wrapper.ready .pdf-bar { display: flex; }
+    .pdf-bar .sep { width: 1px; height: 20px; background: rgb(255 255 255 / 0.25); margin: 0 6px; }
+    .pdf-bar .pages, .pdf-bar .zoom { padding: 0 6px; font-variant-numeric: tabular-nums; }
+    .pdf-bar .zoom { min-width: 3.5em; text-align: center; }
+    .pdf-bar button {
+        display: grid; place-items: center; width: 32px; height: 32px; padding: 0;
+        border: 0; border-radius: 6px; background: transparent; color: inherit; cursor: pointer;
+    }
+    .pdf-bar button:hover { background: rgb(255 255 255 / 0.14); }
+    .pdf-bar button:focus-visible { outline: 2px solid #8ab4f8; outline-offset: 0; }
+    .pdf-bar svg { width: 18px; height: 18px; }
+
+    /* The viewer fills the screen; the footer starts right below it. */
+    :global(.site-footer) { margin-top: 0; }
+
+    @media (max-width: 768px) {
+        .resume-header { flex-direction: column; align-items: flex-start; gap: 0.75rem; padding: 1.25rem 1.25rem 1rem; }
+        .resume-actions { flex-wrap: wrap; }
+        .pdf-scroll { --page-margin: 8px auto 0; }
+    }
+</style>
+
+<div class="resume-page">
+    <div class="resume-header">
+        <div class="resume-header-left">
+            <span class="resume-eyebrow">Rafaela Solís</span>
+            <h1 class="resume-title">Resume</h1>
+        </div>
+        {RESUMES.length > 1 && (
+            <nav class="resume-tabs" aria-label="Resume versions">
+                {RESUMES.map(r => (
+                    <a class="resume-tab" href={r.file} data-file={r.file} aria-current={String(r.id === first.id)}>{r.label}</a>
+                ))}
+            </nav>
+        )}
+        <div class="resume-actions">
+            <a href={first.file} class="action-btn outline" data-resume-open target="_blank" rel="noopener">Open in New Tab ↗</a>
+            <a href={first.file} class="action-btn primary" data-resume-download download>Download PDF</a>
+        </div>
+    </div>
+
+    <div class="resume-embed-wrapper" id="resumeEmbed">
+        <div class="pdf-scroll" id="pdfScroll" data-file={first.file} aria-label="Resume preview">
+            <div class="pdfViewer"></div>
+        </div>
+        <p class="resume-fallback">
+            <a href={first.file} data-resume-open>Open the resume (PDF)</a>
+        </p>
+        <div class="pdf-bar" role="toolbar" aria-label="Resume viewer">
+            <span class="pages" aria-live="polite">Page <span data-page>1</span> / <span data-pages>1</span></span>
+            <span class="sep" aria-hidden="true"></span>
+            <button type="button" data-zoom-out aria-label="Zoom out">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14"/></svg>
+            </button>
+            <span class="zoom" data-zoom>100%</span>
+            <button type="button" data-zoom-in aria-label="Zoom in">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+            <span class="sep" aria-hidden="true"></span>
+            <button type="button" data-fit aria-label="Fit to page">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+            </button>
+        </div>
     </div>
 </div>
 
 <script is:inline>
-    // Size the sheet so the whole page fits under the toolbar, before first paint and on resize.
+    // Size the document area to the rest of the screen before first paint.
     (function () {
-        var desk = document.querySelector('.desk');
+        var embed = document.getElementById('resumeEmbed');
         function fit() {
-            var top = desk.getBoundingClientRect().top + window.scrollY;
-            var h = window.innerHeight - top - 24 - 16;
-            desk.style.setProperty('--fit-h', Math.max(h, 240) + 'px');
+            var top = embed.getBoundingClientRect().top + window.scrollY;
+            embed.style.setProperty('--embed-h', Math.max(window.innerHeight - top, 420) + 'px');
         }
         fit();
         window.addEventListener('resize', fit);
-        window.addEventListener('load', fit);
     })();
 </script>
 <script>
-    const desk = document.querySelector<HTMLElement>('.desk');
-    document.querySelectorAll<HTMLButtonElement>('.fit button').forEach(btn => {
-        btn.addEventListener('click', () => {
-            desk!.dataset.fit = btn.dataset.fit;
-            document.querySelectorAll<HTMLButtonElement>('.fit button').forEach(b =>
-                b.setAttribute('aria-pressed', String(b === btn)));
+    import { pdfjs } from '../lib/pdfjs-global';
+    import { EventBus, PDFLinkService, PDFViewer, LinkTarget } from 'pdfjs-dist/web/pdf_viewer.mjs';
+    import 'pdfjs-dist/web/pdf_viewer.css';
+
+    const wrapper = document.getElementById('resumeEmbed')!;
+    const container = document.getElementById('pdfScroll') as HTMLDivElement;
+    const mobile = window.matchMedia('(max-width: 768px)');
+    const $ = (sel: string) => wrapper.querySelector<HTMLElement>(sel)!;
+
+    const eventBus = new EventBus();
+    const linkService = new PDFLinkService({ eventBus, externalLinkTarget: LinkTarget.BLANK, externalLinkRel: 'noopener' });
+    const viewer = new PDFViewer({ container, eventBus, linkService });
+    linkService.setViewer(viewer);
+
+    // Default view: the whole page on screen (it's a one-pager). Phones fill the width.
+    const defaultFit = () => (mobile.matches ? 'page-width' : 'page-fit');
+    let fitted = true;
+
+    eventBus.on('pagesinit', () => { viewer.currentScaleValue = defaultFit(); fitted = true; });
+    eventBus.on('pagechanging', (e: { pageNumber: number }) => { $('[data-page]').textContent = String(e.pageNumber); });
+    eventBus.on('scalechanging', (e: { scale: number }) => { $('[data-zoom]').textContent = Math.round(e.scale * 100) + '%'; });
+
+    $('[data-zoom-in]').addEventListener('click', () => { fitted = false; viewer.increaseScale(); });
+    $('[data-zoom-out]').addEventListener('click', () => { fitted = false; viewer.decreaseScale(); });
+    $('[data-fit]').addEventListener('click', () => { fitted = true; viewer.currentScaleValue = defaultFit(); });
+
+    let resizeTimer: number | undefined;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = window.setTimeout(() => { if (fitted) viewer.currentScaleValue = defaultFit(); }, 100);
+    });
+
+    // Show the bar on any activity; hide it after a couple of idle seconds.
+    let idleTimer: number | undefined;
+    const wake = () => {
+        wrapper.classList.remove('idle');
+        clearTimeout(idleTimer);
+        idleTimer = window.setTimeout(() => wrapper.classList.add('idle'), 2500);
+    };
+    ['pointermove', 'pointerdown', 'wheel', 'keydown'].forEach(t => wrapper.addEventListener(t, wake, { passive: true }));
+    container.addEventListener('scroll', wake, { passive: true });
+    wake();
+
+    let loadToken = 0;
+    async function load(file: string) {
+        const token = ++loadToken;
+        try {
+            const doc = await pdfjs.getDocument(file).promise;
+            if (token !== loadToken) return;
+            viewer.setDocument(doc);
+            linkService.setDocument(doc);
+            $('[data-pages]').textContent = String(doc.numPages);
+            $('[data-page]').textContent = '1';
+            wrapper.classList.add('ready');
+        } catch {
+            // Leave the plain "Open the resume" link in place
+        }
+    }
+
+    // Version tabs: swap the preview and the open/download links in place
+    document.querySelectorAll<HTMLAnchorElement>('.resume-tab').forEach(tab => {
+        tab.addEventListener('click', e => {
+            e.preventDefault();
+            const file = tab.dataset.file!;
+            document.querySelectorAll<HTMLAnchorElement>('[data-resume-open], [data-resume-download]')
+                .forEach(a => { a.href = file; });
+            document.querySelectorAll('.resume-tab')
+                .forEach(t => t.setAttribute('aria-current', String(t === tab)));
+            load(file);
         });
     });
+
+    load(container.dataset.file!);
 </script>
-
-<style>
-    .bar {
-        display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-6);
-        padding-block: var(--space-3);
-    }
-    .bar h1 { font-size: var(--step-2); }
-    .roles { display: flex; gap: var(--space-5); }
-    .roles a { color: var(--ink-2); text-decoration: none; font-weight: 600; padding-block: var(--space-2); border-bottom: 2px solid transparent; }
-    .roles a:hover { color: var(--forest); }
-    .roles a[aria-current] { color: var(--ink); border-bottom-color: var(--forest); }
-    .tools { margin-left: auto; display: flex; align-items: center; gap: var(--space-4); }
-    .fit { display: none; gap: var(--space-1); }
-    :global(.js) .fit { display: flex; }
-    .fit button {
-        min-height: 36px; padding: 0 var(--space-3); border: 1px solid var(--rule-strong); border-radius: 6px;
-        background: transparent; color: var(--ink-2); font: 600 var(--step--1) / 1 var(--font); cursor: pointer;
-    }
-    .fit button:hover { color: var(--forest); border-color: var(--forest); }
-    .fit button[aria-pressed='true'] { background: var(--forest-wash); color: var(--ink); border-color: var(--forest); }
-
-    :global(.site-footer) { margin-top: 0; }
-
-    /* The desk is card stock; the sheet stays white in dark mode, like paper under a lamp. */
-    .desk { background: var(--board); padding: var(--space-5) var(--gutter) var(--space-7); }
-    .sheets { display: grid; justify-items: center; gap: var(--space-5); }
-    .sheet {
-        position: relative; background: #fff; container-type: inline-size;
-        aspect-ratio: var(--ratio);
-        width: min(100%, calc(var(--fit-h, calc(100dvh - 190px)) * var(--ratio)));
-        box-shadow: 0 1px 2px rgb(0 0 0 / 0.08), 0 12px 32px rgb(0 0 0 / 0.1);
-    }
-    .desk[data-fit='width'] .sheet { width: min(100%, 980px); }
-    .sheet img { width: 100%; height: 100%; }
-
-    .layer { position: absolute; inset: 0; }
-    .layer span {
-        position: absolute; display: block; white-space: nowrap; overflow: hidden;
-        color: transparent; line-height: 1; font: 400 calc(var(--h) * var(--k) * 0.92 * 1cqw) / 1 Arial, sans-serif;
-        text-align: justify; text-align-last: justify;
-    }
-    .layer span::selection { background: rgb(45 80 22 / 0.3); color: transparent; }
-    .layer a { position: absolute; display: block; }
-    .layer a:focus-visible { outline-offset: 0; }
-
-    @media (max-width: 760px) {
-        .tools { margin-left: 0; width: 100%; justify-content: space-between; }
-        .sheet { width: 100%; }
-        .desk { padding-top: var(--space-4); }
-        .fit { display: none !important; }
-        /* The sheet is too small to select from; keep the text for screen readers only */
-        .layer span { width: 1px !important; height: 1px; font-size: 13px; clip-path: inset(50%); }
-    }
-</style>

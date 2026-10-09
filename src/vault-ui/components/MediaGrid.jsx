@@ -1,4 +1,4 @@
-// Media for a project: upload (drop, paste, browse), cover, per-tile alt/caption, reorder, remove with undo.
+// Media for a project: upload (drop, paste, browse), cover, logo, per-tile alt/caption, reorder, remove with undo.
 import { useRef, useState, useEffect } from 'preact/hooks';
 import { Icon, StarFilled } from '../icons.jsx';
 import { upload } from '../api.js';
@@ -12,6 +12,7 @@ const OK_TYPE = /^(image\/(png|jpe?g|webp|avif|gif)|video\/(mp4|webm|quicktime))
 function tilesOf(data) {
     const list = (data.media ?? []).map(mediaObj);
     if (data.image && !list.some(m => m.src === data.image)) list.unshift({ src: data.image });
+    if (data.logo && !list.some(m => m.src === data.logo)) list.push({ src: data.logo });
     return list;
 }
 
@@ -39,6 +40,7 @@ export function MediaGrid({ item, isPublic }) {
 
     const tiles = tilesOf(item.data);
     const cover = item.data.image;
+    const logo = item.data.logo;
 
     const write = (next, image = cover) => {
         const cur = getItem(type, id);
@@ -82,17 +84,29 @@ export function MediaGrid({ item, isPublic }) {
         return () => window.removeEventListener('paste', onPaste);
     }, [type, id]);
 
+    // The logo is laid over the cover on the site, so one file can't be both.
+    const toggleLogo = t => {
+        if (t.src === logo) { editData(type, id, 'logo', undefined); return; }
+        editData(type, id, 'logo', t.src);
+        if (t.src === cover) {
+            const next = tiles.find(x => x.src !== t.src && !isVideo(x.src) && !x.hidden);
+            editData(type, id, 'image', next?.src);
+        }
+    };
+
     const patch = (i, p) => write(tiles.map((t, j) => (j === i ? { ...t, ...p } : t)));
 
     const remove = i => {
-        const before = { media: item.data.media, image: item.data.image };
+        const before = { media: item.data.media, image: item.data.image, logo: item.data.logo };
         const gone = tiles[i];
         write(tiles.filter((_, j) => j !== i), gone.src === cover ? undefined : cover);
+        if (gone.src === logo) editData(type, id, 'logo', undefined);
         toast('Removed from this project. The file stays in the vault.', {
             label: 'Undo',
             action: () => {
                 editData(type, id, 'media', before.media ?? []);
                 editData(type, id, 'image', before.image);
+                editData(type, id, 'logo', before.logo);
             },
         });
     };
@@ -121,10 +135,11 @@ export function MediaGrid({ item, isPublic }) {
                 {tiles.map((t, i) => {
                     const video = isVideo(t.src);
                     const isCover = t.src === cover;
+                    const isLogo = t.src === logo;
                     const noAlt = !t.alt && !t.hidden;
                     const name = t.src.split('/').pop();
                     return (
-                        <div class={'tile' + (t.hidden ? ' is-hidden' : '') + (over === i ? ' drop-target' : '')} key={t.src}
+                        <div class={'tile' + (t.hidden ? ' is-hidden' : '') + (isLogo ? ' is-logo' : '') + (over === i ? ' drop-target' : '')} key={t.src}
                             data-field={`media.${i}`}
                             onDragOver={e => { if (dragFrom.current !== null) { e.preventDefault(); setOver(i); } }}
                             onDragLeave={() => setOver(null)}
@@ -136,13 +151,19 @@ export function MediaGrid({ item, isPublic }) {
                                 <button type="button" class={'tile-btn tile-cover' + (isCover ? ' on' : '')} aria-pressed={isCover ? 'true' : 'false'}
                                     aria-label={isCover ? `${name} is the cover` : `Use ${name} as the cover`}
                                     title={isCover ? 'Cover' : 'Make cover'}
-                                    onClick={() => !video && write(tiles, isCover ? undefined : t.src)} disabled={video}>
+                                    onClick={() => !video && write(tiles, isCover ? undefined : t.src)} disabled={video || isLogo}>
                                     {isCover ? <StarFilled size={14} /> : <Icon name="star" size={14} />}
                                 </button>
                                 <button type="button" class="tile-btn tile-remove" aria-label={`Remove ${name}`} title="Remove" onClick={() => remove(i)}>
                                     <Icon name="x" size={14} />
                                 </button>
-                                {isCover && <span class="tile-flag">Cover</span>}
+                                <button type="button" class={'tile-btn tile-logo' + (isLogo ? ' on' : '')} aria-pressed={isLogo ? 'true' : 'false'}
+                                    aria-label={isLogo ? `${name} is the logo` : `Use ${name} as the logo`}
+                                    title={isLogo ? 'Logo (laid over the cover)' : 'Use as logo'}
+                                    onClick={() => toggleLogo(t)} disabled={video}>
+                                    <Icon name="logo" size={14} />
+                                </button>
+                                {(isCover || isLogo) && <span class="tile-flag">{isLogo ? 'Logo' : 'Cover'}</span>}
                             </div>
                             <div class="tile-fields">
                                 <input class={'input small' + (noAlt && isPublic ? ' warn' : '')} type="text" value={t.alt ?? ''}
@@ -177,7 +198,7 @@ export function MediaGrid({ item, isPublic }) {
             <input ref={fileInput} type="file" class="visually-hidden" multiple accept={ACCEPT} aria-label="Add media files" tabIndex={-1}
                 onChange={e => { addFiles(e.currentTarget.files); e.currentTarget.value = ''; }} />
             {dragging && <div class="drop-veil" aria-hidden="true">Drop to add to this project</div>}
-            {tiles.length > 0 && <p class="hint">The star marks the cover. Drag tiles to reorder. Uploads are converted to WebP (images) or H.264 (video).</p>}
+            {tiles.length > 0 && <p class="hint">The star marks the cover. The hexagon marks the logo, which the site lays over the cover (use a transparent PNG). Drag tiles to reorder. Uploads are converted to WebP (images) or H.264 (video).</p>}
         </div>
     );
 }

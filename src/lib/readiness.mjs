@@ -90,6 +90,12 @@ const CHECKS = {
         for (const [i, l] of (item.links ?? []).entries()) checkUrl(`links.${i}`, l.url, out, ctx);
         if (item.embed) checkUrl('embed', item.embed.url, out, ctx);
         const media = checkMedia(item, out, ctx);
+        if (!blank(item.logo)) {
+            const rel = mediaRel(item.logo);
+            if (!rel) out.errors.push({ field: 'logo', msg: `Logo ${item.logo} is not in the vault (upload it)` });
+            else if (ctx.mediaExists && !ctx.mediaExists(rel)) out.errors.push({ field: 'logo', msg: `Logo ${item.logo} was not found in the vault` });
+            if (!BUILD_IMAGE_RE.test(item.logo)) out.errors.push({ field: 'logo', msg: 'The logo must be an image (a transparent PNG or WebP works best)' });
+        }
 
         const hasCover = !blank(item.image) || media.some(m => m.video && !m.hidden);
         if (item.featured && !hasCover) {

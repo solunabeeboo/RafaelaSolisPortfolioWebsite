@@ -482,7 +482,14 @@ export function createVault({ vaultDir = VAULT_DIR, siteRoot = ROOT } = {}) {
     function writeSite(site) { need(); atomicWrite(path.join(V, 'site.json'), stableJson(site)); }
     function writeResumes(resumes) {
         need();
-        atomicWrite(path.join(V, 'resumes.json'), stableJson(resumesSchema.parse(resumes)));
+        // Publish needs a live résumé; an empty or all-draft list saved by
+        // accident (e.g. from a page that loaded before the file existed)
+        // would silently break the next publish.
+        const parsed = resumesSchema.parse(resumes);
+        if (!parsed.some(r => r.status === 'live')) {
+            throw new Error('Invalid résumé list: keep at least one résumé live — the site’s résumé page needs one.');
+        }
+        atomicWrite(path.join(V, 'resumes.json'), stableJson(parsed));
     }
 
     // ── Media inventory ──

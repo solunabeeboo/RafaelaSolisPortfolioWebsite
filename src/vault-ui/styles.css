@@ -439,6 +439,11 @@ kbd {
 }
 .tile-cover { left: 6px; }
 .tile-cover.on { opacity: 1; color: #f3c64e; }
+.tile-logo { left: 36px; }
+.tile-logo.on { opacity: 1; color: #9bd06f; }
+.tile.is-logo .tile-flag { left: 66px; }
+/* Checkerboard behind the logo so its transparency shows */
+.tile.is-logo .thumb { background: repeating-conic-gradient(var(--sunken) 0 25%, var(--hover) 0 50%) 0 0 / 16px 16px; }
 .tile-remove { right: 6px; }
 .tile:hover .tile-btn, .tile:focus-within .tile-btn { opacity: 1; }
 .tile-btn:disabled { display: none; }

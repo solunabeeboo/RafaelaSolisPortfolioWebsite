@@ -95,7 +95,9 @@ function resolveMedia(item: ReturnType<typeof normalizeMedia>[number]): MediaIte
  * src/assets/media, so a broken ref fails the build instead of rendering blank.
  */
 export function projectMedia(p: Project): MediaItem[] {
-    const items = normalizeMedia(p.data.media, { cover: p.data.image }).filter(m => !m.hidden).map(resolveMedia);
+    const items = normalizeMedia(p.data.media, { cover: p.data.image })
+        .filter(m => !m.hidden && m.src !== p.data.logo)
+        .map(resolveMedia);
     for (const m of items) {
         if (!m.video && !m.image) throw new Error(`${p.id}: image ${m.src} is not in src/assets/media (run publish)`);
     }
@@ -108,11 +110,18 @@ export function coverOf(p: Project): MediaItem | undefined {
     return items.find(m => m.src === p.data.image) ?? items.find(m => !m.video);
 }
 
+/** The project's logo (laid over its header image), if it has one. */
+export function logoOf(p: Project): MediaItem | undefined {
+    const [logo] = normalizeMedia([], { cover: p.data.logo }).filter(m => !m.video).map(resolveMedia);
+    if (logo && !logo.image) throw new Error(`${p.id}: logo ${logo.src} is not in src/assets/media (run publish)`);
+    return logo;
+}
+
 /** First video in the gallery (for hero/loop use). */
 export const firstVideo = (p: Project) => projectMedia(p).find(m => m.video);
 
 /** Whether a project has anything visual to show (a blank card looks broken). */
-export const hasVisual = (p: Project) => normalizeMedia(p.data.media, { cover: p.data.image }).some(m => !m.hidden);
+export const hasVisual = (p: Project) => normalizeMedia(p.data.media, { cover: p.data.image }).some(m => !m.hidden && m.src !== p.data.logo);
 
 // ── Selection helpers ─────────────────────────────────────────────────────
 
@@ -133,7 +142,7 @@ export function featuredFor(projects: Project[], lens?: Discipline) {
  * order so there are always `count` cards.
  */
 export function cardProjects(projects: Project[], lens?: Discipline, count = 3) {
-    const hasImage = (p: Project) => normalizeMedia(p.data.media, { cover: p.data.image }).some(m => !m.hidden && !m.video);
+    const hasImage = (p: Project) => normalizeMedia(p.data.media, { cover: p.data.image }).some(m => !m.hidden && !m.video && m.src !== p.data.logo);
     const picked = featuredFor(projects, lens).filter(hasImage);
     for (const p of projects) {
         if (picked.length >= count) break;
