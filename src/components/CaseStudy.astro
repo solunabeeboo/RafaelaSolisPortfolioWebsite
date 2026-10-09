@@ -4,7 +4,7 @@
 import { getImage } from 'astro:assets';
 import Media from './Media.astro';
 import LogoOverlay from './LogoOverlay.astro';
-import { getProjects, canLoop, type MediaItem } from '../lib/content';
+import { getProjects, canLoop, blurFill, type MediaItem } from '../lib/content';
 import { projectFacts, liveLinks, isExternal, type ProjectLike } from '../lib/view';
 import { renderMarkdown } from '../lib/markdown';
 
@@ -35,6 +35,7 @@ async function fullUrl(m: MediaItem) {
 }
 const altOf = (m: MediaItem) => m.alt || `${d.title} screenshot`;
 const heroFull = hero && !hero.video ? await fullUrl(hero) : undefined;
+const heroBlur = hero ? await blurFill(hero) : undefined;
 const galleryItems = await Promise.all(gallery.map(async m => ({ m, full: m.video ? undefined : await fullUrl(m) })));
 
 const [problem, goal, result, reflection] = await Promise.all(
@@ -47,7 +48,7 @@ const heroRatio = (m: MediaItem) => (m.image ? m.image.width / m.image.height : 
 ---
 <article class="cs">
     <div class="wrap">
-        <p class="back"><a href="/projects/">&larr; Work</a></p>
+        <p class="back"><a href="/#work">&larr; Work</a></p>
         <div class="tabline">
             <div class="cs-tab" style={`view-transition-name: tab-${project.id}`}>
                 <h1>{d.title}</h1>
@@ -57,7 +58,7 @@ const heroRatio = (m: MediaItem) => (m.image ? m.image.width / m.image.height : 
             <p class="lead">{d.hook}</p>
             <div class="cs-grid">
                 {hero && (
-                    <div class="hero" style={`--ratio: ${heroRatio(hero).toFixed(4)}`}>
+                    <div class="hero frame-16x9" style={`--ratio: ${heroRatio(hero).toFixed(4)}${heroBlur ? `; --blur: url(${heroBlur})` : ''}`}>
                         {hero.video ? (
                             <video
                                 src={hero.url}
@@ -303,9 +304,7 @@ const heroRatio = (m: MediaItem) => (m.image ? m.image.width / m.image.height : 
     .lead { font-size: var(--step-1); line-height: 1.4; max-width: 60ch; margin-bottom: var(--space-5); }
     .cs-grid { display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); gap: var(--space-5); align-items: start; }
     .cs-grid:not(:has(.hero)) { grid-template-columns: minmax(0, 1fr); }
-    .hero { position: relative; background: var(--paper); border-radius: 4px; overflow: hidden; }
-    .hero img, .hero video { width: 100%; max-height: 72vh; object-fit: contain; }
-    .hero video { aspect-ratio: var(--ratio); background: #000; }
+    .hero { border-radius: 4px; }
     .card { position: sticky; top: calc(var(--header-h) + var(--space-4)); background: var(--paper); border-top: 2px solid var(--forest); padding: var(--space-4) var(--space-5); border-radius: 0 0 6px 6px; }
     .card:not(:has(*)) { display: none; }
     .links { display: flex; flex-direction: column; gap: var(--space-1); }

@@ -32,7 +32,7 @@ const ogImage = cover?.image
     description={`${d.hook}${d.role ? ` Role: ${d.role}.` : ''}`}
     image={ogImage}
 >
-    <CaseStudy project={entry} media={media} logo={logoOf(entry)} prev={prev} next={next}>
+    <CaseStudy project={entry} media={media} logo={await logoOf(entry)} prev={prev} next={next}>
         <Content slot="body" />
     </CaseStudy>
 </Layout>

@@ -31,7 +31,12 @@ function* files(dir) {
 }
 
 // Carried over verbatim from the pre-redesign site at her request.
-const EXEMPT = new Set(['src/components/ResumeViewer.astro']);
+const EXEMPT = new Set([
+    'src/components/ResumeViewer.astro',
+    // The Studio Journal demo (/article/): its lorem ipsum and picsum images are the demo.
+    'src/pages/article/index.astro',
+    'src/layouts/ArticleLayout.astro',
+]);
 
 const problems = [];
 for (const dir of DIRS) {

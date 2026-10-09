@@ -4,7 +4,7 @@ import { getProjects } from '../lib/content';
 // Built from the published content, so new public projects are listed
 // automatically. /for/* recruiter pages are intentionally left out.
 export const GET: APIRoute = async ({ site }) => {
-    const paths = ['/', '/projects/', '/about/', '/resume/', '/contact/',
+    const paths = ['/', '/about/', '/resume/', '/contact/',
         ...(await getProjects()).map(p => `/projects/${p.id}/`)];
     const urls = paths.map(p => `  <url><loc>${new URL(p, site).href}</loc></url>`).join('\n');
     return new Response(

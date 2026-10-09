@@ -3,7 +3,7 @@
 // rest show only their tab and a one-line summary. Without JS all stay open.
 import Media from './Media.astro';
 import LogoOverlay from './LogoOverlay.astro';
-import { projectMedia, logoOf, type Project } from '../lib/content';
+import { projectMedia, logoOf, blurFill, type Project } from '../lib/content';
 import { projectFacts, playLink, contextOf } from '../lib/view';
 
 interface Props {
@@ -14,18 +14,18 @@ interface Props {
 
 const { projects, priority = false } = Astro.props;
 
-const items = projects.map(p => {
+const items = await Promise.all(projects.map(async p => {
     const media = projectMedia(p);
     const cover = media.find(m => m.src === p.data.image && !m.video)
         ?? media.find(m => !m.video)
         ?? media.find(m => m.video && m.posterUrl);
-    return { p, cover, logo: logoOf(p) };
-});
+    return { p, cover, logo: await logoOf(p), blur: cover ? await blurFill(cover) : undefined };
+}));
 // Open the first folder that has something to show; fall back to the first.
 const openIndex = Math.max(0, items.findIndex(i => i.cover));
 ---
 <ol class="drawer" data-drawer>
-    {items.map(({ p, cover, logo }, i) => {
+    {items.map(({ p, cover, logo, blur }, i) => {
         const d = p.data;
         const open = i === openIndex;
         const facts = projectFacts(d);
@@ -59,7 +59,7 @@ const openIndex = Math.max(0, items.findIndex(i => i.cover));
                     <div class="folder-inner">
                         <div class="folder-body">
                             {cover && (
-                                <a class="folder-media" href={`/projects/${p.id}/`}>
+                                <a class="folder-media frame-16x9" href={`/projects/${p.id}/`} style={blur ? `--blur: url(${blur})` : undefined}>
                                     <Media
                                         item={cover}
                                         alt={cover.alt || `${d.title} screenshot`}
@@ -107,7 +107,7 @@ const openIndex = Math.max(0, items.findIndex(i => i.cover));
             drawer.querySelectorAll<HTMLElement>('.folder[data-open]').forEach(f => setOpen(f, false));
             setOpen(folder, !wasOpen);
         });
-        // A link to /projects/#slug opens that folder
+        // A link to /#slug (or the old /projects/#slug) opens that folder
         const target = drawer.querySelector<HTMLElement>(`.folder${location.hash ? location.hash.replace(/[^#\w-]/g, '') : '#none'}`);
         if (target) {
             drawer.querySelectorAll<HTMLElement>('.folder[data-open]').forEach(f => setOpen(f, false));

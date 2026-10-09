@@ -271,8 +271,22 @@ a:hover { color: var(--forest-2); text-decoration-thickness: 2px; }
     gap: var(--space-6); padding: var(--space-5);
     align-items: start;
 }
-.folder-media { position: relative; display: block; background: var(--paper); border-radius: 4px; overflow: hidden; }
-.folder-media img { width: 100%; max-height: min(52vh, 520px); object-fit: contain; }
+.folder-media { display: block; border-radius: 4px; }
+
+/* Header art in a constant 16:9 frame: the art is centered whole, and a
+   pre-blurred copy of it (--blur, made at build time) fills the rest. */
+.frame-16x9 {
+    position: relative; aspect-ratio: 16 / 9; overflow: hidden;
+    background: #1c1f1a var(--blur, none) center / cover no-repeat;
+}
+.frame-16x9 > picture, .frame-16x9 > img, .frame-16x9 > video,
+.frame-16x9 > a, .frame-16x9 > a > picture, .frame-16x9 > a > img {
+    position: absolute; inset: 0; display: block; width: 100%; height: 100%;
+}
+.frame-16x9 > picture > img, .frame-16x9 > img, .frame-16x9 > video,
+.frame-16x9 > a > picture > img, .frame-16x9 > a > img {
+    width: 100%; height: 100%; max-height: none; object-fit: contain; background: transparent;
+}
 .folder-info { display: flex; flex-direction: column; gap: var(--space-4); min-width: 0; }
 .folder-info .hook { font-size: var(--step-1); line-height: 1.35; max-width: 34ch; }
 .folder-links { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-5); font-weight: 600; }

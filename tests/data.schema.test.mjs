@@ -125,7 +125,7 @@ test('readiness warnings', () => {
 test('readiness warnings: alt text, big video, dead internal link', () => {
     const r = readiness('projects', project({
         media: [{ src: '/vault-media/projects/g/cover.webp' }, { src: '/vault-media/projects/g/big.mp4', alt: 'x' }],
-        links: [{ label: 'Article', url: '/article/' }, { label: 'Other', url: '/projects/g/' }],
+        links: [{ label: 'Gone', url: '/gone/' }, { label: 'Other', url: '/projects/g/' }],
     }), ctxWith({ ...FILES, 'projects/g/big.mp4': 13 * 1024 * 1024 }));
     assert.ok(r.warnings.some(w => /no alt text/.test(w.msg)));
     assert.ok(r.warnings.some(w => /MB/.test(w.msg)));

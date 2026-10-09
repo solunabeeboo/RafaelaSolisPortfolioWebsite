@@ -8,6 +8,7 @@ import {
 } from './media.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
+import sharp from 'sharp';
 
 export type Discipline = (typeof DISCIPLINES)[number];
 export type Project = CollectionEntry<'projects'>;
@@ -29,8 +30,42 @@ const byOrder  = (a: { data: { order: number } }, b: { data: { order: number } }
 export async function getProjects() {
     return (await getCollection('projects', isPublic)).sort(byOrder);
 }
+const MONTHS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+const SEASONS: Record<string, number> = { spring: 3, summer: 6, fall: 9, autumn: 9, winter: 12 };
+
+/**
+ * A hand-typed date ("October 2024", "Oct 2024", "Summer 2025", "2023",
+ * "10/2024", "Present") as a sortable number, or null if it can't be read.
+ */
+export function dateRank(text?: string): number | null {
+    const t = String(text ?? '').trim().toLowerCase();
+    if (!t) return null;
+    if (/^(present|now|current|ongoing)$/.test(t)) return Infinity;
+    const year = t.match(/\b(19|20)\d{2}\b/)?.[0];
+    if (!year) return null;
+    let month = 0;
+    const num = t.match(/^(\d{1,2})\s*[/.-]\s*(19|20)\d{2}$/);
+    if (num) month = Number(num[1]);
+    else {
+        // First word that names a month or season ("Expected May 2028" → May)
+        for (const word of t.match(/[a-z]+/g) ?? []) {
+            const m = MONTHS.indexOf(word.slice(0, 3));
+            month = m >= 0 ? m + 1 : SEASONS[word] ?? 0;
+            if (month) break;
+        }
+    }
+    return Number(year) * 100 + month;
+}
+
+/** Experience as a timeline: newest start date first; ongoing roles before ended ones on the same start. */
 export async function getExperience() {
-    return (await getCollection('experience', isPublic)).sort(byOrder);
+    return (await getCollection('experience', isPublic)).sort((a, b) => {
+        const sa = dateRank(a.data.start) ?? -1, sb = dateRank(b.data.start) ?? -1;
+        if (sa !== sb) return sb - sa;
+        const ea = dateRank(a.data.end) ?? -1, eb = dateRank(b.data.end) ?? -1;
+        if (ea !== eb) return eb - ea;
+        return byOrder(a, b);
+    });
 }
 export async function getAwards() {
     return (await getCollection('awards', isPublic)).sort(byOrder);
@@ -110,11 +145,38 @@ export function coverOf(p: Project): MediaItem | undefined {
     return items.find(m => m.src === p.data.image) ?? items.find(m => !m.video);
 }
 
+/**
+ * Where the visible art sits inside a logo file, as fractions of the trimmed
+ * box: lets the overlay center the art itself, not the file's empty margins.
+ */
+export type LogoCrop = { ratio: number; scale: number; x: number; y: number };
+export type Logo = MediaItem & { crop?: LogoCrop };
+
+const crops = new Map<string, Promise<LogoCrop | undefined>>();
+function logoCrop(file: string) {
+    if (!crops.has(file)) {
+        crops.set(file, (async () => {
+            try {
+                const { width: W, height: H } = await sharp(file).metadata();
+                const { info } = await sharp(file).trim({ threshold: 10 }).toBuffer({ resolveWithObject: true });
+                if (!W || !H) return undefined;
+                const x = -(info.trimOffsetLeft ?? 0), y = -(info.trimOffsetTop ?? 0);
+                return { ratio: info.width / info.height, scale: W / info.width, x: x / info.width, y: y / info.height };
+            } catch {
+                return undefined; // uniform image: nothing to trim
+            }
+        })());
+    }
+    return crops.get(file)!;
+}
+
 /** The project's logo (laid over its header image), if it has one. */
-export function logoOf(p: Project): MediaItem | undefined {
+export async function logoOf(p: Project): Promise<Logo | undefined> {
     const [logo] = normalizeMedia([], { cover: p.data.logo }).filter(m => !m.video).map(resolveMedia);
-    if (logo && !logo.image) throw new Error(`${p.id}: logo ${logo.src} is not in src/assets/media (run publish)`);
-    return logo;
+    if (!logo) return undefined;
+    if (!logo.image) throw new Error(`${p.id}: logo ${logo.src} is not in src/assets/media (run publish)`);
+    const rel = mediaRel(logo.src);
+    return { ...logo, crop: rel ? await logoCrop(path.join('src/assets/media', rel)) : undefined };
 }
 
 /** First video in the gallery (for hero/loop use). */
@@ -185,4 +247,46 @@ const layers = import.meta.glob<{ default: ResumeLayer }>('../data/resume-layers
 /** Selectable-text and link hotspots (percent of page) for a resume, from publish's prerender. */
 export function resumeLayer(id: string): ResumeLayer | undefined {
     return layers[`../data/resume-layers/${id}.json`]?.default;
+}
+
+// ── Blur fill ─────────────────────────────────────────────────────────────
+
+/** The file on disk behind a media item's still (image, or a video's poster). */
+function stillFile(item: MediaItem): string | undefined {
+    const raw = (item as any).rawUrl as string | undefined;
+    const src = item.video ? posterSrcFor(item) : item.src;
+    const rel = src && mediaRel(src);
+    if (!rel) return undefined;
+    // Vault preview: the file is still in the vault
+    if (raw) return path.join(process.env.VAULT_DIR || 'vault', 'media', rel);
+    return item.video ? path.join('public', 'media', rel) : path.join('src', 'assets', 'media', rel);
+}
+
+const blurs = new Map<string, Promise<string | undefined>>();
+
+/**
+ * A tiny, pre-blurred, slightly darkened copy of a still as a data URI, for
+ * filling a 16:9 frame around art of another shape. Blurred here at build time
+ * (about 1 KB) so the page never runs a live CSS blur.
+ */
+export function blurFill(item: MediaItem): Promise<string | undefined> {
+    const file = stillFile(item);
+    if (!file) return Promise.resolve(undefined);
+    if (!blurs.has(file)) {
+        blurs.set(file, (async () => {
+            try {
+                if (!fs.existsSync(file)) return undefined;
+                const buf = await sharp(file)
+                    .resize(64, 36, { fit: 'cover' })
+                    .modulate({ brightness: 0.78, saturation: 1.2 })
+                    .blur(3)
+                    .webp({ quality: 60 })
+                    .toBuffer();
+                return `data:image/webp;base64,${buf.toString('base64')}`;
+            } catch {
+                return undefined;
+            }
+        })());
+    }
+    return blurs.get(file)!;
 }

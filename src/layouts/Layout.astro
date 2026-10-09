@@ -28,12 +28,13 @@ const ogImage = new URL(image, Astro.site).href;
 
 const path = Astro.url.pathname;
 const NAV = [
-    { href: '/projects/', label: 'Work' },
+    { href: '/', label: 'Work' },
     { href: '/about/', label: 'About' },
     { href: '/resume/', label: 'Résumé' },
     { href: '/contact/', label: 'Contact' },
 ];
-const isCurrent = (href: string) => path === href || path.startsWith(href);
+// Work is Home; case studies (/projects/<slug>/) belong to it too.
+const isCurrent = (href: string) => (href === '/' ? path === '/' || path.startsWith('/projects/') : path.startsWith(href));
 ---
 <!doctype html>
 <html lang="en">

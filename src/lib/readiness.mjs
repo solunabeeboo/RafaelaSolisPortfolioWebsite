@@ -33,7 +33,7 @@ export function isValidUrl(url) {
     } catch { return false; }
 }
 
-const STATIC_ROUTES = new Set(['/', '/projects/', '/about/', '/contact/', '/resume/']);
+const STATIC_ROUTES = new Set(['/', '/projects/', '/about/', '/contact/', '/resume/', '/article/']);
 
 function internalRouteExists(url, ctx) {
     const path = url.split(/[?#]/)[0];

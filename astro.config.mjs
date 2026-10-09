@@ -40,4 +40,7 @@ export default defineConfig({
     prefetch: { prefetchAll: true, defaultStrategy: 'hover' },
     // Screenshots must never be cropped (HUDs): contain by default.
     image: { objectFit: 'contain', objectPosition: 'center' },
+    // Pre-bundle PDF.js when the dev server starts. Discovered on first visit
+    // instead, Vite re-optimizes mid-load and the résumé viewer fails once.
+    vite: { optimizeDeps: { include: ['pdfjs-dist', 'pdfjs-dist/web/pdf_viewer.mjs'] } },
 });
