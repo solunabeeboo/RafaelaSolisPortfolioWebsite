@@ -26,7 +26,7 @@ media:
     alt: Portfolio Iteration Resume Page Design
 links:
   - label: Studio Journal demo (typography and SEO)
-    url: /article/
+    url: https://rafaelasolis.work/article/
 tags:
   - HTML
   - CSS
