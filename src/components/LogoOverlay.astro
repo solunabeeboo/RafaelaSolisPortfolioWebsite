@@ -1,42 +1,63 @@
 ---
-// A project's logo laid over its header image: centered, sized to the frame,
-// lifted off the art with a layered drop shadow and a soft vignette. Put it
-// inside a positioned box that holds the image or video. The title is already
-// on the page as text, so the logo itself is decorative.
+// A project's logo laid over its header image: centered on its visible art
+// (the file's empty margins are cropped away), sized to the frame, lifted off
+// the image with a layered drop shadow and a soft vignette. Put it inside a
+// positioned box that holds the image or video. The title is already on the
+// page as text, so the logo itself is decorative.
 import Media from './Media.astro';
-import type { MediaItem } from '../lib/content';
+import type { Logo } from '../lib/content';
 
 interface Props {
-    logo: MediaItem;
-    /** Rendered width of the frame, for responsive sizes. */
+    logo: Logo;
+    /** Rendered width of the logo, for responsive sizes. */
     sizes?: string;
     priority?: boolean;
 }
 
-const { logo, sizes = '(min-width: 1000px) 500px, 70vw', priority = false } = Astro.props;
+const { logo, sizes = '(min-width: 1000px) 640px, 80vw', priority = false } = Astro.props;
+const c = logo.crop;
+const style = c ? `--r: ${c.ratio.toFixed(4)}; --s: ${c.scale.toFixed(4)}; --x: ${c.x.toFixed(4)}; --y: ${c.y.toFixed(4)}` : undefined;
 ---
 <span class="logo-overlay" data-logo-overlay>
-    <Media item={logo} alt="" sizes={sizes} widths={[320, 640, 960]} priority={priority} />
+    <span class:list={['logo-box', { cropped: !!c }]} style={style}>
+        <Media item={logo} alt="" sizes={sizes} widths={[400, 800, 1200]} priority={priority} />
+    </span>
 </span>
 
 <style>
     .logo-overlay {
         position: absolute; inset: 0; z-index: 1;
-        display: grid; place-items: center; padding: 8%;
+        display: grid; place-items: center;
+        container-type: size;
         pointer-events: none;
         /* Vignette: darkens the edges a little so the logo reads on busy art */
         box-shadow: inset 0 0 clamp(40px, 12vw, 140px) rgb(0 0 0 / 0.38);
         transition: opacity var(--dur) var(--ease);
     }
     .logo-overlay :global(picture) { display: contents; }
-    .logo-overlay :global(img) {
-        width: auto; height: auto; max-width: min(72%, 640px); max-height: 52%;
-        object-fit: contain;
+
+    /* The box is exactly the visible art: as wide as the frame allows (82% of
+       its width, 62% of its height), keeping the art's proportions. */
+    .logo-box {
+        position: relative; display: block;
+        aspect-ratio: var(--r);
+        width: min(82cqw, calc(62cqh * var(--r)), 900px);
         filter:
             drop-shadow(0 1px 1px rgb(0 0 0 / 0.55))
             drop-shadow(0 4px 8px rgb(0 0 0 / 0.4))
             drop-shadow(0 12px 28px rgb(0 0 0 / 0.35));
     }
+    /* The whole file, scaled and shifted so its art fills the box */
+    .logo-box.cropped :global(img) {
+        position: absolute; max-width: none;
+        width: calc(100% * var(--s)); height: auto;
+        left: calc(-100% * var(--x));
+        top: calc(-100% * var(--y));
+    }
+    /* Vault preview (no measurements): fit the file itself */
+    .logo-box:not(.cropped) { aspect-ratio: auto; width: auto; }
+    .logo-box:not(.cropped) :global(img) { width: auto; height: auto; max-width: 82cqw; max-height: 62cqh; object-fit: contain; }
+
     /* Step aside while someone is watching the video underneath */
     :global(.is-playing) > .logo-overlay { opacity: 0; }
 </style>

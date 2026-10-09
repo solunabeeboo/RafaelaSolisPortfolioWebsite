@@ -272,16 +272,16 @@ test('leak check catches vault-only content in the published folders', async () 
     const { siteRoot } = await fixture();
     write(path.join(siteRoot, 'src/content/projects/leaky.md'), '---\ntitle: x\ntodo:\n  - hi\nvisibility: private\n---\nTODO(fix)');
     write(path.join(siteRoot, 'src/data/x.json'), '{"todo": []}');
-    fs.mkdirSync(path.join(siteRoot, 'src/pages/article'), { recursive: true });
     write(path.join(siteRoot, 'dist/index.html'), '<p>Lorem ipsum</p><img src="https://picsum.photos/1">');
+    write(path.join(siteRoot, 'dist/article/index.html'), '<p>Lorem ipsum (the Studio Journal demo)</p>');
     const src = findLeaks({ root: siteRoot });
     assert.ok(src.some(p => p.includes('leaky.md') && /todo/.test(p)));
     assert.ok(src.some(p => /private item/.test(p)));
     assert.ok(src.some(p => /TODO\(/.test(p)));
     assert.ok(src.some(p => p.includes('x.json')));
-    assert.ok(src.some(p => /src\/pages\/article/.test(p)));
     const dist = findLeaks({ root: siteRoot, dist: true });
     assert.ok(dist.some(p => /lorem/.test(p)) && dist.some(p => /picsum/.test(p)));
+    assert.ok(!dist.some(p => p.includes('dist/article')), 'the /article demo may use placeholders');
 });
 
 test('JSON collection entries are versioned independently', async () => {

@@ -87,7 +87,7 @@ export function previewLogo(data: Record<string, any>): MediaItem | undefined {
     return logo ? ({ ...logo, rawUrl: VAULT_ORIGIN + logo.src } as unknown as MediaItem) : undefined;
 }
 
-const STATIC_PAGES = new Set(['/', '/projects/', '/about/', '/resume/', '/contact/']);
+const STATIC_PAGES = new Set(['/', '/projects/', '/about/', '/resume/', '/contact/', '/article/']);
 
 /**
  * Her links, minus internal ones that do not resolve to a page on this site
@@ -95,5 +95,5 @@ const STATIC_PAGES = new Set(['/', '/projects/', '/about/', '/resume/', '/contac
  */
 export function liveLinks(links: { label: string; url: string }[] = [], projectIds: string[] = []) {
     const pages = new Set([...STATIC_PAGES, ...projectIds.map(id => `/projects/${id}/`)]);
-    return links.filter(l => !isInternal(l.url) || pages.has(l.url));
+    return links.filter(l => l.url?.trim() && (!isInternal(l.url) || pages.has(l.url)));
 }

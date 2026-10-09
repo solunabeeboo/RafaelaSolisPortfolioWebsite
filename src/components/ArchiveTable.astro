@@ -1,0 +1,118 @@
+---
+// The rest of her work, under the featured folders: one row per project with
+// a thumbnail, context, role, engine, year and up to two links. A column only
+// appears if some row has something for it.
+import Media from './Media.astro';
+import { getProjects, projectMedia, type Project } from '../lib/content';
+import { contextOf, isExternal, liveLinks } from '../lib/view';
+
+interface Props {
+    projects: Project[];
+}
+
+const publicIds = (await getProjects()).map(p => p.id);
+const archive = Astro.props.projects.map(p => {
+    const media = projectMedia(p);
+    const cover = media.find(m => m.src === p.data.image && !m.video) ?? media.find(m => !m.video);
+    // Only links that lead somewhere: no blanks, no internal pages that no longer exist
+    return { p, cover, context: contextOf(p.data), links: liveLinks(p.data.links, publicIds) };
+});
+
+const show = {
+    context: archive.some(r => r.context),
+    role: archive.some(r => r.p.data.role),
+    engine: archive.some(r => r.p.data.engine),
+    year: archive.some(r => r.p.data.year),
+    links: archive.some(r => r.links.length),
+};
+---
+{archive.length > 0 && (
+    <section class="archive" id="archive" aria-labelledby="archive-h">
+        <h2 id="archive-h">More work <span class="count">{archive.length} projects</span></h2>
+        <table role="table">
+            <thead role="rowgroup">
+                <tr role="row">
+                    <th role="columnheader" scope="col" class="c-title">Project</th>
+                    {show.context && <th role="columnheader" scope="col" class="c-ctx">Context</th>}
+                    {show.role && <th role="columnheader" scope="col" class="c-role">Role</th>}
+                    {show.engine && <th role="columnheader" scope="col" class="c-engine">Engine</th>}
+                    {show.year && <th role="columnheader" scope="col" class="c-year">Year</th>}
+                    {show.links && <th role="columnheader" scope="col" class="c-links">Links</th>}
+                </tr>
+            </thead>
+            <tbody role="rowgroup">
+                {archive.map(({ p, cover, context, links }) => (
+                    <tr role="row" data-d={p.data.disciplines.join(' ')}>
+                        <td role="cell" class="c-title"><div class="title-cell">
+                            <a class="thumb" href={`/projects/${p.id}/`} tabindex="-1" aria-hidden="true">
+                                {cover && <Media item={cover} alt="" sizes="96px" widths={[96, 192, 288]} />}
+                            </a>
+                            <a class="name" href={`/projects/${p.id}/`}>{p.data.title}</a>
+                        </div></td>
+                        {show.context && <td role="cell" class="c-ctx">{context}</td>}
+                        {show.role && <td role="cell" class="c-role">{p.data.role}</td>}
+                        {show.engine && <td role="cell" class="c-engine">{p.data.engine}</td>}
+                        {show.year && <td role="cell" class="c-year">{p.data.year}</td>}
+                        {show.links && (
+                            <td role="cell" class="c-links">
+                                {links.slice(0, 2).map(l => (
+                                    <a href={l.url} {...(isExternal(l.url) ? { rel: 'noopener' } : {})}>{l.label}</a>
+                                ))}
+                            </td>
+                        )}
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    </section>
+)}
+
+<style>
+    .archive { margin-top: var(--space-8); scroll-margin-top: calc(var(--header-h) + 16px); }
+    .archive h2 { margin-bottom: var(--space-4); }
+    .count { color: var(--ink-3); font-weight: 400; font-size: var(--step--1); margin-left: var(--space-3); }
+
+    table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    th {
+        text-align: left; font-weight: 600; color: var(--ink-3); font-size: var(--step--1);
+        padding: var(--space-2) var(--space-4) var(--space-2) 0; border-bottom: 2px solid var(--outline);
+    }
+    td { padding: var(--space-3) var(--space-4) var(--space-3) 0; vertical-align: top; border-bottom: 1px solid var(--rule); line-height: 1.4; }
+    td, th { font-size: var(--step--1); }
+    tr > :last-child { padding-right: 0; }
+    .c-title { width: 36%; }
+    .c-ctx { width: 14%; }
+    .c-role { width: 14%; }
+    .c-engine { width: 11%; }
+    .c-year { width: 8%; }
+    .c-links { width: 17%; }
+    td.c-ctx:empty::before, td.c-role:empty::before, td.c-engine:empty::before, td.c-year:empty::before { content: '\2013'; color: var(--ink-3); }
+    .title-cell { display: flex; align-items: center; gap: var(--space-4); }
+    .thumb {
+        flex: none; width: 96px; height: 60px; background: var(--board); border-radius: 4px; overflow: hidden;
+        display: flex; align-items: center; justify-content: center;
+    }
+    .thumb :global(img) { width: 100%; height: 100%; object-fit: contain; }
+    .name { font-size: var(--step-0); font-weight: 600; color: var(--ink); }
+    .name:hover { color: var(--forest); }
+    .c-links a { display: block; overflow-wrap: anywhere; }
+    tr[data-d] td:not(.c-title):not(.c-links) { color: var(--ink-2); }
+    :global([data-focus='design']) tr[data-d]:not([data-d~='design']) .name,
+    :global([data-focus='programming']) tr[data-d]:not([data-d~='programming']) .name,
+    :global([data-focus='production']) tr[data-d]:not([data-d~='production']) .name { color: var(--ink-3); }
+
+    @media (max-width: 760px) {
+        thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+        table, tbody { display: block; }
+        tr {
+            display: grid; grid-template-columns: 96px 1fr; column-gap: var(--space-4);
+            padding: var(--space-3) 0; border-bottom: 1px solid var(--rule);
+        }
+        td { display: block; padding: 0; border: 0; grid-column: 1 / -1; color: var(--ink-2); padding-left: 112px; }
+        td.c-title { grid-column: 1 / -1; padding-left: 0; padding-bottom: var(--space-2); }
+        td.c-title .name { font-size: var(--step-0); }
+        td:empty { display: none; }
+        td:empty::before { content: none !important; }
+        .c-links { padding-top: var(--space-1); }
+    }
+</style>

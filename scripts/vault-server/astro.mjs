@@ -1,6 +1,7 @@
 /** Runs `astro dev` as a child for the live preview; restarts it if it dies. */
 import path from 'node:path';
 import { spawn, execFile } from 'node:child_process';
+import { clearStaleContentCache } from '../content-cache.mjs';
 
 export function createAstro({ siteRoot, vaultDir, preferredPort, onChange, log = () => {}, env = {} }) {
     let child = null;
@@ -14,6 +15,7 @@ export function createAstro({ siteRoot, vaultDir, preferredPort, onChange, log =
     function start() {
         if (stopped || child) return;
         const bin = path.join(siteRoot, 'node_modules', 'astro', 'astro.js');
+        if (clearStaleContentCache(siteRoot)) log('Content schema changed: cleared the Astro content cache');
         child = spawn(process.execPath, [bin, 'dev', '--port', String(preferredPort), '--host', '127.0.0.1'], {
             cwd: siteRoot, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'],
             env: { ...process.env, VAULT_DIR: vaultDir, FORCE_COLOR: '0', NO_COLOR: '1', ...env },

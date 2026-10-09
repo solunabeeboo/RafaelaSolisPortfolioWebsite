@@ -3,6 +3,7 @@
   "type": "module",
   "version": "1.0.0",
   "scripts": {
+    "predev": "node scripts/content-cache.mjs",
     "dev": "astro dev",
     "prebuild": "node scripts/check-leaks.mjs",
     "build": "astro build",

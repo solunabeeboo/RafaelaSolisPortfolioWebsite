@@ -1,8 +1,10 @@
 ---
 // Home and the unlisted /for/<lens>/ pages share this body: who, what role,
-// availability, résumé and email, then the featured folders.
+// availability, résumé and email, then the featured folders and the rest of
+// her work. Home also gets the discipline filter (?focus=).
 import FolderDrawer from './FolderDrawer.astro';
-import { getProjects, featuredFor, resumeFor, type Discipline } from '../lib/content';
+import ArchiveTable from './ArchiveTable.astro';
+import { getProjects, featuredFor, resumeFor, DISCIPLINE_LABELS, type Discipline } from '../lib/content';
 import { site, EMAIL } from '../lib/view';
 
 interface Props {
@@ -13,7 +15,8 @@ const { lens } = Astro.props;
 const copy = lens ? site.lenses[lens] : undefined;
 const projects = await getProjects();
 const featured = featuredFor(projects, lens);
-const archiveCount = projects.length - projects.filter(p => p.data.featured).length;
+const archive = projects.filter(p => !p.data.featured);
+const lenses = Object.entries(DISCIPLINE_LABELS);
 const resume = resumeFor(lens);
 const resumeHref = resume.id === resumeFor().id ? '/resume/' : `/resume/${resume.id}/`;
 const role = copy?.title ?? site.home.role;
@@ -40,13 +43,45 @@ const role = copy?.title ?? site.home.role;
     </div>
 </section>
 
-<section class="wrap work" aria-labelledby="featured-h">
-    <h2 class="sr-only" id="featured-h">Featured work</h2>
+<section class="wrap work" id="work" aria-labelledby="featured-h">
+    <div class="work-head">
+        <h2 id="featured-h">Featured work</h2>
+        {!lens && (
+            <nav class="lens" aria-label="Filter by discipline">
+                <a href="/#work" data-lens="" aria-current="true">All</a>
+                {lenses.map(([id, label]) => <a href={`/?focus=${id}#work`} data-lens={id}>{label}</a>)}
+            </nav>
+        )}
+    </div>
     <FolderDrawer projects={featured} priority />
-    {archiveCount > 0 && (
-        <p class="more"><a href="/projects/#archive">More work &rarr;</a> <span class="count">{archiveCount} more projects in the archive</span></p>
-    )}
+    <ArchiveTable projects={archive} />
 </section>
+
+{!lens && (
+    <script is:inline>
+        // Discipline filter: matching projects come first, others dim. Works in place; ?focus= links still load it.
+        (function () {
+            var root = document.documentElement;
+            function apply(f) {
+                if (['design', 'programming', 'production'].indexOf(f) < 0) f = '';
+                if (f) root.setAttribute('data-focus', f); else root.removeAttribute('data-focus');
+                document.querySelectorAll('[data-lens]').forEach(function (a) {
+                    if (a.getAttribute('data-lens') === f) a.setAttribute('aria-current', 'true');
+                    else a.removeAttribute('aria-current');
+                });
+                return f;
+            }
+            apply(new URLSearchParams(location.search).get('focus') || '');
+            document.querySelectorAll('[data-lens]').forEach(function (a) {
+                a.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var f = apply(a.getAttribute('data-lens'));
+                    history.replaceState(null, '', (f ? '/?focus=' + f : '/') + '#work');
+                });
+            });
+        })();
+    </script>
+)}
 
 <style>
     .hero {
@@ -66,9 +101,15 @@ const role = copy?.title ?? site.home.role;
     .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3) var(--space-5); }
     .mail { display: inline-flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
     .mail a { font-weight: 600; overflow-wrap: anywhere; }
-    .more { margin-top: var(--space-5); font-weight: 600; }
-    .more .count { color: var(--ink-3); font-weight: 400; margin-left: var(--space-3); font-size: var(--step--1); }
-    .work { padding-bottom: var(--space-4); }
+    .work { padding-bottom: var(--space-4); scroll-margin-top: calc(var(--header-h) + 16px); }
+    .work-head {
+        display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+        gap: var(--space-2) var(--space-6); margin-bottom: var(--space-4);
+    }
+    .lens { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-5); }
+    .lens a { color: var(--ink-2); text-decoration: none; padding-block: var(--space-2); font-weight: 600; border-bottom: 2px solid transparent; }
+    .lens a:hover { color: var(--forest); }
+    .lens a[aria-current] { color: var(--ink); border-bottom-color: var(--forest); }
 
     @media (max-width: 860px) {
         .hero { grid-template-columns: 1fr; padding-block: var(--space-5); align-items: start; }
