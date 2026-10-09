@@ -42,6 +42,7 @@ contribution:
   - Built InternHunter, my own internship-tracking tool and website
   - Built a Studio Journal demo to practice typography and clean SEO
 year: "2025"
+role: Designer & Programmer
 ---
 
 My primary web development projects are this portfolio site and my personal tool and website, InternHunter. Both have taught me a massive amount about good practice, design and implementation, and the importance of being open to new libraries and methods. Through developing these two sites, I have become skilled in implementing databases, using JavaScript features, following good SEO practices, developing with Astro and Next.js, and more.
