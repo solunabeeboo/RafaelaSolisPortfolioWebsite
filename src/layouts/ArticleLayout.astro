@@ -123,6 +123,8 @@ const {
             text-decoration: none;
             transition: color 0.15s;
             white-space: nowrap;
+            /* A full-height tap target in the header bar */
+            display: inline-flex; align-items: center; min-height: 44px;
         }
         .pub-back:hover { color: #f5f2eb; }
 
@@ -141,6 +143,7 @@ const {
         @media (max-width: 768px) {
             .pub-logo-tag { display: none; }
             .pub-header { padding: 0 1rem; }
+            .pub-back { font-size: 0.75rem; }
         }
     </style>
 

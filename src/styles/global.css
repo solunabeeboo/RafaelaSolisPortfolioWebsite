@@ -258,7 +258,7 @@ a:hover { color: var(--forest-2); text-decoration-thickness: 2px; }
     padding-bottom: var(--space-2); color: var(--ink-2); font-size: var(--step--1);
 }
 .folder-summary .hook { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
-.folder-summary .ctx { color: var(--ink-3); white-space: nowrap; flex: none; }
+.folder-summary .ctx { color: var(--ink-3); white-space: nowrap; flex: 0 1 auto; max-width: 40%; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .folder[data-open] .folder-summary { visibility: hidden; }
 
 .folder-panel { display: grid; grid-template-rows: 1fr; }
