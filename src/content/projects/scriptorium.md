@@ -24,7 +24,7 @@ media:
     alt: Scriptorium Logo
 links:
   - label: Play on itch.io
-    url: https://vellum-games.itch.io/project-dungeon
+    url: https://vellum-games.itch.io/scriptorium
 embed:
   type: widget
   url: https://itch.io/embed/3904438

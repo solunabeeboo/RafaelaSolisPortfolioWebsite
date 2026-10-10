@@ -44,7 +44,10 @@ iterations:
   - before: Colors looked too similar and spins were hard to read.
     finding: Playtests found players could not tell the colors apart or read the spins.
     change: Raised palette contrast and added clear spin telegraphs.
-year: "2024"
+year: "2025"
+status: Prototype
+platforms:
+  - HTML5
 ---
 
 Mazetastic Colors combines maze navigation with color-based puzzles. You spin with Q and E, and you spin super fast to lose your color. Line up with the protrusions to open doors and find the exit.
