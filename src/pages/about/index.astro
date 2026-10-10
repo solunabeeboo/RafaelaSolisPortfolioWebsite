@@ -13,6 +13,11 @@ const edu = about.education;
 
 // Pixel icons keyed by the words in a label; anything else gets a star.
 const SKILL_ICONS: [RegExp, string][] = [
+    [/network|multiplayer/i, 'network'],
+    [/\bai\b|machine learning/i, 'chip'],
+    [/graphic|render|shader/i, 'cube'],
+    [/mod/i, 'wrench'],
+    [/version|automation/i, 'branch'],
     [/language|code/i, 'code'],
     [/engine/i, 'gear'],
     [/design/i, 'pencil'],
@@ -142,7 +147,7 @@ const iconFor = (label: string, table: [RegExp, string][]) => table.find(([re]) 
                 <h2 class="sec-head"><span class="sec-icon"><PixelIcon name="gamepad" /></span>Skills</h2>
                 <ul class="skills">
                     {skills.map(s => (
-                        <li class="skill">
+                        <li class:list={['skill', { wide: s.data.wide }]}>
                             <h3><PixelIcon name={iconFor(s.data.name, SKILL_ICONS)} class="skill-icon" />{s.data.name}</h3>
                             <ul class="tags">
                                 {s.data.items.map((item: string) => <li>{item}</li>)}
@@ -254,7 +259,9 @@ const iconFor = (label: string, table: [RegExp, string][]) => table.find(([re]) 
     .awards .org { display: inline; font-weight: 400; color: var(--ink-2); }
 
     /* Skills: one card per group, items as small tags */
-    .skills { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: var(--space-5); align-items: start; }
+    .skills { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: var(--space-5); align-items: start; grid-auto-flow: dense; }
+    /* "Wide group" in the vault: the card spans the whole row */
+    .skill.wide { grid-column: 1 / -1; }
     .skill {
         background: var(--board); border: 2px solid var(--outline); border-radius: var(--radius);
         padding: var(--space-4) var(--space-5) var(--space-5);
