@@ -54,6 +54,9 @@ iterations:
 result: A finished PC game, playable in the browser on itch.io.
 logo: /vault-media/projects/rat-attack/isolated-white-logo.webp
 year: "2025"
+status: Prototype
+platforms:
+  - HTML5
 ---
 
 Rat Attack is a game about subverting expectation, and being open to change. The player takes the body of a seasoned exterminator in upstate New York, going into a job he will never forget. Through moments of fast-paced and challenging combat of trying to capture feral rats interlaced with longer calmer sections of storied exploration, the game intends to create a curious and captivating experience. This makes the game suitable for ages 10+ with a focus on the young adult / teen market, meant to be played on PC. It supports keyboard and controller.

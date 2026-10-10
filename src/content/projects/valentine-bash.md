@@ -41,7 +41,10 @@ contribution:
   - Designed and built the game solo in Unity (C#) in two weeks
   - Implemented multi-camera rendering
   - Designed a progression system based on color saturation
-year: "2024"
+year: "2025"
+status: Prototype
+platforms:
+  - HTML5
 ---
 
 Valentine Bash is a vertical shooter where you defend love by eliminating waves of bugs that threaten to destroy Valentine's Day. It uses multi-camera rendering, and progression is tied to color saturation.

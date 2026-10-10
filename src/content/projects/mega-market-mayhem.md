@@ -42,6 +42,9 @@ contribution:
   - Built an attack system that syncs hits and motions to the level's soundtrack
   - Helped teammates manage their workload
 year: "2024"
+platforms:
+  - HTML5
+  - Windows
 ---
 
 Mega Market Mayhem is a 2D fighting platformer where ordinary grocery-store items brawl. It has a cartoon look inspired by the Fleischer animation style, and the fighters use "hammer space" moves, pulling oversized props out of nowhere. It was made by a team of 7–10 at Pentad Games, then Vellum Games.

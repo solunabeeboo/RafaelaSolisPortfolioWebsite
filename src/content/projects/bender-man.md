@@ -35,7 +35,10 @@ contribution:
   - Designed and built the game solo in Unreal Engine Blueprints in three weeks
   - Designed a page-collecting loop with a comically reimagined antagonist
   - Worked in Unreal Engine to design blueprint blocks & flow.
-year: "2024"
+year: "2025"
+status: Prototype
+platforms:
+  - Windows
 ---
 
 Bender Man is a parody of Slender Man games. You gather scattered pages in a 3D forest while avoiding a comically reimagined antagonist, which turns a horror setup into a lighthearted collecting game.

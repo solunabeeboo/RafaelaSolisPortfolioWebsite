@@ -37,7 +37,8 @@ contribution:
   - Designed the harpoon as both a traversal tool (swinging) and a weapon
   - Modified Lyra's template Blueprints to add the new systems
 problem: The harpoon had to feel good for both movement and combat, and the new systems had to be injected into Unreal's template Blueprints inside the multiplayer Lyra framework.
-year: "2024"
+year: "2025"
+status: Prototype
 ---
 
 In Fishing For Fun you use a harpoon both to fight and to get around. You swing through the level, collect fish, and upgrade your stats.

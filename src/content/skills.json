@@ -7,11 +7,14 @@
     "wide": false,
     "items": [
       "C++",
-      "Lua",
       "C#",
+      "Lua",
       "Python",
+      "GLSL",
       "Java",
-      "HTML/CSS"
+      "JavaScript",
+      "HTML/CSS",
+      "PowerShell"
     ],
     "disciplines": [
       "programming"
@@ -19,18 +22,87 @@
   },
   {
     "id": "engines",
-    "name": "Engines",
+    "name": "Engines & tools",
     "visibility": "public",
     "order": 2,
     "wide": false,
     "items": [
-      "Unreal Engine 5 (Lyra Framework)",
+      "Unreal Engine 5",
+      "Unity (6 & 2022 LTS)",
       "UEFN",
-      "Unity 6",
-      "UE4SS",
-      "Blueprints",
+      "Lyra Framework",
+      "Blueprints"
+    ],
+    "disciplines": [
+      "programming",
+      "design"
+    ]
+  },
+  {
+    "id": "networking",
+    "name": "Multiplayer & networking",
+    "visibility": "public",
+    "order": 3,
+    "wide": false,
+    "items": [
+      "Steam Networking",
+      "Unity Relay",
+      "Distributed authority",
+      "Server & client authority",
+      "Hostless, router-based sessions",
+      "Local networking",
+      "RPCs & state sync"
+    ],
+    "disciplines": [
+      "programming"
+    ]
+  },
+  {
+    "id": "ai-ml",
+    "name": "AI & machine learning",
+    "visibility": "public",
+    "order": 4,
+    "wide": false,
+    "items": [
+      "Neural networks (CNN)",
+      "TensorFlow",
+      "Keras",
+      "Game AI",
+      "Pathfinding",
+      "Local LLMs (llama.cpp, Qwen3)",
+      "Speech-to-text (whisper.cpp)"
+    ],
+    "disciplines": [
+      "programming"
+    ]
+  },
+  {
+    "id": "graphics",
+    "name": "Graphics",
+    "visibility": "public",
+    "order": 5,
+    "wide": false,
+    "items": [
       "OpenGL",
-      "GLSL Shaders"
+      "GLSL shaders",
+      "Real-time lighting",
+      "Texturing"
+    ],
+    "disciplines": [
+      "programming"
+    ]
+  },
+  {
+    "id": "modding",
+    "name": "Modding",
+    "visibility": "public",
+    "order": 6,
+    "wide": false,
+    "items": [
+      "UE4SS (reverse-engineered)",
+      "C++ & Lua mods",
+      "CurseForge publishing",
+      "Minecraft modpacks"
     ],
     "disciplines": [
       "programming",
@@ -41,7 +113,7 @@
     "id": "design",
     "name": "Design",
     "visibility": "public",
-    "order": 3,
+    "order": 7,
     "wide": true,
     "items": [
       "Systems Design",
@@ -49,10 +121,29 @@
       "Level Design",
       "Technical Design",
       "Narrative Design",
+      "Combat Design",
+      "Camera Design",
+      "Progression & Economy Design",
+      "Puzzle Design",
       "Rapid Prototyping",
-      "Playtesting & Data Analysis",
-      "GDDs, VDDs & System Diagrams",
-      "UI/UX"
+      "UI/UX",
+      "GDDs, VDDs & System Diagrams"
+    ],
+    "disciplines": [
+      "design"
+    ]
+  },
+  {
+    "id": "playtesting",
+    "name": "Playtesting",
+    "visibility": "public",
+    "order": 8,
+    "wide": false,
+    "items": [
+      "Behaviour Interactive external playtests (Dead by Daylight, Blight: Survival)",
+      "Playtest planning",
+      "Data analysis",
+      "Iterating on player findings"
     ],
     "disciplines": [
       "design"
@@ -62,29 +153,75 @@
     "id": "production",
     "name": "Production",
     "visibility": "public",
-    "order": 4,
+    "order": 9,
     "wide": true,
     "items": [
       "Agile / Scrum",
+      "Sprint facilitation",
       "Kanban",
       "Waterfall",
+      "Product ownership & backlog",
+      "Scope management",
+      "Production documentation",
       "Jira",
       "Confluence",
       "Taiga",
-      "AFFiNE",
-      "Git",
-      "GitHub Actions",
-      "Subversion"
+      "AFFiNE (self-hosted)",
+      "Trello",
+      "Notion",
+      "Miro"
     ],
     "disciplines": [
       "production"
     ]
   },
   {
-    "id": "art",
-    "name": "Art",
+    "id": "infrastructure",
+    "name": "Backend & infrastructure",
     "visibility": "public",
-    "order": 5,
+    "order": 10,
+    "wide": false,
+    "items": [
+      "Node.js",
+      "Docker & Compose",
+      "Self-hosting",
+      "Cloudflare Tunnel",
+      "S3 object storage (Garage)",
+      "REST & GraphQL APIs",
+      "MCP integrations",
+      "CalDAV & iCal",
+      "Discord webhooks",
+      "Email automation",
+      "Automated API & browser tests (Puppeteer)"
+    ],
+    "disciplines": [
+      "programming",
+      "production"
+    ]
+  },
+  {
+    "id": "version-control",
+    "name": "Version control & automation",
+    "visibility": "public",
+    "order": 11,
+    "wide": false,
+    "items": [
+      "Git",
+      "GitHub Actions",
+      "Subversion",
+      "Python automation & CI",
+      "GameCI (Unity CI builds)"
+    ],
+    "disciplines": [
+      "programming",
+      "production"
+    ]
+  },
+  {
+    "id": "art",
+    "name": "Art & media",
+    "visibility": "public",
+    "order": 12,
     "wide": false,
     "items": [
       "Pixel Art",
@@ -93,6 +230,7 @@
       "Aseprite",
       "Photoshop",
       "Illustrator",
+      "Figma",
       "DaVinci Resolve",
       "Audacity"
     ],
@@ -104,28 +242,16 @@
     "id": "web",
     "name": "Web",
     "visibility": "public",
-    "order": 6,
+    "order": 13,
     "wide": false,
     "items": [
       "Astro",
-      "Next.js"
+      "Next.js",
+      "SEO",
+      "Three.js"
     ],
     "disciplines": [
       "programming"
-    ]
-  },
-  {
-    "id": "playtesting",
-    "name": "Playtesting",
-    "visibility": "public",
-    "order": 7,
-    "wide": true,
-    "items": [
-      "External playtests for Behaviour Interactive (Dead by Daylight, Blight: Survival)",
-      "Dozens of playtests run on my own games, with data compiled and used for iteration"
-    ],
-    "disciplines": [
-      "design"
     ]
   }
 ]
