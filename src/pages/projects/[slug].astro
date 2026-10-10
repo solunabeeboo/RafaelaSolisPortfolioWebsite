@@ -6,8 +6,27 @@ import CaseStudy from '../../components/CaseStudy.astro';
 import { getProjects, projectMedia, logoOf, featuredFor } from '../../lib/content';
 
 export async function getStaticPaths() {
+    // Old addresses of renamed projects. Each becomes a redirect page once the old
+    // project is gone and the new one exists, so links people already shared keep working.
+    // (Astro runs this function on its own, so the list has to live inside it.)
+    const RENAMED: Record<string, string> = {
+        'scrum-facilitation': 'agile-production-tools',
+    };
     const projects = await getProjects();
-    return projects.map(p => ({ params: { slug: p.id }, props: { entry: p } }));
+    const ids = new Set(projects.map(p => p.id));
+    const moved = Object.entries(RENAMED)
+        .filter(([from, to]) => !ids.has(from) && ids.has(to))
+        .map(([from, to]) => ({ params: { slug: from }, props: { movedTo: `/projects/${to}/` } }));
+    return [...projects.map(p => ({ params: { slug: p.id }, props: { entry: p } })), ...moved];
+}
+
+const { movedTo } = Astro.props as { movedTo?: string };
+if (movedTo) {
+    // A static site can't send a 301, so a tiny page forwards right away.
+    return new Response(
+        `<!doctype html><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href="${new URL(movedTo, Astro.site)}"><meta http-equiv="refresh" content="0; url=${movedTo}"><title>Moved</title><a href="${movedTo}">This project moved</a>`,
+        { headers: { 'Content-Type': 'text/html; charset=utf-8' } },
+    );
 }
 
 const { entry } = Astro.props;
