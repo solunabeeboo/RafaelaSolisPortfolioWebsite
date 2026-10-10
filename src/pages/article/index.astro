@@ -633,6 +633,10 @@ const SEED = [
       #artEditStrip { padding: 0.4rem 1.25rem; }
       .art-edit-hint { display: none; }
       .art-related-card { width: calc(50% - 0.5rem); }
+      /* Thumb-sized toolbar controls on phones (the bar scrolls sideways) */
+      #artToolbar button { min-height: 34px; min-width: 34px; font-size: 0.72rem; }
+      #artSizeSlider { height: 34px; }
+      #artNewBtn, #artDeleteBtn, #artSaveBtn { min-height: 34px; min-width: 34px; }
     }
 
     /* ── SEO inspector — element outlines ── */
