@@ -1,9 +1,9 @@
 {
   "home": {
-    "role": "Game Designer",
-    "tagline": "I design games, build the systems behind them, and lead the teams that ship them.",
+    "role": "Game Designer / Technical Designer",
+    "tagline": "I take game ideas from paper to playable in Unity and Unreal Engine 5, and build the tools teams use to ship them.",
     "openTo": "Open to summer 2027 internships · US / CA / EU",
-    "proof": "Runner-up in CurseForge’s Subnautica 2 Modding Contest ($650 prize) for Easy Third Person, a third-person camera mod with 3,000+ downloads."
+    "proof": "Lead designer & product owner at Pentad Games · Built the studio’s production toolkit · 2nd place internationally, CurseForge Subnautica 2 Modding Contest (6,000+ downloads)"
   },
   "about": {
     "name": "Rafaela Solís",
@@ -87,7 +87,7 @@
   "lenses": {
     "design": {
       "title": "Game Designer",
-      "summary": "Game designer pursuing dual B.S. degrees in Game Design and Game Programming with a Project Management minor. Designs across three studio titles at Pentad Games, leading two, prototyping in Unity and Unreal Engine 5 (C++, Lua, C#) and directing the team that builds them. Placed 2nd internationally in the CurseForge Subnautica 2 Modding Contest (6,500+ mod downloads). Programming makes it possible to prototype firsthand and work fluently with engineers; production training means leading or supporting a team."
+      "summary": "Game designer pursuing dual B.S. degrees in Game Design and Game Programming with a Project Management minor. Designs across three studio titles at Pentad Games, leading two, prototyping in Unity and Unreal Engine 5 (C++, Lua, C#) and directing the team that builds them. Placed 2nd internationally in the CurseForge Subnautica 2 Modding Contest (6,000+ mod downloads). Programming makes it possible to prototype firsthand and work fluently with engineers; production training means leading or supporting a team."
     },
     "programming": {
       "title": "Gameplay Programmer",
