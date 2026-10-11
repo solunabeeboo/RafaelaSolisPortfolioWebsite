@@ -3,7 +3,7 @@
 // a thumbnail, context, role, engine, year and up to two links. A column only
 // appears if some row has something for it.
 import Media from './Media.astro';
-import { getProjects, projectMedia, type Project } from '../lib/content';
+import { getProjects, projectMedia, blurFill, type Project } from '../lib/content';
 import { contextOf, isExternal, liveLinks } from '../lib/view';
 
 interface Props {
@@ -11,12 +11,12 @@ interface Props {
 }
 
 const publicIds = (await getProjects()).map(p => p.id);
-const archive = Astro.props.projects.map(p => {
+const archive = await Promise.all(Astro.props.projects.map(async p => {
     const media = projectMedia(p);
     const cover = media.find(m => m.src === p.data.image && !m.video) ?? media.find(m => !m.video);
     // Only links that lead somewhere: no blanks, no internal pages that no longer exist
-    return { p, cover, context: contextOf(p.data), links: liveLinks(p.data.links, publicIds) };
-});
+    return { p, cover, blur: cover ? await blurFill(cover) : undefined, context: contextOf(p.data), links: liveLinks(p.data.links, publicIds) };
+}));
 
 const show = {
     context: archive.some(r => r.context),
@@ -41,10 +41,10 @@ const show = {
                 </tr>
             </thead>
             <tbody role="rowgroup">
-                {archive.map(({ p, cover, context, links }) => (
+                {archive.map(({ p, cover, blur, context, links }) => (
                     <tr role="row" data-d={p.data.disciplines.join(' ')}>
                         <td role="cell" class="c-title"><div class="title-cell">
-                            <a class="thumb" href={`/projects/${p.id}/`} tabindex="-1" aria-hidden="true">
+                            <a class="thumb frame-16x9" href={`/projects/${p.id}/`} tabindex="-1" aria-hidden="true" style={blur ? `--blur: url(${blur})` : undefined}>
                                 {cover && <Media item={cover} alt="" sizes="96px" widths={[96, 192, 288]} />}
                             </a>
                             <a class="name" href={`/projects/${p.id}/`}>{p.data.title}</a>
@@ -88,11 +88,8 @@ const show = {
     .c-links { width: 17%; }
     td.c-ctx:empty::before, td.c-role:empty::before, td.c-engine:empty::before, td.c-year:empty::before { content: '\2013'; color: var(--ink-3); }
     .title-cell { display: flex; align-items: center; gap: var(--space-4); }
-    .thumb {
-        flex: none; width: 96px; height: 60px; background: var(--board); border-radius: 4px; overflow: hidden;
-        display: flex; align-items: center; justify-content: center;
-    }
-    .thumb :global(img) { width: 100%; height: 100%; object-fit: contain; }
+    /* Same 16:9 frame as the featured cards: the whole image, centered, with a blur of itself around it */
+    .thumb { flex: none; width: 96px; border-radius: 4px; }
     .name { font-size: var(--step-0); font-weight: 600; color: var(--ink); }
     .name:hover { color: var(--forest); }
     .c-links a { display: block; overflow-wrap: anywhere; }
