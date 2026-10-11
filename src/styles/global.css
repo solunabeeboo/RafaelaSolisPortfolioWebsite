@@ -271,7 +271,8 @@ a:hover { color: var(--forest-2); text-decoration-thickness: 2px; }
     gap: var(--space-6); padding: var(--space-5);
     align-items: start;
 }
-.folder-media { display: block; border-radius: 4px; }
+/* The media frame sits vertically centered beside the (usually taller) details column */
+.folder-media { display: block; border-radius: 4px; align-self: center; }
 
 /* Header art in a constant 16:9 frame: the art is centered whole, and a
    pre-blurred copy of it (--blur, made at build time) fills the rest. */
