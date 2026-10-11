@@ -20,10 +20,14 @@ const lenses = Object.entries(DISCIPLINE_LABELS);
 const resume = resumeFor(lens);
 const resumeHref = resume.id === resumeFor().id ? '/resume/' : `/resume/${resume.id}/`;
 const role = copy?.title ?? site.home.role;
+// "Game Designer / Technical Designer": the broad title, then the specialty picked out.
+const [roleMain, roleFocus] = String(role).split(/\s+\/\s+/);
+// The proof line's facts are separated by " · " in her copy.
+const proofFacts: string[] = site.home.proof ? String(site.home.proof).split(/\s+·\s+/) : [];
 ---
 <section class="hero wrap">
     <div class="hero-id">
-        <h1><span class="name">Rafaela Solís</span> <span class="role">{role}</span></h1>
+        <h1><span class="name">Rafaela Solís</span> <span class="role"><span class="role-main">{roleMain}</span>{roleFocus && <> <span class="role-sep" aria-hidden="true">/</span> <span class="role-focus">{roleFocus}</span></>}</span></h1>
         <div class="hero-actions">
             <a class="btn primary" href={resumeHref}>Résumé</a>
             <span class="mail">
@@ -37,7 +41,11 @@ const role = copy?.title ?? site.home.role;
     </div>
     <div class="hero-copy">
         <p class="tagline">{site.home.tagline}</p>
-        {site.home.proof && <p class="proof">{site.home.proof}</p>}
+        {proofFacts.length > 0 && (
+            <p class="proof">
+                {proofFacts.map((fact, i) => <><span class="fact">{fact}{i < proofFacts.length - 1 && <span class="proof-sep" aria-hidden="true">&nbsp;·</span>}</span>{' '}</>)}
+            </p>
+        )}
         {copy && <p class="summary">{copy.summary}</p>}
         <p class="open">{site.home.openTo}</p>
     </div>
@@ -92,10 +100,19 @@ const role = copy?.title ?? site.home.role;
     .hero h1 { display: flex; flex-direction: column; gap: var(--space-1); line-height: 1.02; letter-spacing: -0.02em; }
     .hero h1 .name { font-size: var(--step-5); font-weight: 800; }
     .hero h1 .role { font-size: var(--step-2); font-weight: 600; color: var(--forest); letter-spacing: -0.005em; }
+    .hero h1 .role-sep { color: var(--moss); font-weight: 400; }
+    /* Each title stays in one piece; on narrow screens the specialty moves to its own line */
+    .hero h1 .role-main, .hero h1 .role-focus { white-space: nowrap; }
+    /* The specialty: ink on a soft forest highlight, like a marker pass */
+    .hero h1 .role-focus {
+        color: var(--ink); padding: 0 0.2em; margin-left: -0.05em; border-radius: 4px;
+        background: var(--forest-wash); box-decoration-break: clone; -webkit-box-decoration-break: clone;
+    }
     .hero-id { display: flex; flex-direction: column; gap: var(--space-5); }
     .hero-copy { display: flex; flex-direction: column; gap: var(--space-3); max-width: 46ch; }
     .tagline { font-size: var(--step-1); line-height: 1.4; }
     .proof { color: var(--ink-2); }
+    .proof .proof-sep { color: var(--moss); font-weight: 700; }
     .summary { color: var(--ink-2); font-size: var(--step--1); line-height: 1.5; }
     .open { color: var(--ink-2); }
     .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3) var(--space-5); }
