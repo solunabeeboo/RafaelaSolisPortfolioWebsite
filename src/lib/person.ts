@@ -13,7 +13,7 @@ export const personJsonLd = {
     '@type': 'Person',
     name: 'Rafaela Solís',
     alternateName: 'Rafaela X. Solís',
-    jobTitle: 'Game Designer',
+    jobTitle: 'Game Designer / Technical Designer',
     url: 'https://rafaelasolis.work/',
     image: 'https://rafaelasolis.work/headshot.jpg',
     email: 'mailto:rafa@miguelsolis.com',
