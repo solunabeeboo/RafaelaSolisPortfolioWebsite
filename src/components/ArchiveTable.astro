@@ -94,9 +94,6 @@ const show = {
     .name:hover { color: var(--forest); }
     .c-links a { display: block; overflow-wrap: anywhere; }
     tr[data-d] td:not(.c-title):not(.c-links) { color: var(--ink-2); }
-    :global([data-focus='design']) tr[data-d]:not([data-d~='design']) .name,
-    :global([data-focus='programming']) tr[data-d]:not([data-d~='programming']) .name,
-    :global([data-focus='production']) tr[data-d]:not([data-d~='production']) .name { color: var(--ink-3); }
 
     /* Stacked rows up to tablet width: the six columns need about 900px */
     @media (max-width: 900px) {

@@ -1,6 +1,6 @@
 ---
 // Work lives on Home now (featured folders plus the rest). Old links to
-// /projects/ (with ?focus= or #slug) land there with their query and hash.
+// /projects/ (with #slug) land there with their hash.
 ---
 <!doctype html>
 <html lang="en">
@@ -9,7 +9,7 @@
     <meta name="robots" content="noindex">
     <link rel="canonical" href={new URL('/', Astro.site).href}>
     <title>Work | Rafaela Solís</title>
-    <script is:inline>location.replace('/' + location.search + (location.hash || '#work'));</script>
+    <script is:inline>location.replace('/' + (location.hash || '#work'));</script>
     <meta http-equiv="refresh" content="0; url=/#work">
 </head>
 <body>

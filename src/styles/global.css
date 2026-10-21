@@ -320,15 +320,6 @@ html:not(.js) .folder-tab::before { -webkit-mask: none; mask: none; }
     .folder.typographic .folder-body { grid-template-columns: 1fr; }
 }
 
-/* Lens focus (?focus=): matching folders and rows come first; others dim */
-[data-focus] .drawer .folder { order: 1; }
-[data-focus='design'] .folder[data-d~='design'],
-[data-focus='programming'] .folder[data-d~='programming'],
-[data-focus='production'] .folder[data-d~='production'] { order: 0; }
-[data-focus='design'] .folder:not([data-d~='design']) .folder-tab,
-[data-focus='programming'] .folder:not([data-d~='programming']) .folder-tab,
-[data-focus='production'] .folder:not([data-d~='production']) .folder-tab { color: var(--ink-3); }
-
 /* ── Prose (her markdown) ─────────────────────────────────────────────── */
 .prose { max-width: 68ch; }
 .prose > * + * { margin-top: var(--space-4); }
