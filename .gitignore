@@ -13,3 +13,4 @@ vault/
 
 # Vault app working files (settings, token, logs, thumbnails, built UI)
 .vault/
+/.claude
